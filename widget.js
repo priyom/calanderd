@@ -137,14 +137,31 @@ console.log(obj.summary);
 console.log("Grabbing events from " + now.toISOString() + " to " + endDate.toISOString());
 console.log("Number of events found: " + obj.items.length);
 console.log("Time of first event: " + obj.items[0].start.dateTime);
+var events = [];
 
 for (var i = 0; i < obj.items.length; i++)
 {
     var title = obj.items[i].summary;
     var time = obj.items[i].start.dateTime;
     var eventDate = new Date(time);
+    var theEvent = {"eventDate":eventDate, "title":title};
+    events.push(theEvent);
     console.log(time + " ** " + title + "- " + Date.daysBetween(now, eventDate));
 }
 
 debugger; 
-var test = events.pop;
+var eventToCheck = events.pop();
+while(eventToCheck != null && eventToCheck.eventDate < new Date())
+{
+    console.log("Removing event.");
+    eventToCheck = events.pop();
+}
+
+var nextEvents = [];
+var firstEvent = events.pop();
+nextEvents.push(firstEvent);
+var thisEvent = events.pop();
+while(thisEvent.eventDate == firstEvent.eventDate)
+{
+    nextEvents.push(thisEvent);
+}
