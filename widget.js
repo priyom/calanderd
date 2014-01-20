@@ -42,7 +42,7 @@ Date.daysBetween = function( date1, date2 ) {
   var hours = Math.floor(difference_ms % 24);  
   var days = Math.floor(difference_ms/24);
   
-  return days + ' days, ' + hours + ' hours, ' + minutes + ' minutes, and ' + seconds + ' seconds';
+  return days + 'd, ' + hours + 'h, ' + minutes + 'm, and ' + seconds + 's';
 }
 
 var now = new Date();
@@ -71,7 +71,7 @@ for (var i = 0; i < obj.items.length; i++)
     var time = obj.items[i].start.dateTime;
     var eventDate = new Date(time);
     //console.log(time + " ** " + title + "- " + Date.daysBetween(now, eventDate));
-    var theEvent = {"eventDate":time, "title":title};
+    var theEvent = {"eventDate":eventDate, "title":title};
     events.push(theEvent);    
 }
 var consoleLine = "<p class=\"console-line\"></p>";
@@ -91,17 +91,30 @@ while(eventToCheck != null && eventToCheck.eventDate < new Date())
 }
 
 var nextEvents = [];
-var firstEvent = events.pop();
+var firstEvent = events[0];
 nextEvents.push(firstEvent);
-var thisEvent = events.pop();
-while(thisEvent.eventDate == firstEvent.eventDate)
+var thisEvent = events[1];
+var continueSearching = true;
+
+// Get the next event and any other events that happen at the same time
+while(continueSearching)
 {
-    nextEvents.push(thisEvent);
+    if(thisEvent.eventDate == firstEvent.eventDate)
+    {
+        nextEvents.push(thisEvent);
+    }
+    else
+    {
+        continueSearching = false;
+    }
 }
+
+// TODO: Get the next few events?
 
 for(var eventId = 0; eventId < nextEvents.length; eventId++)
 {
-    console.log(eventId);
+    console.log("-- Next event(s) --");
+    console.log(nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate));
 }
 
                 
