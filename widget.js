@@ -83,7 +83,7 @@ var obj = JSON.parse(json);
 
 function getNextEvent(events)
 {
-  //debugger; 
+  debugger; 
   var eventToCheck = events[0];
   while(eventToCheck != null && eventToCheck.eventDate < new Date())
   {
