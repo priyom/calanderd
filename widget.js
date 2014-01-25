@@ -1,11 +1,3 @@
-var consoleLine = "<p class=\"console-line\"></p>";
-// Log helper function for jsfiddle
-console = {
-    log: function (text) {
-        $("#console-log").append($(consoleLine).html(text));
-    }
-};
-
 function httpGet(theUrl)
 {
     var xmlHttp = null;
@@ -49,72 +41,79 @@ var now = new Date();
 var numberOfDaysToFetch = 1;
 var endDate = now.addDays(numberOfDaysToFetch);
 
-//var json = '{"summary": "ENIGMA 2000 Numbers Station Schedule", "items": [{"start": {"dateTime": "2014-01-19T01:00:00Z"}}]}',
-
-json=httpGet("https://www.googleapis.com/calendar/v3/calendars/us9gvp2nqjuf4nk4df49sfji4o@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMax=" + endDate.toISOString() + "&timeMin=" + now.toISOString() + 
-"&fields=items(start%2Csummary)%2Csummary&key=AIzaSyCobUsCNLg2lIsBlKYtbeHsAaN_X2LjwV0");
-
-// Parse the data that we got back from the calendar call
-obj = JSON.parse(json);
-
-console.log(obj.summary);
-console.log("Grabbing events from " + now.toISOString() + " to " + endDate.toISOString());
-console.log("Number of events found: " + obj.items.length);
-console.log("Time of first event: " + obj.items[0].start.dateTime);
-
-
-var events = [];
-
-for (var i = 0; i < obj.items.length; i++)
+function getCalendarEvents()
 {
-    var title = obj.items[i].summary;
-    var time = obj.items[i].start.dateTime;
-    var eventDate = new Date(time);
-    //console.log(time + " ** " + title + "- " + Date.daysBetween(now, eventDate));
-    var theEvent = {"eventDate":eventDate, "title":title};
-    events.push(theEvent);    
+  json=httpGet("https://www.googleapis.com/calendar/v3/calendars/us9gvp2nqjuf4nk4df49sfji4o@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMax=" + endDate.toISOString() + "&timeMin=" + now.toISOString() + 
+  "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyCobUsCNLg2lIsBlKYtbeHsAaN_X2LjwV0");
+
+  // Parse the data that we got back from the calendar call
+  obj = JSON.parse(json);
+  return obj;
 }
-var consoleLine = "<p class=\"console-line\"></p>";
-// Log helper function for jsfiddle
-console = {
-    log: function (text) {
-        $("#console-log").append($(consoleLine).html(text));
-    }
-};
 
-debugger; 
-var eventToCheck = events.pop();
-while(eventToCheck != null && eventToCheck.eventDate < new Date())
+function writeSummaryInformation()
 {
+  console.log(obj.summary);
+  console.log("Grabbing events from " + now.toISOString() + " to " + endDate.toISOString());
+  console.log("Number of events found: " + obj.items.length);
+  console.log("Time of first event: " + obj.items[0].start.dateTime);
+}
+
+
+function parseEvents()
+{
+  var events = [];
+  var obj = getCalendarEvents();
+  for (var i = 0; i < obj.items.length; i++)
+  {
+      var title = obj.items[i].summary;
+      var time = obj.items[i].start.dateTime;
+      var eventDate = new Date(time);
+      //console.log(time + " ** " + title + "- " + Date.daysBetween(now, eventDate));
+      var theEvent = {"eventDate":eventDate, "title":title};
+      events.push(theEvent);    
+  }
+  return events;
+}
+
+function getNextEvent()
+{
+  //debugger; 
+  var eventToCheck = events.pop();
+  while(eventToCheck != null && eventToCheck.eventDate < new Date())
+  {
     console.log("Removing event.");
     eventToCheck = events.pop();
-}
+  }
 
-var nextEvents = [];
-var firstEvent = events[0];
-nextEvents.push(firstEvent);
-var thisEvent = events[1];
-var continueSearching = true;
+  var nextEvents = [];
+  var firstEvent = events[0];
+  nextEvents.push(firstEvent);
+  var thisEvent = events[1];
+  var continueSearching = true;
 
-// Get the next event and any other events that happen at the same time
-while(continueSearching)
-{
-    if(thisEvent.eventDate == firstEvent.eventDate)
-    {
+  // Get the next event and any other events that happen at the same time
+  while(continueSearching)
+  {
+      if(thisEvent.eventDate == firstEvent.eventDate)
+      {
         nextEvents.push(thisEvent);
-    }
-    else
-    {
+      }
+      else
+      {
         continueSearching = false;
-    }
+      }
+  }
+
+  // TODO: Get the next few events?
+  var returnVal = "";
+  for(var eventId = 0; eventId < nextEvents.length; eventId++)
+  {
+    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". ";
+    //console.log("-- Next event(s) --");
+    //console.log(nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate));
+  }
+  
+  return returnVal;
+
 }
-
-// TODO: Get the next few events?
-
-for(var eventId = 0; eventId < nextEvents.length; eventId++)
-{
-    console.log("-- Next event(s) --");
-    console.log(nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate));
-}
-
-                
