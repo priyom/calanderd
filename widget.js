@@ -62,13 +62,13 @@ function writeSummaryInformation()
 
 function parseEvents()
 {
-  var slightFuture = new Date();
-slightFuture.setSeconds(now.getSeconds() + 20);
-var json = '{"summary": "TEST SUMMARY", "items": [{"summary": "TEST EVENT", "start": {"dateTime": "' + slightFuture.toISOString() + '"}}, {"summary": "TEST EVENT2", "start": {"dateTime": "2014-01-26T21:00:00Z"}}]}';
+//var slightFuture = new Date();
+//slightFuture.setSeconds(now.getSeconds() + 20);
+//var json = '{"summary": "TEST SUMMARY", "items": [{"summary": "TEST EVENT", "start": {"dateTime": "' + slightFuture.toISOString() + '"}}, {"summary": "TEST EVENT2", "start": {"dateTime": "2014-01-26T21:00:00Z"}}]}';
 var obj = JSON.parse(json);
 
   var events = [];
-  //var obj = getCalendarEvents();
+  var obj = getCalendarEvents();
   for (var i = 0; i < obj.items.length; i++)
   {
       var title = obj.items[i].summary;
