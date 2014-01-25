@@ -108,7 +108,7 @@ function getNextEvent(events)
   var returnVal = "";
   for(var eventId = 0; eventId < nextEvents.length; eventId++)
   {
-    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". ";
+    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(nextEvents[eventId].eventDate, new Date()) + ". ";
     //console.log("-- Next event(s) --");
     //console.log(nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate));
   }
