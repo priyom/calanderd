@@ -62,7 +62,7 @@ function writeSummaryInformation()
 
 function parseEvents()
 {
-  var json = '{"summary": "TEST SUMMARY", "items": [{"summary": "TEST EVENT", "start": {"dateTime": "2014-01-26T21:00:00Z"}}, {"summary": "TEST EVENT", "start": {"dateTime": "2014-01-26T21:00:00Z"}}]}';
+  var json = '{"summary": "TEST SUMMARY", "items": [{"summary": "TEST EVENT", "start": {"dateTime": "2014-01-26T21:00:00Z"}}, {"summary": "TEST EVENT2", "start": {"dateTime": "2014-01-26T21:00:00Z"}}]}';
   var obj = JSON.parse(json);
 
   var events = [];
