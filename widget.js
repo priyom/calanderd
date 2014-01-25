@@ -63,7 +63,7 @@ function writeSummaryInformation()
 function parseEvents()
 {
   var slightFuture = new Date();
-slightFuture.setSeconds(now.getSeconds() + 10);
+slightFuture.setSeconds(now.getSeconds() + 20);
 var json = '{"summary": "TEST SUMMARY", "items": [{"summary": "TEST EVENT", "start": {"dateTime": "' + slightFuture.toISOString() + '"}}, {"summary": "TEST EVENT2", "start": {"dateTime": "2014-01-26T21:00:00Z"}}]}';
 var obj = JSON.parse(json);
 
@@ -109,7 +109,7 @@ function getNextEvent(events)
   var returnVal = "";
   for(var eventId = 0; eventId < nextEvents.length; eventId++)
   {
-    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(nextEvents[eventId].eventDate, new Date()) + ". ";
+    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". ";
     //console.log("-- Next event(s) --");
     //console.log(nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate));
   }
