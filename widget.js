@@ -88,7 +88,8 @@ function getNextEvent(events)
   while(eventToCheck != null && eventToCheck.eventDate < new Date())
   {
     //console.log("Removing event.");
-    eventToCheck = events.shift();
+    events.shift();
+    eventToCheck = events[0];
   }
 
   var nextEvents = [];
