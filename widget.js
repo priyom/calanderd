@@ -79,7 +79,7 @@ function parseEvents()
 function getNextEvent(events)
 {
   //debugger; 
-  var eventToCheck = events.pop();
+  var eventToCheck = events[0];
   while(eventToCheck != null && eventToCheck.eventDate < new Date())
   {
     //console.log("Removing event.");
