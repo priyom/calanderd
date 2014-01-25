@@ -76,13 +76,13 @@ function parseEvents()
   return events;
 }
 
-function getNextEvent()
+function getNextEvent(events)
 {
   //debugger; 
-  var eventToCheck = parseEvents().pop();
+  var eventToCheck = events.pop();
   while(eventToCheck != null && eventToCheck.eventDate < new Date())
   {
-    console.log("Removing event.");
+    //console.log("Removing event.");
     eventToCheck = events.pop();
   }
 
