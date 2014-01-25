@@ -62,8 +62,11 @@ function writeSummaryInformation()
 
 function parseEvents()
 {
+  var json = '{"summary": "TEST SUMMARY", "items": [{"summary": "TEST EVENT", "start": {"dateTime": "2014-01-26T21:00:00Z"}}, {"summary": "TEST EVENT", "start": {"dateTime": "2014-01-26T21:00:00Z"}}]}';
+  var obj = JSON.parse(json);
+
   var events = [];
-  var obj = getCalendarEvents();
+  //var obj = getCalendarEvents();
   for (var i = 0; i < obj.items.length; i++)
   {
       var title = obj.items[i].summary;
@@ -87,22 +90,16 @@ function getNextEvent(events)
   }
 
   var nextEvents = [];
-  var firstEvent = events[0];
-  nextEvents.push(firstEvent);
-  var thisEvent = events[1];
-  var continueSearching = true;
+  var prevEvent;
 
-  // Get the next event and any other events that happen at the same time
-  while(continueSearching)
+  for(i = 0; i < events.length; i++)
   {
-      if(thisEvent.eventDate == firstEvent.eventDate)
-      {
-        nextEvents.push(thisEvent);
-      }
-      else
-      {
-        continueSearching = false;
-      }
+     var thisEvent = events[i];
+     if(prevEvent == null) { prevEvent = thisEvent; nextEvents.push(prevEvent); continue;}
+     
+     if(prevEvent.eventDate.toISOString() == thisEvent.eventDate.toISOString()) 
+	{nextEvents.push(thisEvent);}
+     else {break;}
   }
 
   // TODO: Get the next few events?
