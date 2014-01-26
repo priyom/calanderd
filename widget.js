@@ -8,7 +8,7 @@ function extractFrequency(textToMatch) {
     if (floatResult != null) {
         var float1 = floatResult[1];
         return float1;
-        console.log("(" + float1.replace(/</, "&lt;") + ")" + "\n");
+        //console.log("(" + float1.replace(/</, "&lt;") + ")" + "\n");
     }
 
     var re3 = '.*?'; // Non-greedy match on filler
@@ -20,7 +20,7 @@ function extractFrequency(textToMatch) {
     var integerResult = integerExp.exec(textToMatch);
     if (integerResult != null) {
         var int1 = integerResult[1];
-        console.log("(" + int1.replace(/</, "&lt;") + ")" + "\n");
+        //console.log("(" + int1.replace(/</, "&lt;") + ")" + "\n");
         return int1;
     }
 }
@@ -138,9 +138,8 @@ function getNextEvent(events)
   var returnVal = "";
   for(var eventId = 0; eventId < nextEvents.length; eventId++)
   {
-    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". <a href=#>test</a>";
-    //console.log("-- Next event(s) --");
-    //console.log(nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate));
+    var frequency = extractFrequency(nextEvents[eventId].frequency);
+    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". <a href=#>" + frequency + "</a>");
   }
   
   return returnVal;
