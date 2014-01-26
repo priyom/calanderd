@@ -1,3 +1,30 @@
+function extractFrequency(textToMatch) {
+    var re1 = '.*?'; // Non-greedy match on filler
+    var re2 = '([+-]?\\d*\\.\\d+)(?![-+0-9\\.])'; // Float 1
+
+    var floatExp = new RegExp(re1 + re2, ["i"]);
+    console.log(floatExp.toString());
+    var floatResult = floatExp.exec(textToMatch);
+    if (floatResult != null) {
+        var float1 = floatResult[1];
+        return float1;
+        console.log("(" + float1.replace(/</, "&lt;") + ")" + "\n");
+    }
+
+    var re3 = '.*?'; // Non-greedy match on filler
+    var re4 = '\\d+'; // Uninteresting: int
+    var re5 = '.*?'; // Non-greedy match on filler
+    var re6 = '(\\d+)'; // Integer Number 1
+
+    var integerExp = new RegExp(re3 + re4 + re5 + re6, ["i"]);
+    var integerResult = integerExp.exec(textToMatch);
+    if (integerResult != null) {
+        var int1 = n[1];
+        console.log("(" + int1.replace(/</, "&lt;") + ")" + "\n");
+        return int1;
+    }
+}
+
 function httpGet(theUrl)
 {
     var xmlHttp = null;
@@ -75,7 +102,9 @@ function parseEvents()
       var time = obj.items[i].start.dateTime;
       var eventDate = new Date(time);
       //console.log(time + " ** " + title + "- " + Date.daysBetween(now, eventDate));
-      var theEvent = {"eventDate":eventDate, "title":title};
+
+      var frequency = extractFrequency(title);
+      var theEvent = {"eventDate":eventDate, "title":title, "frequency":frequency};
       events.push(theEvent);    
   }
   return events;
@@ -109,7 +138,7 @@ function getNextEvent(events)
   var returnVal = "";
   for(var eventId = 0; eventId < nextEvents.length; eventId++)
   {
-    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". ";
+    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". <a href=#>test</a>";
     //console.log("-- Next event(s) --");
     //console.log(nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate));
   }
