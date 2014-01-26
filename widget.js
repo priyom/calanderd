@@ -138,7 +138,7 @@ function getNextEvent(events)
   for(var eventId = 0; eventId < nextEvents.length; eventId++)
   {
     var frequency = nextEvents[eventId].frequency;
-    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". <a href=#></a>";
+    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". <a href='javascript:setfreq(1234)'>" + frequency + "</a>";
   }
   
   return returnVal;
