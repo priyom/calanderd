@@ -140,7 +140,7 @@ function getNextEvent(events)
   {
 debugger;
     var frequency = nextEvents[eventId].frequency;
-    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". <a href=#>" + frequency + "</a>");
+    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". <a href=#></a>");
   }
   
   return returnVal;
