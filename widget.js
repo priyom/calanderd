@@ -102,7 +102,7 @@ function parseEvents()
       var time = obj.items[i].start.dateTime;
       var eventDate = new Date(time);
       //console.log(time + " ** " + title + "- " + Date.daysBetween(now, eventDate));
-
+debugger;
       var frequency = extractFrequency(title);
       var theEvent = {"eventDate":eventDate, "title":title, "frequency":frequency};
       events.push(theEvent);    
