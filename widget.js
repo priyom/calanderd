@@ -3,7 +3,7 @@ function extractFrequency(textToMatch) {
     var re2 = '([+-]?\\d*\\.\\d+)(?![-+0-9\\.])'; // Float 1
 
     var floatExp = new RegExp(re1 + re2, ["i"]);
-    console.log(floatExp.toString());
+    //console.log(floatExp.toString());
     var floatResult = floatExp.exec(textToMatch);
     if (floatResult != null) {
         var float1 = floatResult[1];
@@ -138,7 +138,7 @@ function getNextEvent(events)
   for(var eventId = 0; eventId < nextEvents.length; eventId++)
   {
     var frequency = nextEvents[eventId].frequency;
-    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". <a href='javascript:setfreq(1234)'>" + frequency + "</a>";
+    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". <a href='javascript:set_mode(\'USB\');setfreq(" + frequency + "'>" + frequency + "</a>";
   }
   
   return returnVal;
