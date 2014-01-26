@@ -102,7 +102,6 @@ function parseEvents()
       var time = obj.items[i].start.dateTime;
       var eventDate = new Date(time);
       //console.log(time + " ** " + title + "- " + Date.daysBetween(now, eventDate));
-debugger;
       var frequency = extractFrequency(title);
       var theEvent = {"eventDate":eventDate, "title":title, "frequency":frequency};
       events.push(theEvent);    
@@ -138,9 +137,8 @@ function getNextEvent(events)
   var returnVal = "";
   for(var eventId = 0; eventId < nextEvents.length; eventId++)
   {
-debugger;
     var frequency = nextEvents[eventId].frequency;
-    //returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". <a href=#></a>");
+    returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". <a href=#></a>";
   }
   
   return returnVal;
