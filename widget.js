@@ -19,7 +19,7 @@ function extractFrequency(textToMatch) {
     var integerExp = new RegExp(re3 + re4 + re5 + re6, ["i"]);
     var integerResult = integerExp.exec(textToMatch);
     if (integerResult != null) {
-        var int1 = n[1];
+        var int1 = integerResult[1];
         console.log("(" + int1.replace(/</, "&lt;") + ")" + "\n");
         return int1;
     }
