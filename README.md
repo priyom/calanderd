@@ -10,9 +10,9 @@ Purpose
 ----
 At #priyom (http://priyom.org) we needed a real-time way to announce upcoming foreign intelligence shortwave broadcasts.
 
-This solves the problem by grabbing our Google Calendar and announcing each transmission by use of repeated setTimeouts in combination with the node IRC client library. On demand commands are also implemented.
+This solves the problem by grabbing our Google Calendar and announcing each transmission with the use of repeated setTimeouts and the node IRC client library. On demand commands are also implemented.
 
-It could be modified to serve multiple uses, use it as a base for your simple irc bot, etc.
+It could be modified to serve multiple uses, you could it as a base for your simple irc bot, etc.
 Patches are accepted as long it follows the core purpose of this bot, the Calendar announcements.
 
 ---
