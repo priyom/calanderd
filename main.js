@@ -6,10 +6,10 @@
 // Config
 var room = '#priyom';
 var server = 'adams.freenode.net';
-var botName = 'Autototo';
+var botName = 'MaciejHunia';
 
 var calendarId = 'ul6joarfkgroeho84vpieeaakk' // this is in your iCal, html, etc. URLs
-var announceEarly = 2 * 60000; // milliseconds
+var announceEarly = 6 * 60000; // milliseconds
 
 
 // IRC login
