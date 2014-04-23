@@ -266,6 +266,7 @@ function nextAnnouncement() {
 
     if (next === '-1') {
         hasEvents = false;
+        events = [];
         getEvents();
         console.log('[i] restarting');
         return false;
