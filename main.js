@@ -65,7 +65,7 @@ Date.daysBetween = function (date1, date2) {
     var days = Math.floor(difference_ms / 24);
 
     //return days + 'd, ' + hours + 'h, ' + minutes + 'm, and ' + seconds + 's';
-    if (hours == 0) {
+    if (hours != 0) {
         return hours + 'h and ' + minutes + 'm';
     } else {
         return minutes + ' minutes';
