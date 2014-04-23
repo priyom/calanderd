@@ -18,7 +18,7 @@ var irc = require('irc');
 var client = new irc.Client(server, botName, {
     realName: 'calanderd 0.1',
     port: 7000,
-    showErrors: false,
+    showErrors: true,
     autoConnect: false,
     retryDelay: 4000,
     retryCount: 1000,
