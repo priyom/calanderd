@@ -12,5 +12,8 @@ At #priyom (http://priyom.org) we needed a real-time way to announce upcoming fo
 
 This solves the problem by grabbing our Google Calendar and announcing each transmission by use of repeated setTimeouts in combination with the node IRC client library. On demand commands are also implemented.
 
-It could be monified to serve multiple uses, use it as a base for your simple irc bot, etc.
+It could be modified to serve multiple uses, use it as a base for your simple irc bot, etc.
 Patches are accepted as long it follows the core purpose of this bot, the Calendar announcements.
+
+---
+name invented by Web_weasel
