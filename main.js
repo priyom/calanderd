@@ -162,7 +162,7 @@ function getNextEvent(events, humanReadable) {
 
         for (var eventId = 0; eventId < nextEvents.length; eventId++) {
             var frequency = nextEvents[eventId].frequency;
-            returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". http://websdr.ewi.utwente.nl:8901/?tune=" + frequency;
+            returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". http://websdr.ewi.utwente.nl:8901/?tune=" + frequency + "    ";
         }
     } else {
         // here we assume that only date parsing is needed
