@@ -16,6 +16,7 @@ var announceEarly = 2 * 60000; // milliseconds
 var irc = require('irc');
 
 var client = new irc.Client(server, botName, {
+    userName: 'calanderd',
     realName: 'calanderd 0.1',
     port: 7000,
     showErrors: true,
