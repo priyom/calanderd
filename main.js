@@ -1,7 +1,8 @@
 // calanderd 0.1
 // GNU GPL 3+
-// Written for #priyom on freenode (priyom.org) by TomßÜ Hetmer.
+// Written for #priyom on freenode (priyom.org) by Tomáš Hetmer.
 // Based on original events code written by foo (UTwente-Usability/events.js)
+
 // Config
 var room = '#priyom';
 var server = 'adams.freenode.net';
@@ -29,7 +30,7 @@ client.connect(5, function (input) {
 });
 
 client.addListener('error', function (message) {
-    //console.log('[!] error: ', message);
+    console.log('[!] error: ', message);
 });
 
 
@@ -172,7 +173,7 @@ function getNextEvent(events, humanReadable) {
 
 function main() {
 
-    console.log('[dbg] Asking Google for data');
+    console.log('[i] Asking Google for data');
 
     getEvents();
 }
@@ -225,7 +226,7 @@ function onEvents(myEvents) {
     events = myEvents;
 
     client.addListener('message', function (from, to, message) {
-        //console.log('[dbg] ' + from + ': ' + message);
+        //console.log('[i] ' + from + ': ' + message);
 
         if (message.startsWith('!next')) {
             console.log('[i] received next command from ' + from);
