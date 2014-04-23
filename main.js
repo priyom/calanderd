@@ -9,8 +9,7 @@ var server = 'adams.freenode.net';
 var botName = 'Autototo';
 
 var calendarId = 'ul6joarfkgroeho84vpieeaakk' // this is in your iCal, html, etc. URLs
-
-var announceEarly = 2 * 60000;
+var announceEarly = 2 * 60000; // milliseconds
 
 
 // IRC login
@@ -18,7 +17,12 @@ var irc = require('irc');
 
 var client = new irc.Client(server, botName, {
     realName: 'calanderd 0.1',
-    autoConnect: false
+    port: 7000,
+    showErrors: false,
+    autoConnect: false,
+    retryDelay: 4000,
+    retryCount: 1000,
+    secure: true
 });
 
 client.connect(5, function (input) {
@@ -172,18 +176,16 @@ function getNextEvent(events, humanReadable) {
 // MAIN
 
 function main() {
-
     console.log('[i] Asking Google for data');
 
     getEvents();
 }
 
 function getEvents() {
-
     var https = require('https');
 
     https.get(calanderUrl, function (res) {
-        console.log("[dbg] got statusCode: ", res.statusCode);
+        console.log("[i] got statusCode: ", res.statusCode);
 
         res.on('data', function (d) {
             obj = JSON.parse(d);
@@ -192,12 +194,13 @@ function getEvents() {
 
     }).on('error', function (e) {
         console.log("[!] " + e.message);
+		// it shouldn't cycle :>
+		getEvents();
     });
 }
 
 
 function onHttpReturn(obj) {
-
     console.log("[i] Grabbing events from " + now.toISOString() + " to " + endDate.toISOString());
     console.log("[i] Number of events found: " + obj.items.length);
     console.log("[i] Time of first event: " + obj.items[0].start.dateTime);
@@ -206,7 +209,7 @@ function onHttpReturn(obj) {
         var title = obj.items[i].summary;
         var time = obj.items[i].start.dateTime;
         var eventDate = new Date(time);
-        // console.log(time + " ** " + title + "- " + Date.daysBetween(now, eventDate));
+        //console.log(time + " ** " + title + "- " + Date.daysBetween(now, eventDate));
         var frequency = extractFrequency(title);
         var theEvent = {
             "eventDate": eventDate,
@@ -221,7 +224,6 @@ function onHttpReturn(obj) {
 
 
 function onEvents(myEvents) {
-
     hasEvents = true;
     events = myEvents;
 
@@ -261,7 +263,6 @@ function onReady() {
 }
 
 function nextAnnouncement() {
-
     var next = getNextEvent(events, false);
 
     if (next === '-1') {
@@ -282,7 +283,6 @@ function nextAnnouncement() {
 }
 
 function cmdNext(hilit) {
-
     hilit = typeof hilit !== 'undefined' ? hilit : false;
 
     var next = getNextEvent(events);
