@@ -274,7 +274,7 @@ function nextAnnouncement() {
 
     // channel announcement
     var nextTime = next.getTime() - (new Date()).getTime();
-    time = nextTime - announceEarly;
+    var time = nextTime - announceEarly;
     setTimeout(cmdNext, time);
 
     console.log('[i] scheduler event cmdNext added for ' + time);
