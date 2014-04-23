@@ -194,8 +194,8 @@ function getEvents() {
 
     }).on('error', function (e) {
         console.log("[!] " + e.message);
-		// it shouldn't cycle :>
-		getEvents();
+	// it shouldn't cycle :>
+	getEvents();
     });
 }
 
