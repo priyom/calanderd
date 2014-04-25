@@ -260,7 +260,7 @@ function onReady() {
 
     setInterval(function () {
         client.send('PONG', 'empty');
-    }, 5 * 60 * 1000);
+    }, 2 * 60 * 1000);
 }
 
 function nextAnnouncement() {
