@@ -27,11 +27,11 @@ module.exports = {
   getNextEvent: function (events, humanReadable) {
     humanReadable = typeof humanReadable !== 'undefined' ? humanReadable : true;
 
-    // var eventToCheck = events[0];
-    // while (eventToCheck != null && eventToCheck.eventDate < new Date()) {
-    //    events.shift();
-    //    eventToCheck = events[0];
-    // }
+    var eventToCheck = events[0];
+     while (eventToCheck != null && eventToCheck.eventDate < new Date()) {
+        events.shift();
+        eventToCheck = events[0];
+     }
 
     var nextEvents = [];
     var prevEvent;
