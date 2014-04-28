@@ -33,7 +33,7 @@ Date.daysBetween = function (date1, date2) {
     minutes++;
     
     if (hours != 0) {
-        return hours + 'h and ' + minutes + 'm';
+        return hours + ' hours and ' + minutes + ' minutes';
     } else {
         return minutes + ' minutes';
     }
