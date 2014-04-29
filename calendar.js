@@ -2,27 +2,15 @@
 
 module.exports = {
   extractFrequency: function (textToMatch) {
-    var re1 = '.*?'; // Non-greedy match on filler
-    var re2 = '([+-]?\\d*\\.\\d+)(?![-+0-9\\.])'; // Float 1
+    var digitsRe = '([0-9]*k|[0-9]* k)';
+    var exp = new RegExp(digitsRe);
+    var expResult = exp.exec(textToMatch);
 
-    var floatExp = new RegExp(re1 + re2, ["i"]);
-    var floatResult = floatExp.exec(textToMatch);
-    if (floatResult != null) {
-        var float1 = floatResult[1];
-        return float1;
+    if(expResult !== null) {
+      return expResult[0];
     }
 
-    var re3 = '.*?'; // Non-greedy match on filler
-    var re4 = '\\d+'; // Uninteresting: int
-    var re5 = '.*?'; // Non-greedy match on filler
-    var re6 = '(\\d+)'; // Integer Number 1
-
-    var integerExp = new RegExp(re3 + re4 + re5 + re6, ["i"]);
-    var integerResult = integerExp.exec(textToMatch);
-    if (integerResult != null) {
-        var int1 = integerResult[1];
-        return int1;
-    }
+    return expResult;
   },
   getNextEvent: function (events, humanReadable) {
     humanReadable = typeof humanReadable !== 'undefined' ? humanReadable : true;
