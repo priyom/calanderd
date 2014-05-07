@@ -15,7 +15,7 @@ module.exports = {
   getNextEvent: function (events, humanReadable) {
     humanReadable = typeof humanReadable !== 'undefined' ? humanReadable : true;
 
-    var eventToCheck = events[0];
+     var eventToCheck = events[0];
      while (eventToCheck != null && eventToCheck.eventDate < new Date()) {
         events.shift();
         eventToCheck = events[0];
@@ -49,11 +49,11 @@ module.exports = {
         for (var eventId = 0; eventId < nextEvents.length; eventId++) {
 
             if(eventId > 0) {
-                returnVal += " • And another one: ";
+                returnVal += " • ";
             }
 
             var frequency = nextEvents[eventId].frequency;
-            returnVal += nextEvents[eventId].title + " in " + Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + ". http://websdr.ewi.utwente.nl:8901/?tune=" + frequency;
+            returnVal += Date.daysBetween(new Date(), nextEvents[eventId].eventDate) + " • " + nextEvents[eventId].title + " • http://websdr.ewi.utwente.nl:8901/?tune=" + frequency;
         }
     } else {
         // here we assume that only date parsing is needed

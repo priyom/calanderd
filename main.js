@@ -8,8 +8,8 @@ var irc = require('irc');
 require('./extends');
 
 var client = new irc.Client(config.server, config.botName, {
-    userName: 'calanderd',
-    realName: 'calanderd 0.1',
+    userName: 'OLX',
+    realName: 'Ivo Schwarz',
     port: 7000,
     showErrors: true,
     autoConnect: false,
@@ -50,7 +50,7 @@ function main() {
     var now = new Date();
     var endDate = now.addDays(config.numberOfDaysToFetch);
     var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/" + config.calendarId + "@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMax=" + endDate.toISOString() + "&timeMin=" + now.toISOString() +
-        "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyCobUsCNLg2lIsBlKYtbeHsAaN_X2LjwV0";
+        "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyCobUsCNLg2lIsBlKYtbeHsAaN_X2LjwV0&maxResults=" + config.maxResults;
 
     var https = require('https');
 
@@ -91,10 +91,16 @@ function onHttpReturn(obj) {
     }
 
     client.addListener('message', function (from, to, message) {
-        if (message.startsWith('!next')) {
-            console.log('[i] received next command from ' + from);
+        if (message.startsWith('!avare')){
+            console.log('[i] received avare command from ' + from);
             cmdNext(false);
         }
+
+        if (message.startsWith('!') && !message.startsWith('!avare')) {
+            console.log('[i] received next command from ' + from);
+            client.say(config.room, "!avare deflect meteor");
+        }
+
     });
 
     if (hasRoom && hasEvents) {
@@ -112,10 +118,10 @@ function nextAnnouncement() {
     var next = calendar.getNextEvent(events, false);
 
     if (next === -1) {
+        console.log('[i] restarting');
         hasEvents = false;
         events = [];
         main();
-        console.log('[i] restarting');
         return false;
     }
 
