@@ -34,6 +34,19 @@ client.connect(5, function (input) {
             onReady();
         }
     });
+
+    client.addListener('message', function (from, to, message) {
+        if (message.startsWith('!avare')){
+            console.log('[i] received avare command from ' + from);
+            cmdNext(false);
+        }
+
+        if (message.startsWith('!') && !message.startsWith('!avare')) {
+            console.log('[i] received next command from ' + from);
+            client.say(config.room, "!avare deflect meteor");
+        }
+
+    });
 });
 
 client.addListener('error', function (message) {
@@ -89,19 +102,6 @@ function onHttpReturn(obj) {
         };
         events.push(theEvent);
     }
-
-    client.addListener('message', function (from, to, message) {
-        if (message.startsWith('!avare')){
-            console.log('[i] received avare command from ' + from);
-            cmdNext(false);
-        }
-
-        if (message.startsWith('!') && !message.startsWith('!avare')) {
-            console.log('[i] received next command from ' + from);
-            client.say(config.room, "!avare deflect meteor");
-        }
-
-    });
 
     if (hasRoom && hasEvents) {
         onReady();
