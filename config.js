@@ -13,6 +13,6 @@ config.announceEarly = 2 * 60000; // milliseconds
 
 // calendar limits
 config.numberOfDaysToFetch = 1;
-config.maxResults = 3;
+config.maxResults = 4;
 
 module.exports = config;
