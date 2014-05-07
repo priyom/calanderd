@@ -112,14 +112,6 @@ function onReady() {
 function nextAnnouncement() {
     var next = calendar.getNextEvent(events, false);
 
-    if (next === -1) {
-        console.log('[i] restarting');
-        hasEvents = false;
-        events = [];
-        main();
-        return false;
-    }
-
     var nextTime = next.getTime() - (new Date()).getTime();
     var time = nextTime - config.announceEarly;
     setTimeout(cmdNext, time);
