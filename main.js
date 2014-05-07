@@ -111,7 +111,7 @@ function onReady() {
 function nextAnnouncement() {
     var next = calendar.getNextEvent(events, false);
 
-    if (next === '-1') {
+    if (next === -1) {
         hasEvents = false;
         events = [];
         main();
