@@ -54,10 +54,10 @@ module.exports = {
 
             var frequency = nextEvents[eventId].frequency;
 
-			var moment = require('moment');
-			moment.lang('ru');
+            var moment = require('moment');
+            moment.lang('ru');
 
-			var next = moment(nextEvents[eventId].eventDate);
+            var next = moment(nextEvents[eventId].eventDate);
             returnVal += next.fromNow() + " • " + next.format('hh:mm') + " • " + nextEvents[eventId].title + " • http://websdr.ewi.utwente.nl:8901/?tune=" + frequency;
         }
     } else {

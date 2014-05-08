@@ -55,7 +55,7 @@ function main() {
     console.log('[i] Asking Google for data');
 
     var now = new Date();
-	var moment = require('moment');
+    var moment = require('moment');
     var endDate = moment(now).add('days', config.numberOfDaysToFetch);
     var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/" + config.calendarId + "@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMax=" + endDate.toISOString() + "&timeMin=" + now.toISOString() +
         "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyCobUsCNLg2lIsBlKYtbeHsAaN_X2LjwV0&maxResults=" + config.maxResults;
