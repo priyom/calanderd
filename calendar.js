@@ -15,11 +15,11 @@ module.exports = {
   getNextEvent: function (events, humanReadable) {
     humanReadable = typeof humanReadable !== 'undefined' ? humanReadable : true;
 
-     //var eventToCheck = events[0];
-     //while (eventToCheck != null && eventToCheck.eventDate < new Date()) {
-     //   events.shift();
-     //   eventToCheck = events[0];
-     //}
+     var eventToCheck = events[0];
+     while (eventToCheck != null && eventToCheck.eventDate < new Date()) {
+        events.shift();
+        eventToCheck = events[0];
+     }
 
     var nextEvents = [];
     var prevEvent;
@@ -53,13 +53,12 @@ module.exports = {
             //}
 
             var moment = require('moment');
-            moment.utc();
 
             var languages = ["ar-ma","ar","bg","br","bs","ca","cs","cv","cy","da","de","el","en-au","en-ca","en-gb","eo","es","et","eu","fa","fi","fo","fr-ca","fr","gl","he","hi","hr","hu","hy-am","id","is","it","ja","ka","km","ko","lb","lt","lv","mk","ml","mr","ms-my","nb","ne","nl","nn","pl","pt-br","pt","ro","ru","sk","sl","sq","sr-cyr","sr","sv","ta","th","tl-ph","tr","tzm-la","tzm","uk","uz","vi","zh-cn","zh-tw"];
             moment.lang(languages[Math.floor(Math.random() * languages.length)]);
 
             var next = moment(nextEvents[eventId].eventDate);
-            returnVal += next.fromNow() + " • " + nextEvents[eventId].title + " • " + next.format('hh:mm') + " • http://" + nextEvents[eventId].frequency + ".t.hetmer.cz";
+            returnVal += next.fromNow() + " • " + nextEvents[eventId].title + " • " + next.utc().format('H:mm') + " • http://" + nextEvents[eventId].frequency + ".t.hetmer.cz";
         }
     } else {
         // here we assume that only date parsing is needed
