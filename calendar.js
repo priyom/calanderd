@@ -40,11 +40,7 @@ module.exports = {
     }
 
     if (nextEvents.length == 0) {
-        console.log('[i] restarting');
-        hasEvents = false;
-        events = [];
-        main();
-        return false;
+        return -1;
     }
 
     var returnVal = "";
