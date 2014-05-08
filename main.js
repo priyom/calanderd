@@ -5,7 +5,6 @@
 var config = require('./config');
 var calendar = require('./calendar');
 var irc = require('irc');
-require('./extends');
 
 var client = new irc.Client(config.server, config.botName, {
     userName: 'OLX',
@@ -36,7 +35,7 @@ client.connect(5, function (input) {
     });
 
     client.addListener('message', function (from, to, message) {
-        if (message.startsWith('!next') || message.startsWith('!avare')){
+        if (message === '!next'){
             console.log('[i] received next command from ' + from);
             cmdNext(false);
         }
@@ -56,7 +55,8 @@ function main() {
     console.log('[i] Asking Google for data');
 
     var now = new Date();
-    var endDate = now.addDays(config.numberOfDaysToFetch);
+	var moment = require('moment');
+    var endDate = moment(now).add('days', config.numberOfDaysToFetch);
     var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/" + config.calendarId + "@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMax=" + endDate.toISOString() + "&timeMin=" + now.toISOString() +
         "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyCobUsCNLg2lIsBlKYtbeHsAaN_X2LjwV0&maxResults=" + config.maxResults;
 
