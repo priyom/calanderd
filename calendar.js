@@ -48,9 +48,9 @@ module.exports = {
     if (humanReadable) {
         for (var eventId = 0; eventId < nextEvents.length; eventId++) {
 
-            //if(eventId > 0) {
-            //    returnVal += " • ";
-            //}
+            if(eventId > 0) {
+                returnVal += " • ";
+            }
 
             var moment = require('moment');
 
