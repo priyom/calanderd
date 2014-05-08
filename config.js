@@ -12,7 +12,6 @@ config.calendarId = 'ul6joarfkgroeho84vpieeaakk' // this is in your iCal, html, 
 config.announceEarly = 2 * 60000; // milliseconds
 
 // calendar limits
-config.numberOfDaysToFetch = 1;
-config.maxResults = 4;
+config.maxResults = 1;
 
 module.exports = config;

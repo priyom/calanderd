@@ -15,11 +15,11 @@ module.exports = {
   getNextEvent: function (events, humanReadable) {
     humanReadable = typeof humanReadable !== 'undefined' ? humanReadable : true;
 
-     var eventToCheck = events[0];
-     while (eventToCheck != null && eventToCheck.eventDate < new Date()) {
-        events.shift();
-        eventToCheck = events[0];
-     }
+     //var eventToCheck = events[0];
+     //while (eventToCheck != null && eventToCheck.eventDate < new Date()) {
+     //   events.shift();
+     //   eventToCheck = events[0];
+     //}
 
     var nextEvents = [];
     var prevEvent;
@@ -48,17 +48,15 @@ module.exports = {
     if (humanReadable) {
         for (var eventId = 0; eventId < nextEvents.length; eventId++) {
 
-            if(eventId > 0) {
-                returnVal += " • ";
-            }
-
-            var frequency = nextEvents[eventId].frequency;
+            //if(eventId > 0) {
+            //    returnVal += " • ";
+            //}
 
             var moment = require('moment');
-            moment.lang('ru');
+            moment.lang('pl');
 
             var next = moment(nextEvents[eventId].eventDate);
-            returnVal += next.fromNow() + " • " + next.format('hh:mm') + " • " + nextEvents[eventId].title + " • http://websdr.ewi.utwente.nl:8901/?tune=" + frequency;
+            returnVal += next.fromNow() + " • " + next.format('hh:mm') + " • " + nextEvents[eventId].title + " • http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency;
         }
     } else {
         // here we assume that only date parsing is needed
