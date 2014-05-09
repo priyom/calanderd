@@ -51,6 +51,9 @@ var hasRoom = false;
 var hasEvents = false;
 var events = [];
 
+var schedNext;
+var schedAnnounce;
+
 function main() {
     console.log('[i] Asking Google for data');
 
@@ -103,7 +106,7 @@ function onHttpReturn(obj) {
 
 function onReady() {
     console.log('[i] both actions succeeded, starting main system');
-    nextAnnouncement();
+    schedAnnounce = setTimeout(nextAnnouncement, 1);
 }
 
 function nextAnnouncement() {
@@ -113,13 +116,15 @@ function nextAnnouncement() {
         console.log('[i] restarting');
         hasEvents = false;
         events = [];
+        clearTimeout(schedNext);
+        clearTimeout(schedAnnounce);
         main();
         return false;
     }
 
     var nextTime = next.getTime() - (new Date()).getTime();
     var time = nextTime - config.announceEarly;
-    setTimeout(cmdNext, time);
+    schedNext = setTimeout(cmdNext, time);
 
     console.log('[i] scheduler event cmdNext added for ' + time);
 }
@@ -133,6 +138,8 @@ function cmdNext(recursion) {
         console.log('[i] restarting');
         hasEvents = false;
         events = [];
+        clearTimeout(schedNext);
+        clearTimeout(schedAnnounce);
         main();
         return false;
     }
@@ -142,7 +149,7 @@ function cmdNext(recursion) {
     if (recursion) {
         var next = getNextEvent(false);
         var time = next.getTime() - (new Date()).getTime();
-        setTimeout(nextAnnouncement, time);
+        schedAnnounce = setTimeout(nextAnnouncement, time);
 
         console.log('[i] scheduler event nextAnnouncement added for ' + time);
     }
@@ -188,7 +195,7 @@ function getNextEvent(humanReadable) {
         }
     }
 
-    if (nextEvents.length == 0) {
+    if (events.length < 3) {
         return -1;
     }
 
