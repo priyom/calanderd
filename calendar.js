@@ -44,6 +44,7 @@ module.exports = {
     }
 
     var returnVal = "";
+    var moment = require('moment');
 
     if (humanReadable) {
         for (var eventId = 0; eventId < nextEvents.length; eventId++) {
@@ -52,13 +53,15 @@ module.exports = {
                 returnVal += " • ";
             }
 
-            var moment = require('moment');
-
-            //var languages = ["ar-ma","ar","bg","br","bs","ca","cs","cv","cy","da","de","el","en-au","en-ca","en-gb","eo","es","et","eu","fa","fi","fo","fr-ca","fr","gl","he","hi","hr","hu","hy-am","id","is","it","ja","ka","km","ko","lb","lt","lv","mk","ml","mr","ms-my","nb","ne","nl","nn","pl","pt-br","pt","ro","ru","sk","sl","sq","sr-cyr","sr","sv","ta","th","tl-ph","tr","tzm-la","tzm","uk","uz","vi","zh-cn","zh-tw"];
-            //moment.lang(languages[Math.floor(Math.random() * languages.length)]);
+            var languages = ["ar-ma","ar","bg","br","bs","ca","cs","cv","cy","da","de","en","eo","es","et","eu","fi","fo","fr","gl","hr","hu","id","is","it","lt","lv","ms-my","nb","nl","nn","pl","pt","ro","ru","sk","sl","sq","sr-cyr","sr","sv","ta","tl-ph","tr","tzm-la","uk","uz"];
+            moment.lang(languages[Math.floor(Math.random() * languages.length)]);
 
             var next = moment(nextEvents[eventId].eventDate);
-            returnVal += next.fromNow() + " • " + nextEvents[eventId].title + " • " + next.utc().format('H:mm') + " • http://" + nextEvents[eventId].frequency + ".t.hetmer.cz";
+            returnVal += next.utc().format('H:mm') + " " + nextEvents[eventId].title + " " + next.fromNow();
+
+            if(nextEvents[eventId].frequency !== null) {
+                returnVal += " http://" + nextEvents[eventId].frequency + ".t.hetmer.cz";
+            }
         }
     } else {
         // here we assume that only date parsing is needed
