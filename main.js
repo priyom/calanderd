@@ -10,14 +10,17 @@ var client = new irc.Client(config.server, config.botName, {
     userName: config.userName,
     realName: config.realName,
     port: config.port,
+    password: config.password,
+    sasl: true,
     showErrors: true,
     autoConnect: false,
     retryDelay: 4000,
     retryCount: 1000,
-    secure: config.tls
+    secure: config.tls,
 });
 
 client.connect(5, function (input) {
+
     console.log("[i] calanderd on server");
 
     client.join(config.room, function (input) {
@@ -34,10 +37,17 @@ client.connect(5, function (input) {
         }
     });
 
-    client.addListener('message', function (from, to, message) {
+    client.addListener('message#' + config.room, function (from, to, message) {
         if (message === '!next'){
             console.log('[i] received next command from ' + from);
             cmdNext(false);
+        }
+    });
+
+    client.addListener('pm', function (from, to, message) {
+        if (message === '!next'){
+            console.log('[i] received private next command from ' + from);
+            cmdNext(false, to);
         }
 
     });
@@ -125,10 +135,10 @@ function nextAnnouncement() {
     var time = next.getTime() - (new Date()).getTime();
     schedNext = setTimeout(cmdNext, time - config.announceEarly);
 
-    console.log('[i] scheduler event cmdNext added for ' + time);
+    console.log('[i] scheduler event cmdNext added for ' + next.toISOString());
 }
 
-function cmdNext(recursion) {
+function cmdNext(recursion, to) {
     recursion = typeof recursion !== 'undefined' ? recursion : true;
 
     var next = getNextEvent();
@@ -143,14 +153,18 @@ function cmdNext(recursion) {
         return false;
     }
 
-    client.say(config.room, next);
+    if(to !== 'undefined') {
+        client.say(to, next);
+    } else {
+        client.say(config.room, next);
+    }
 
     if (recursion) {
         var next = getNextEvent(false);
         var time = next.getTime() - (new Date()).getTime();
         schedAnnounce = setTimeout(nextAnnouncement, time + 1 * 60000);
 
-        console.log('[i] scheduler event nextAnnouncement added for ' + time);
+        console.log('[i] scheduler event nextAnnouncement added for ' + next.toISOString());
     }
 }
 

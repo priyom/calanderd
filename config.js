@@ -6,6 +6,7 @@ config.server = 'kornbluth.freenode.net';
 config.botName = 'IvoSchwarz';
 config.userName = 'OLX',
 config.realName = 'Ivo Schwarz',
+config.password = '';
 config.port = 7000;
 config.tls = true;
 
@@ -16,6 +17,6 @@ config.calendarId = 'ul6joarfkgroeho84vpieeaakk' // this is in your iCal, html, 
 config.announceEarly = 1 * 60000; // milliseconds
 
 // calendar limits
-config.maxResults = 4; // at least 2
+config.maxResults = 5; // at least 2
 
 module.exports = config;
