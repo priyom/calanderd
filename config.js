@@ -4,6 +4,10 @@ var config = {}
 config.room = '#priyom';
 config.server = 'kornbluth.freenode.net';
 config.botName = 'IvoSchwarz';
+config.userName = 'OLX',
+config.realName = 'Ivo Schwarz',
+config.port = 7000;
+config.tls = true;
 
 // calendar settings
 config.calendarId = 'ul6joarfkgroeho84vpieeaakk' // this is in your iCal, html, etc. URLs
