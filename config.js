@@ -13,7 +13,7 @@ config.tls = true;
 config.calendarId = 'ul6joarfkgroeho84vpieeaakk' // this is in your iCal, html, etc. URLs
 
 // announce before ...
-config.announceEarly = 0.5 * 60000; // milliseconds
+config.announceEarly = 1 * 60000; // milliseconds
 
 // calendar limits
 config.maxResults = 4; // at least 2

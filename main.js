@@ -122,9 +122,8 @@ function nextAnnouncement() {
         return false;
     }
 
-    var nextTime = next.getTime() - (new Date()).getTime();
-    var time = nextTime - config.announceEarly;
-    schedNext = setTimeout(cmdNext, time);
+    var time = next.getTime() - (new Date()).getTime();
+    schedNext = setTimeout(cmdNext, time - config.announceEarly);
 
     console.log('[i] scheduler event cmdNext added for ' + time);
 }
@@ -149,7 +148,7 @@ function cmdNext(recursion) {
     if (recursion) {
         var next = getNextEvent(false);
         var time = next.getTime() - (new Date()).getTime();
-        schedAnnounce = setTimeout(nextAnnouncement, time);
+        schedAnnounce = setTimeout(nextAnnouncement, time + 1 * 60000);
 
         console.log('[i] scheduler event nextAnnouncement added for ' + time);
     }
