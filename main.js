@@ -20,7 +20,6 @@ var client = new irc.Client(config.server, config.botName, {
 });
 
 client.connect(5, function (input) {
-
     console.log("[i] calanderd on server");
 
     client.join(config.room, function (input) {
@@ -37,20 +36,20 @@ client.connect(5, function (input) {
         }
     });
 
-    client.addListener('message#' + config.room, function (from, to, message) {
-        if (message === '!next'){
-            console.log('[i] received next command from ' + from);
-            cmdNext(false);
-        }
-    });
+});
 
-    client.addListener('pm', function (from, to, message) {
-        if (message === '!next'){
-            console.log('[i] received private next command from ' + from);
-            cmdNext(false, to);
-        }
+client.addListener('message' + config.room, function (from, to, message) {
+    if (message.args[1] === '!next'){
+        console.log('[i] received next command from ' + from);
+        cmdNext(false);
+    }
+});
 
-    });
+client.addListener('pm', function (from, to, message) {
+    if (message.args[1] === '!next'){
+        console.log('[i] received private next command from ' + from);
+        cmdNext(false, from);
+    }
 });
 
 client.addListener('error', function (message) {
@@ -122,7 +121,7 @@ function onReady() {
 function nextAnnouncement() {
     var next = getNextEvent(false);
 
-    if(next === -1) {
+    if (next === -1) {
         console.log('[i] restarting');
         hasEvents = false;
         events = [];
@@ -140,10 +139,11 @@ function nextAnnouncement() {
 
 function cmdNext(recursion, to) {
     recursion = typeof recursion !== 'undefined' ? recursion : true;
+    to = typeof to !== 'undefined' ? to : false;
 
     var next = getNextEvent();
 
-    if(next === -1) {
+    if (next === -1) {
         console.log('[i] restarting');
         hasEvents = false;
         events = [];
@@ -153,7 +153,7 @@ function cmdNext(recursion, to) {
         return false;
     }
 
-    if(to !== 'undefined') {
+    if (to !== false) {
         client.say(to, next);
     } else {
         client.say(config.room, next);
@@ -173,7 +173,7 @@ function extractFrequency (textToMatch) {
     var exp = new RegExp(digitsRe);
     var expResult = exp.exec(textToMatch);
 
-    if(expResult !== null) {
+    if (expResult !== null) {
       return expResult[0];
     }
 
@@ -217,7 +217,7 @@ function getNextEvent(humanReadable) {
     if (humanReadable) {
         for (var eventId = 0; eventId < nextEvents.length; eventId++) {
 
-            if(eventId > 0) {
+            if (eventId > 0) {
                 returnVal += " • ";
             }
 
@@ -227,7 +227,7 @@ function getNextEvent(humanReadable) {
             var next = moment(nextEvents[eventId].eventDate);
             returnVal += next.utc().format('H:mm') + " " + nextEvents[eventId].title + " " + next.fromNow();
 
-            if(nextEvents[eventId].frequency !== null) {
+            if (nextEvents[eventId].frequency !== null) {
                 returnVal += " http://" + nextEvents[eventId].frequency + ".t.hetmer.cz";
             }
         }
