@@ -19,20 +19,20 @@ function extractFrequency(textToMatch) {
 
 function getEvents() {  
   if (typeof(Storage) !== 'undefined') {
-    localEvents = JSON.parse(localStorage.getItem("events"));
+    var localEvents = JSON.parse(localStorage.getItem("events"));
     if (localEvents !== null && localEvents.length > 3) {
       return localEvents;
     }
   }
 
-  calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + now.toISOString() + 
+  var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + now.toISOString() + 
   "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyARkBX_t1JfOEVk0caNk7tf5HpNIEVdcU4&maxResults=50";
   
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("GET", calanderUrl, false);
   xmlHttp.send(null);  
   
-  obj = JSON.parse(xmlHttp.responseText);
+  var obj = JSON.parse(xmlHttp.responseText);
 
   for (var i = 0; i < obj.items.length; i++) {
     var title = obj.items[i].summary;
