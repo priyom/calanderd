@@ -73,12 +73,6 @@ function getNextEvent(humanReadable) {
   
    if (humanReadable) {
      for (var eventId = 0; eventId < nextEvents.length; eventId++) {
-      
-       // if (eventId > 0) {
-       //   returnVal += "<br>";
-       // }
-      
-       var next = moment(nextEvents[eventId].eventDate);
        
        returnVal += "<p>";
        returnVal += nextEvents[eventId].title;
