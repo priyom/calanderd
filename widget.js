@@ -84,7 +84,7 @@ function getNextEvent(humanReadable) {
        returnVal += nextEvents[eventId].title;
     
        if (nextEvents[eventId].frequency !== null) {
-         returnVal =  "<a href='http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency + "'> " + freqOrTitle +"</a>";
+         returnVal =  "<a href='http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency + "'> " + returnVal +"</a>";
        }
        
        returnVal += "</p>";
