@@ -19,7 +19,7 @@ function extractFrequency(textToMatch) {
 
 function getEvents() {  
   calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + now.toISOString() + 
-  "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyCobUsCNLg2lIsBlKYtbeHsAaN_X2LjwV0&maxResults=10";
+  "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyARkBX_t1JfOEVk0caNk7tf5HpNIEVdcU4&maxResults=10";
   
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("GET", calanderUrl, false);
