@@ -93,10 +93,11 @@ function getNextEvent(humanReadable) {
    if (humanReadable) {
      for (var eventId = 0; eventId < nextEvents.length; eventId++) {
        returnVal += "<p>";
-       returnVal += nextEvents[eventId].title;
-    
+       
        if (nextEvents[eventId].frequency !== null && nextEvents[eventId].frequency.length > 3) {
-         returnVal =  "<a href='http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency + "'> " + returnVal +"</a>";
+         returnVal += "<a href='http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency + "'> " + nextEvents[eventId].title +"</a>";
+       } else {
+         returnVal += nextEvents[eventId].title;
        }
        
        returnVal += "</p>";
