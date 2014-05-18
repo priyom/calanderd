@@ -6,6 +6,13 @@ var config = require('./config');
 var irc = require('irc');
 var moment = require('moment');
 
+var hasRoom = false;
+var hasEvents = false;
+var events = [];
+
+var schedNext;
+var schedAnnounce;
+
 var client = new irc.Client(config.server, config.botName, {
     userName: config.userName,
     realName: config.realName,
@@ -56,13 +63,6 @@ client.addListener('error', function (message) {
     console.log('[!] error: ', message);
 });
 
-var hasRoom = false;
-var hasEvents = false;
-var events = [];
-
-var schedNext;
-var schedAnnounce;
-
 function main() {
     console.log('[i] Asking Google for data');
 
@@ -75,7 +75,7 @@ function main() {
         console.log("[i] got statusCode: ", res.statusCode);
 
         res.on('data', function (d) {
-            obj = JSON.parse(d);
+            var obj = JSON.parse(d);
             onHttpReturn(obj);
         });
 
