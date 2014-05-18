@@ -101,7 +101,7 @@ function getNextEvent(humanReadable)
 function cmdNext() {
   var events = getEvents();
   var next = moment(getNextEvent(false));
-  $("#events").html("<p><b>Next station in " + next.fromNow() + "</b></p><p>" + getNextEvent() + "</p>");
+  $("#events").html("<h3><b>Next station in " + next.fromNow() + "</b></h3><p>" + getNextEvent() + "</p>");
 }
 
 $(document).ready(function() {
