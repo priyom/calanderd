@@ -221,11 +221,13 @@ function getNextEvent(humanReadable) {
                 returnVal += " • ";
             }
 
-            var languages = ["ar-ma","ar","bg","br","bs","ca","cs","cv","cy","da","de","en","eo","es","et","eu","fi","fo","fr","gl","hr","hu","id","is","it","lt","lv","ms-my","nb","nl","nn","pl","pt","ro","ru","sk","sl","sq","sr-cyr","sr","sv","ta","tl-ph","tr","tzm-la","uk","uz"];
-            moment.lang(languages[Math.floor(Math.random() * languages.length)]);
-
             var next = moment(nextEvents[eventId].eventDate);
-            returnVal += next.utc().format('H:mm') + " " + nextEvents[eventId].title + " " + next.fromNow();
+
+            if (eventId == 0) {
+                returnVal += next.utc().format('H:mm') + " " + next.fromNow() + " ";
+            }
+
+            returnVal += nextEvents[eventId].title;
 
             if (nextEvents[eventId].frequency !== null) {
                 returnVal += " http://" + nextEvents[eventId].frequency + ".t.hetmer.cz";
