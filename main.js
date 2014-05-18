@@ -174,10 +174,9 @@ function extractFrequency(textToMatch) {
     var expResult = exp.exec(textToMatch);
 
     if (expResult !== null) {
-      return expResult[0];
+      expResult = expResult[0].substring(0, expResult[0].length - 1);
+      return expResult;
     }
-
-    return expResult;
 }
 
 // Based on original events code written by foo (UTwente-Usability/events.js)
@@ -229,7 +228,7 @@ function getNextEvent(humanReadable) {
 
             returnVal += nextEvents[eventId].title;
 
-            if (nextEvents[eventId].frequency !== null) {
+            if (nextEvents[eventId].frequency !== null && nextEvents[eventId].frequency.length > 3) {
                 returnVal += " http://" + nextEvents[eventId].frequency + ".t.hetmer.cz";
             }
         }
