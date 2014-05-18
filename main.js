@@ -168,7 +168,7 @@ function cmdNext(recursion, to) {
     }
 }
 
-function extractFrequency (textToMatch) {
+function extractFrequency(textToMatch) {
     var digitsRe = '([0-9]*k|[0-9]* k)';
     var exp = new RegExp(digitsRe);
     var expResult = exp.exec(textToMatch);
