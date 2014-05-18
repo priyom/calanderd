@@ -85,8 +85,9 @@ function getNextEvent(humanReadable) {
        if (nextEvents[eventId].frequency !== null) {
          freqOrTitle =  "<a href='http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency + "'> " + freqOrTitle +"</a>";
        }
-    
+       returnVal += "<p>";
        returnVal += freqOrTitle;
+       returnVal += "</p>";
      }
   
     } else {
@@ -101,7 +102,7 @@ function getNextEvent(humanReadable) {
 function cmdNext() {
   var events = getEvents();
   var next = moment(getNextEvent(false));
-  $("#events").html("<h3><b>Next station " + next.fromNow() + "</b></h3><p>" + getNextEvent() + "</p>");
+  $("#events").html("<h3><b>Next station " + next.fromNow() + "</b></h3>" + getNextEvent());
 }
 
 $(document).ready(function() {
