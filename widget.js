@@ -5,7 +5,7 @@
 var now = new Date();
 var events = [];
 
-function extractFrequency (textToMatch) {
+function extractFrequency(textToMatch) {
     var digitsRe = '([0-9]*k|[0-9]* k)';
     var exp = new RegExp(digitsRe);
     var expResult = exp.exec(textToMatch);
@@ -22,8 +22,8 @@ function getEvents() {
   "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyCobUsCNLg2lIsBlKYtbeHsAaN_X2LjwV0&maxResults=15";
   
   var xmlHttp = new XMLHttpRequest();
-  xmlHttp.open( "GET", calanderUrl, false );
-  xmlHttp.send( null );  
+  xmlHttp.open("GET", calanderUrl, false);
+  xmlHttp.send(null);  
   
   obj = JSON.parse(xmlHttp.responseText);
 
