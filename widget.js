@@ -9,12 +9,11 @@ function extractFrequency(textToMatch) {
     var digitsRe = '([0-9]*k|[0-9]* k)';
     var exp = new RegExp(digitsRe);
     var expResult = exp.exec(textToMatch);
-
+  
     if (expResult !== null) {
-      return expResult[0];
+      expResult = expResult[0].substring(0, expResult[0].length - 1);
+      return expResult;
     }
-
-    return expResult;
 }
 
 function getEvents(forceLoad) {  
@@ -96,7 +95,7 @@ function getNextEvent(humanReadable) {
        returnVal += "<p>";
        returnVal += nextEvents[eventId].title;
     
-       if (nextEvents[eventId].frequency !== null) {
+       if (nextEvents[eventId].frequency !== null && nextEvents[eventId].frequency.length > 3) {
          returnVal =  "<a href='http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency + "'> " + returnVal +"</a>";
        }
        
