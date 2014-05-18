@@ -18,7 +18,7 @@ function extractFrequency(textToMatch) {
 }
 
 function getEvents() {  
-  if (typeof(Storage)!=="undefined") {
+  if (typeof(Storage) !== 'undefined') {
     localEvents = JSON.parse(localStorage.getItem("events"));
     if (localEvents !== null && localEvents.length > 3) {
       return localEvents;
@@ -46,7 +46,7 @@ function getEvents() {
     };
     events.push(theEvent);    
   }
-  if(typeof(Storage)!=="undefined") {
+  if (typeof(Storage) !== 'undefined') {
     localStorage.setItem("events", JSON.stringify(events));
   }
   return events;
