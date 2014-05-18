@@ -18,21 +18,26 @@ function extractFrequency(textToMatch) {
 }
 
 function getEvents() {  
+  var localEvents;
   if (typeof(Storage) !== 'undefined') {
-    var localEvents = JSON.parse(localStorage.getItem("events"));
-    if (localEvents !== null && localEvents.length > 3) {
-      return localEvents;
+    localEvents = JSON.parse(localStorage.getItem("events"));
+  }
+  
+  if (localEvents !== null && localEvents.length > 3) {
+    var obj = localEvents;
+  } else {
+    var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + now.toISOString() + 
+    "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyARkBX_t1JfOEVk0caNk7tf5HpNIEVdcU4&maxResults=50";
+  
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", calanderUrl, false);
+    xmlHttp.send(null);  
+    
+    if (typeof(Storage) !== 'undefined') {
+      var obj = JSON.parse(xmlHttp.responseText);      
+      localStorage.setItem("events", xmlHttp.responseText);
     }
   }
-
-  var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + now.toISOString() + 
-  "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyARkBX_t1JfOEVk0caNk7tf5HpNIEVdcU4&maxResults=50";
-  
-  var xmlHttp = new XMLHttpRequest();
-  xmlHttp.open("GET", calanderUrl, false);
-  xmlHttp.send(null);  
-  
-  var obj = JSON.parse(xmlHttp.responseText);
 
   for (var i = 0; i < obj.items.length; i++) {
     var title = obj.items[i].summary;
@@ -46,9 +51,6 @@ function getEvents() {
     };
     events.push(theEvent);    
   }
-  if (typeof(Storage) !== 'undefined') {
-    localStorage.setItem("events", JSON.stringify(events));
-  }
   return events;
 }
 
@@ -59,10 +61,6 @@ function getNextEvent(humanReadable) {
   while (eventToCheck != null && eventToCheck.eventDate < new Date()) {
     events.shift();
     eventToCheck = events[0];
-  }
-  
-  if (typeof(Storage) !== 'undefined') {
-    localStorage.setItem("events", JSON.stringify(events));
   }
   
   var nextEvents = [];
