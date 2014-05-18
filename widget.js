@@ -85,6 +85,8 @@ function getNextEvent(humanReadable) {
 
   if (events.length < 3) {
     events = getEvents(true);
+    cmdNext();
+    return false;
   }
   
   var returnVal = "";
