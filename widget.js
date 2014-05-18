@@ -77,7 +77,7 @@ function getNextEvent(humanReadable)
      for(var eventId = 0; eventId < nextEvents.length; eventId++) {
       
        if (eventId > 0) {
-         returnVal += "<br>";
+         // returnVal += "<br>";
        }
       
        var next = moment(nextEvents[eventId].eventDate);
@@ -101,7 +101,7 @@ function getNextEvent(humanReadable)
 function cmdNext() {
   var events = getEvents();
   var next = moment(getNextEvent(false));
-  $("#events").html("<b>Next station in " + next.fromNow() + "</b><br>" + getNextEvent());
+  $("#events").html("<p><b>Next station in " + next.fromNow() + "</b></p><p>" + getNextEvent() + "</p>");
 }
 
 $(document).ready(function() {
