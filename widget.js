@@ -17,13 +17,15 @@ function extractFrequency(textToMatch) {
     return expResult;
 }
 
-function getEvents() {  
+function getEvents(forceLoad) {  
+  forceLoad = typeof forceLoad !== 'undefined' ? forceLoad : false;
+  
   var localEvents;
-  if (typeof(Storage) !== 'undefined') {
+  if (typeof(Storage) !== 'undefined' && !forceLoad) {
     localEvents = JSON.parse(localStorage.getItem("events"));
   }
   
-  if (localEvents !== null && localEvents.length > 3) {
+  if (localEvents !== null) {
     var obj = localEvents;
   } else {
     var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + now.toISOString() + 
@@ -81,6 +83,10 @@ function getNextEvent(humanReadable) {
     }
   }
 
+  if (events.length < 3) {
+    events = getEvents(true);
+  }
+  
   var returnVal = "";
   
    if (humanReadable) {
