@@ -18,8 +18,15 @@ function extractFrequency(textToMatch) {
 }
 
 function getEvents() {  
+  if (typeof(Storage)!=="undefined") {
+    localEvents = JSON.parse(localStorage.getItem("events"));
+    if (localEvents !== null && localEvents.length > 3) {
+      return localEvents;
+    }
+  }
+
   calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + now.toISOString() + 
-  "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyARkBX_t1JfOEVk0caNk7tf5HpNIEVdcU4&maxResults=10";
+  "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyARkBX_t1JfOEVk0caNk7tf5HpNIEVdcU4&maxResults=50";
   
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("GET", calanderUrl, false);
@@ -38,6 +45,9 @@ function getEvents() {
       "frequency": frequency
     };
     events.push(theEvent);    
+  }
+  if(typeof(Storage)!=="undefined") {
+    localStorage.setItem("events", JSON.stringify(events));
   }
   return events;
 }
@@ -73,7 +83,6 @@ function getNextEvent(humanReadable) {
   
    if (humanReadable) {
      for (var eventId = 0; eventId < nextEvents.length; eventId++) {
-       
        returnVal += "<p>";
        returnVal += nextEvents[eventId].title;
     
