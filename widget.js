@@ -43,12 +43,11 @@ function getEvents() {
   return events;
 }
 
-function getNextEvent(humanReadable)
-{
+function getNextEvent(humanReadable) {
   humanReadable = typeof humanReadable !== 'undefined' ? humanReadable : true;
 
   var eventToCheck = events[0];
-  while(eventToCheck != null && eventToCheck.eventDate < new Date()) {
+  while (eventToCheck != null && eventToCheck.eventDate < new Date()) {
     events.shift();
     eventToCheck = events[0];
   }
@@ -74,11 +73,11 @@ function getNextEvent(humanReadable)
   var returnVal = "";
   
    if (humanReadable) {
-     for(var eventId = 0; eventId < nextEvents.length; eventId++) {
+     for (var eventId = 0; eventId < nextEvents.length; eventId++) {
       
-       if (eventId > 0) {
-         // returnVal += "<br>";
-       }
+       // if (eventId > 0) {
+       //   returnVal += "<br>";
+       // }
       
        var next = moment(nextEvents[eventId].eventDate);
        freqOrTitle = nextEvents[eventId].title;
@@ -96,6 +95,7 @@ function getNextEvent(humanReadable)
   }
   
   return returnVal;
+  
 }
 
 function cmdNext() {
@@ -106,5 +106,5 @@ function cmdNext() {
 
 $(document).ready(function() {
   cmdNext();
-  setInterval(cmdNext, 30000);
+  setInterval(cmdNext, 60 * 1000);
 });
