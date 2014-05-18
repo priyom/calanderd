@@ -19,7 +19,7 @@ function extractFrequency(textToMatch) {
 
 function getEvents() {  
   calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + now.toISOString() + 
-  "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyCobUsCNLg2lIsBlKYtbeHsAaN_X2LjwV0&maxResults=15";
+  "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyCobUsCNLg2lIsBlKYtbeHsAaN_X2LjwV0&maxResults=10";
   
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("GET", calanderUrl, false);
@@ -27,18 +27,17 @@ function getEvents() {
   
   obj = JSON.parse(xmlHttp.responseText);
 
-  for (var i = 0; i < obj.items.length; i++)
-  {
-      var title = obj.items[i].summary;
-      var time = obj.items[i].start.dateTime;
-      var eventDate = new Date(time);
-      var frequency = extractFrequency(title);
-      var theEvent = {
-          "eventDate": eventDate,
-          "title": title,
-          "frequency": frequency
-      };
-      events.push(theEvent);    
+  for (var i = 0; i < obj.items.length; i++) {
+    var title = obj.items[i].summary;
+    var time = obj.items[i].start.dateTime;
+    var eventDate = new Date(time);
+    var frequency = extractFrequency(title);
+    var theEvent = {
+      "eventDate": eventDate,
+      "title": title,
+      "frequency": frequency
+    };
+    events.push(theEvent);    
   }
   return events;
 }
@@ -58,15 +57,15 @@ function getNextEvent(humanReadable) {
   for (i = 0; i < events.length; i++) {
     var thisEvent = events[i];
     if (prevEvent == null) {
-          prevEvent = thisEvent;
-          nextEvents.push(prevEvent);
-          continue;
+      prevEvent = thisEvent;
+      nextEvents.push(prevEvent);
+      continue;
     }
     
     if (prevEvent.eventDate.toISOString() == thisEvent.eventDate.toISOString()) {
        nextEvents.push(thisEvent);
     } else {
-        break;
+       break;
     }
   }
 
@@ -80,13 +79,14 @@ function getNextEvent(humanReadable) {
        // }
       
        var next = moment(nextEvents[eventId].eventDate);
-       freqOrTitle = nextEvents[eventId].title;
+       
+       returnVal += "<p>";
+       returnVal += nextEvents[eventId].title;
     
        if (nextEvents[eventId].frequency !== null) {
-         freqOrTitle =  "<a href='http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency + "'> " + freqOrTitle +"</a>";
+         returnVal =  "<a href='http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency + "'> " + freqOrTitle +"</a>";
        }
-       returnVal += "<p>";
-       returnVal += freqOrTitle;
+       
        returnVal += "</p>";
      }
   
@@ -100,12 +100,12 @@ function getNextEvent(humanReadable) {
 }
 
 function cmdNext() {
-  var events = getEvents();
   var next = moment(getNextEvent(false));
   $("#events").html("<h3><b>Next station " + next.fromNow() + "</b></h3>" + getNextEvent());
 }
 
 $(document).ready(function() {
+  events = getEvents();
   cmdNext();
   setInterval(cmdNext, 60 * 1000);
 });
