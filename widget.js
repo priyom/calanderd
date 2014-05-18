@@ -61,6 +61,10 @@ function getNextEvent(humanReadable) {
     eventToCheck = events[0];
   }
   
+  if (typeof(Storage) !== 'undefined') {
+    localStorage.setItem("events", JSON.stringify(events));
+  }
+  
   var nextEvents = [];
   var prevEvent;
 
