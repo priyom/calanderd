@@ -22,13 +22,8 @@ function getEvents(forceLoad) {
   var localEvents;
   if (typeof(Storage) !== 'undefined' && !forceLoad) {
     localEvents = JSON.parse(localStorage.getItem("events"));
-  }
-  
-  if (localEvents !== null && !forceLoad) {
     var obj = localEvents;
-  }
-  
-  if (typeof obj === 'undefined') {
+  } else {
     var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + now.toISOString() + 
     "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyARkBX_t1JfOEVk0caNk7tf5HpNIEVdcU4&maxResults=50";
   
