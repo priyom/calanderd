@@ -86,7 +86,7 @@ function getNextEvent(humanReadable) {
       // have to tell it we're out of stuff
       localStorage.removeItem("events");
     }
-    events = getEvents(true);
+    events = getEvents();
     cmdNext();
     return false;
   }
