@@ -85,7 +85,9 @@ function getNextEvent(humanReadable) {
   }
 
   if (events.length < 3) {
+    if (typeof(Storage) !== 'undefined') {
     localStorage.removeItem("events");
+    }
     events = getEvents(true);
     cmdNext();
     return false;
