@@ -228,7 +228,7 @@ function getNextEvent(humanReadable) {
 
             returnVal += nextEvents[eventId].title;
 
-            if (nextEvents[eventId].frequency !== null && typeof nextEvents[eventId].frequency !== 'undefined') {
+            if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
                 returnVal += " http://" + nextEvents[eventId].frequency + ".t.hetmer.cz";
             }
         }
