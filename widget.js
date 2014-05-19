@@ -16,14 +16,16 @@ function extractFrequency(textToMatch) {
     }
 }
 
-function getEvents(forceLoad) {  
-  forceLoad = typeof forceLoad !== 'undefined' ? forceLoad : false;
+function getEvents() {  
   
   var localEvents;
-  if (typeof(Storage) !== 'undefined' && !forceLoad) {
+  if (typeof(Storage) !== 'undefined' && localStorage.getItem("events") !== null) {
+    // ok, storage ok. try to get it.
+    // will assume valid format and not check it
     localEvents = JSON.parse(localStorage.getItem("events"));
     var obj = localEvents;
   } else {
+    // no stoed values
     var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + now.toISOString() + 
     "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyARkBX_t1JfOEVk0caNk7tf5HpNIEVdcU4&maxResults=50";
   
@@ -81,7 +83,8 @@ function getNextEvent(humanReadable) {
 
   if (events.length < 3) {
     if (typeof(Storage) !== 'undefined') {
-    localStorage.removeItem("events");
+      // have to tell it we're out of stuff
+      localStorage.removeItem("events");
     }
     events = getEvents(true);
     cmdNext();
