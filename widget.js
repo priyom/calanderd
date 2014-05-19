@@ -24,7 +24,7 @@ function getEvents(forceLoad) {
     localEvents = JSON.parse(localStorage.getItem("events"));
   }
   
-  if (localEvents !== null) {
+  if (localEvents !== null && !forceLoad) {
     var obj = localEvents;
   }
   
