@@ -17,13 +17,10 @@ function extractFrequency(textToMatch) {
 }
 
 function getEvents() {  
-  
-  var localEvents;
   if (typeof(Storage) !== 'undefined' && localStorage.getItem("events") !== null) {
     // ok, storage ok. try to get it.
     // will assume valid format and not check it
-    localEvents = JSON.parse(localStorage.getItem("events"));
-    var obj = localEvents;
+    var obj = JSON.parse(localStorage.getItem("events"));
   } else {
     // no stored values
     var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + now.toISOString() + 
