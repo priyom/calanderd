@@ -33,8 +33,9 @@ function getEvents() {
     xmlHttp.open("GET", calanderUrl, false);
     xmlHttp.send(null);  
     
+    var obj = JSON.parse(xmlHttp.responseText);      
+    
     if (typeof(Storage) !== 'undefined') {
-      var obj = JSON.parse(xmlHttp.responseText);      
       localStorage.setItem("events", xmlHttp.responseText);
     }
   }
