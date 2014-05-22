@@ -105,14 +105,16 @@ function getNextEvent(humanReadable) {
 }
 
 function cmdNext() {
-  var next = moment(getNextEvent(false));
+  var next = getNextEvent(false);
   
   if (next === -1) {
     if (typeof(Storage) !== 'undefined') {
       localStorage.removeItem("events");
     }
     events = getEvents();
-    var next = moment(getNextEvent(false));
+    next = moment(getNextEvent(false));
+  } else {
+    next = moment(next);
   }
   
   $("#events").html("<h3><b>Next station " + next.fromNow() + "</b></h3>" + getNextEvent());
