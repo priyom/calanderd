@@ -18,11 +18,8 @@ function extractFrequency(textToMatch) {
 
 function getEvents() {  
   if (typeof(Storage) !== 'undefined' && localStorage.getItem("events") !== null) {
-    // ok, storage ok. try to get it.
-    // will assume valid format and not check it
     var obj = JSON.parse(localStorage.getItem("events"));
   } else {
-    // no stored values
     var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + now.toISOString() + 
     "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyARkBX_t1JfOEVk0caNk7tf5HpNIEVdcU4&maxResults=50";
   
@@ -80,13 +77,7 @@ function getNextEvent(humanReadable) {
   }
 
   if (events.length < 3) {
-    if (typeof(Storage) !== 'undefined') {
-      // have to tell it we're out of stuff
-      localStorage.removeItem("events");
-    }
-    events = getEvents();
-    cmdNext();
-    return false;
+    return -1;
   }
   
   var returnVal = "";
@@ -115,6 +106,15 @@ function getNextEvent(humanReadable) {
 
 function cmdNext() {
   var next = moment(getNextEvent(false));
+  
+  if (next === -1) {
+    if (typeof(Storage) !== 'undefined') {
+      localStorage.removeItem("events");
+    }
+    events = getEvents();
+    var next = moment(getNextEvent(false));
+  }
+  
   $("#events").html("<h3><b>Next station " + next.fromNow() + "</b></h3>" + getNextEvent());
 }
 
