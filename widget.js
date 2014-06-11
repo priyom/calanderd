@@ -83,18 +83,19 @@ function getNextEvent(humanReadable) {
   var returnVal = "";
   
    if (humanReadable) {
+     returnVal += "<ul>";
+     
      for (var eventId = 0; eventId < nextEvents.length; eventId++) {
-       returnVal += "<p>";
        
        if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
-         returnVal += "<a href='http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency + "'> " + nextEvents[eventId].title +"</a>";
+         returnVal += "<li><a href='http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency + "'>•  " + nextEvents[eventId].title +"</a></li>";
        } else {
-         returnVal += nextEvents[eventId].title;
+         returnVal += "<li>• " + nextEvents[eventId].title + "</li>";
        }
        
-       returnVal += "</p>";
      }
-  
+     
+     returnVal += "</ul>";
     } else {
       // here we assume that only date parsing is needed
       returnVal = nextEvents[0].eventDate;
