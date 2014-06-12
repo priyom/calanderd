@@ -50,6 +50,11 @@ client.addListener('message' + config.room, function (from, to, message) {
         console.log('[i] received next command from ' + from);
         cmdNext(false);
     }
+
+    if (message.args[1] === '!stream'){
+        console.log('[i] received stream command from ' + from);
+        client.say(config.room, 'To listen to the Buzzer/UZB-76 stream, click here http://priyom.hetmer.cz:8000/buzzer.ogg.m3u');
+    }
 });
 
 client.addListener('pm', function (from, to, message) {
