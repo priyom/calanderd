@@ -146,9 +146,6 @@ function onHttpReturn(obj) {
 
     for (var i = 0; i < obj.items.length; i++) {
         var title = obj.items[i].summary;
-        
-        if (typeof title === 'undefined') continue;
-        
         var time = obj.items[i].start.dateTime;
         var eventDate = new Date(time);
         var frequency = extractFrequency(title);
