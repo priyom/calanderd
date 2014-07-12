@@ -46,15 +46,60 @@ client.connect(5, function (input) {
 });
 
 client.addListener('message' + config.room, function (from, to, message) {
-    if (message.args[1] === '!next'){
-        console.log('[i] received next command from ' + from);
-        cmdNext(false);
-    }
+    
+    // console.log(from + ": " + message.args[1]);
 
-    if (message.args[1] === '!stream'){
-        console.log('[i] received stream command from ' + from);
-        client.say(config.room, 'To listen to the Buzzer/UZB-76 stream, click here http://priyom.hetmer.cz:8000/buzzer.ogg.m3u');
-    }
+	switch(message.args[1]) {
+		case '!next':
+	        console.log('[i] received next command from ' + from);
+	        cmdNext(false);
+	        break;
+		case '!stream':			
+	        client.say(config.room, 'To listen to the Buzzer/UZB-76 stream, click here http://priyom.hetmer.cz:8000/buzzer.ogg.m3u');
+			break;
+	    case '!help':
+	        client.say(config.room, 'Available commands: !listen !escuchar !next !stream !faq !primer !dossier !schedule !signals !propagation !eam !hfgcs !ndb !oth');
+	        break;
+	    case '!faq':
+	        client.say(config.room, 'You can find our Buzzer FAQ here: http://priyom.org/number-stations/slavic/s28/faq.aspx - don\'t forget to also check out !dossier');
+	        break;
+	    case '!primer':
+	        client.say(config.room, 'You can find our introductory buzzer tutorial here: http://www.priyom.org/media/57653/the_buzzer_primer.pdf');
+	        break;
+	    case '!dossier':
+	        client.say(config.room, 'You can find our Pip dossier here: http://priyom.org/media/56944/the_pip_dossier.pdf');
+	        break;
+	    case '!propagation':
+	        client.say(config.room, 'You can learn about shortwave propagation here: http://short-wave.info/index.php?feature=propagation');
+	        break;
+	    case '!schedule':
+	        client.say(config.room, 'Number station schedule: http://priyom.org/number-stations/number-station-schedule.aspx');
+	        break;
+	    case '!eam':
+	        client.say(config.room, 'You can learn more about EAM here: http://en.wikipedia.org/wiki/Emergency_Action_Message');
+	        break;
+	    case '!hfgcs':
+	        client.say(config.room, 'You can learn more about HF-GCS here: http://en.wikipedia.org/wiki/High_Frequency_Global_Communications_System');
+	        break;
+	    case '!ndb':
+	        client.say(config.room, 'You can learn more about NDBs here: http://en.wikipedia.org/wiki/Non_Directional_Beaconh');
+	        break;
+	    case '!oth':
+	        client.say(config.room, 'You can learn more about OTH radars here: http://en.wikipedia.org/wiki/Over-the-horizon_radar');
+	        break;
+	    case '!escuchar':
+	        client.say(config.room, 'Para escuchar el Buzzer/UVB-76 tienes que abrir el enlace http://websdr.ewi.utwente.nl:8901/ y introducir la frecuencia de 4625 kHz');
+	        break;
+	    case '!listen':
+	        client.say(config.room, 'To listen to the Buzzer/UVB-76 open the URL http://websdr.ewi.utwente.nl:8901/ and enter the 4625 kHz frequency');
+	        break;
+	    case '!signals':
+	        client.say(config.room, 'Radio signal identification guide: http://www.rtl-sdr.com/signal-identification-guide/');
+	        break;
+	    default:
+	        break;
+	}
+
 });
 
 client.addListener('pm', function (from, to, message) {
