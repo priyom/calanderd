@@ -50,13 +50,13 @@ client.addListener('message' + config.room, function (from, to, message) {
     // console.log(from + ": " + message.args[1]);
 
 	switch(message.args[1]) {
-		case '!next':
+	    case '!next':
 	        console.log('[i] received next command from ' + from);
 	        cmdNext(false);
 	        break;
-		case '!stream':			
+	    case '!stream':			
 	        client.say(config.room, 'To listen to the Buzzer/UZB-76 stream, click here http://priyom.hetmer.cz:8000/buzzer.ogg.m3u');
-			break;
+		break;
 	    case '!help':
 	        client.say(config.room, 'Available commands: !listen !escuchar !next !stream !faq !primer !dossier !schedule !signals !propagation !eam !hfgcs !ndb !oth');
 	        break;
