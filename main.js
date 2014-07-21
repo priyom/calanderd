@@ -126,6 +126,12 @@ function main() {
 
         res.on('data', function (d) {
             var obj = JSON.parse(d);
+            
+            if (typeof obj != 'object') {
+                main();
+                return false;
+            }
+            
             onHttpReturn(obj);
         });
 
