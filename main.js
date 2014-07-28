@@ -124,7 +124,7 @@ function main() {
     https.get(calanderUrl, function (res) {
         console.log("[i] got statusCode: ", res.statusCode);
 
-		var data = '';
+        var data = '';
 
         res.on('data', function(chunk) {
             data += chunk;
