@@ -34,6 +34,8 @@ client.connect(5, function (input) {
 
         console.log('[i] room connection is ready');
 
+        client.say(config.room, 'Voice, fast!');
+
         setInterval(function () {
             client.send('PONG', 'empty');
         }, 2 * 60 * 1000);
