@@ -97,6 +97,7 @@ client.addListener('message' + config.room, function (from, to, message) {
             client.say(config.room, 'Radio signal identification guide: http://www.rtl-sdr.com/signal-identification-guide/');
             break;
         case '!kurva':
+        case '!k':
             client.say(config.room, 'KURVA !');
             break;
         default:
