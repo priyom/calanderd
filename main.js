@@ -73,7 +73,7 @@ client.addListener('message' + config.room, function (from, to, message) {
             client.say(config.room, 'You can learn about shortwave propagation here: http://short-wave.info/index.php?feature=propagation');
             break;
         case '!schedule':
-            client.say(config.room, 'Number station schedule: http://priyom.org/number-stations/number-station-schedule.aspx');
+            client.say(config.room, 'Number station schedule: http://priyom.org/number-stations/station-schedule.aspx');
             break;
         case '!eam':
             client.say(config.room, 'You can learn more about EAM here: http://en.wikipedia.org/wiki/Emergency_Action_Message');
