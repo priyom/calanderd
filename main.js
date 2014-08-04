@@ -53,6 +53,7 @@ client.addListener('message' + config.room, function (from, to, message) {
 
     switch(message.args[1]) {
         case '!next':
+        case '!n':
             console.log('[i] received next command from ' + from);
             cmdNext(false);
             break;
@@ -109,7 +110,7 @@ client.addListener('message' + config.room, function (from, to, message) {
 });
 
 client.addListener('pm', function (from, to, message) {
-    if (message.args[1] === '!next'){
+    if (message.args[1] === '!next' || message.args[1] === '!n'){
         console.log('[i] received private next command from ' + from);
         cmdNext(false, from);
     }
