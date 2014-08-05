@@ -85,7 +85,7 @@ client.addListener('message' + config.room, function (from, to, message) {
             client.say(config.room, 'You can learn more about HF-GCS here: http://en.wikipedia.org/wiki/High_Frequency_Global_Communications_System');
             break;
         case '!ndb':
-            client.say(config.room, 'You can learn more about NDBs here: http://en.wikipedia.org/wiki/Non_Directional_Beaconh');
+            client.say(config.room, 'You can learn more about NDBs here: http://en.wikipedia.org/wiki/Non_Directional_Beacon');
             break;
         case '!oth':
             client.say(config.room, 'You can learn more about OTH radars here: http://en.wikipedia.org/wiki/Over-the-horizon_radar');
