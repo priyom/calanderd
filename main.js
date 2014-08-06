@@ -34,7 +34,7 @@ client.connect(5, function (input) {
 
         console.log('[i] room connection is ready');
 
-        client.say(config.room, 'Voice, fast!');
+        // client.say(config.room, 'Voice, fast!');
 
         setInterval(function () {
             client.send('PONG', 'empty');
@@ -99,10 +99,10 @@ client.addListener('message' + config.room, function (from, to, message) {
         case '!signals':
             client.say(config.room, 'Radio signal identification guide: http://www.rtl-sdr.com/signal-identification-guide/');
             break;
-        case '!kurva':
-        case '!k':
-            client.say(config.room, 'KURVA !');
-            break;
+        // case '!kurva':
+        // case '!k':
+        //     client.say(config.room, 'KURVA !');
+        //     break;
         default:
             break;
     }
