@@ -298,7 +298,7 @@ function getNextEvent(humanReadable) {
             returnVal += nextEvents[eventId].title;
 
             if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
-                returnVal += " http://" + nextEvents[eventId].frequency + ".t.hetmer.cz";
+                returnVal += " http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency;
             }
         }
     } else {
