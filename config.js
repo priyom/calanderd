@@ -2,7 +2,7 @@ var config = {}
 
 // irc config
 config.room = '#priyom';
-config.server = 'kornbluth.freenode.net';
+config.server = 'chat.freenode.net';
 config.botName = 'IvoSchwarz';
 config.userName = 'ivo',
 config.realName = 'Kompot\'s Ivo',
