@@ -103,6 +103,17 @@ client.addListener('message' + config.room, function (from, to, message) {
         // case '!k':
         //     client.say(config.room, 'KURVA !');
         //     break;
+        case '!reload':
+            client.say(config.room, 'Reloading...');
+            
+            console.log('[i] restarting');
+            hasEvents = false;
+            events = [];
+            clearTimeout(schedNext);
+            clearTimeout(schedAnnounce);
+            main();
+            return false;
+            break;
         default:
             break;
     }
