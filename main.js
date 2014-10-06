@@ -107,12 +107,12 @@ client.addListener('message' + config.room, function (from, to, message) {
             client.say(config.room, 'Reloading...');
             
             console.log('[i] restarting');
-            hasEvents = false;
+            // hasEvents = false;
             events = [];
-            clearTimeout(schedNext);
-            clearTimeout(schedAnnounce);
-            main();
-            return false;
+            // clearTimeout(schedNext);
+            // clearTimeout(schedAnnounce);
+            // main();
+            // return false;
             break;
         default:
             break;
