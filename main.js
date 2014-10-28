@@ -69,7 +69,7 @@ client.addListener('message' + config.room, function (from, to, message) {
        return true;
     }
 
-    if(message.args[1].startsWith("!k ") || message.args[1].startsWith("!kurva") || message.args[1].startsWith("!f ") || message.args[1].startsWith("!fuck ")) {
+    if(message.args[1].startsWith("!k ") || message.args[1].startsWith("!kurva ") || message.args[1].startsWith("!f ") || message.args[1].startsWith("!fuck ")) {
        var re = / (.*)/; 
        var match = re.exec(message.args[1]);
        client.say(config.room, 'KURVA' + match[0] + ' !');
