@@ -47,9 +47,20 @@ client.connect(5, function (input) {
 
 });
 
+if (typeof String.prototype.startsWith != 'function') {
+  String.prototype.startsWith = function (str){
+    return this.slice(0, str.length) == str;
+  };
+}
+
 client.addListener('message' + config.room, function (from, to, message) {
     
-    // console.log(from + ": " + message.args[1]);
+    if(message.args[1].startsWith("!manyu ")) {
+       var re = / (.*)/; 
+       var match = re.exec(message.args[1]);
+       client.say(config.room, 'Manyu hugs,' + match[0]);
+       return true;
+    }
 
     switch(message.args[1]) {
         case '!next':
@@ -99,20 +110,23 @@ client.addListener('message' + config.room, function (from, to, message) {
         case '!signals':
             client.say(config.room, 'Radio signal identification guide: http://www.rtl-sdr.com/signal-identification-guide/');
             break;
-        // case '!kurva':
-        // case '!k':
-        //     client.say(config.room, 'KURVA !');
-        //     break;
+        case '!manyu':
+            client.say(config.room, 'Manyu hugs, ' + from);
+            break;
+        case '!veryu':
+            client.say(config.room, 'Veryu strong, ' + from);
+            break;
+        case '!f':
+        case '!fuck':
+        case '!kurva':
+        case '!k':
+            client.say(config.room, from + ', KURVA !');
+            break;
         case '!reload':
             client.say(config.room, 'Reloading...');
             
             console.log('[i] restarting');
-            // hasEvents = false;
             events = [];
-            // clearTimeout(schedNext);
-            // clearTimeout(schedAnnounce);
-            // main();
-            // return false;
             break;
         default:
             break;
