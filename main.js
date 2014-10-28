@@ -62,6 +62,20 @@ client.addListener('message' + config.room, function (from, to, message) {
        return true;
     }
 
+    if(message.args[1].startsWith("!veryu ")) {
+       var re = / (.*)/; 
+       var match = re.exec(message.args[1]);
+       client.say(config.room, 'Veryu strong,' + match[0]);
+       return true;
+    }
+
+    if(message.args[1].startsWith("!k ") || message.args[1].startsWith("!kurva") || message.args[1].startsWith("!f ") || message.args[1].startsWith("!fuck ")) {
+       var re = / (.*)/; 
+       var match = re.exec(message.args[1]);
+       client.say(config.room, 'KURVA' + match[0] + ' !');
+       return true;
+    }
+
     switch(message.args[1]) {
         case '!next':
         case '!n':
