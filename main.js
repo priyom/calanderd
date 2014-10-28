@@ -86,7 +86,7 @@ client.addListener('message' + config.room, function (from, to, message) {
             client.say(config.room, 'To listen to the Buzzer/UZB-76 stream, click here http://argon.printf.cc:8000/buzzer.ogg.m3u');
             break;
         case '!help':
-            client.say(config.room, 'Available commands: !listen !escuchar !next !stream !faq !primer !dossier !schedule !signals !propagation !eam !hfgcs !ndb !oth');
+            client.say(config.room, 'Available commands: !stream !listen !next !manyu');
             break;
         case '!faq':
             client.say(config.room, 'You can find our Buzzer FAQ here: http://priyom.org/number-stations/slavic/s28/faq.aspx - don\'t forget to also check out !dossier');
@@ -119,7 +119,7 @@ client.addListener('message' + config.room, function (from, to, message) {
             client.say(config.room, 'Para escuchar el Buzzer/UVB-76 tienes que abrir el enlace http://websdr.ewi.utwente.nl:8901/ y introducir la frecuencia de 4625 kHz');
             break;
         case '!listen':
-            client.say(config.room, 'To listen to the Buzzer/UVB-76 open the URL http://websdr.ewi.utwente.nl:8901/ and enter the 4625 kHz frequency');
+            client.say(config.room, 'To listen to the stations open the URL http://websdr.ewi.utwente.nl:8901/');
             break;
         case '!signals':
             client.say(config.room, 'Radio signal identification guide: http://www.rtl-sdr.com/signal-identification-guide/');
