@@ -79,6 +79,7 @@ client.addListener('message' + config.room, function (from, to, message) {
     switch(message.args[1]) {
         case '!next':
         case '!n':
+        case '!N':
             console.log('[i] received next command from ' + from);
             cmdNext(false);
             break;
