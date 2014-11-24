@@ -174,7 +174,8 @@ function cmdNext(recursion) {
         main();
         return false;
     }
-        client.say(config.room, next);
+    
+    client.say(config.room, next);
 
     if (recursion) {
         var next = getNextEvent(false);
