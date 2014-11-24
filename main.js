@@ -161,10 +161,8 @@ function nextAnnouncement() {
     console.log('[i] scheduler event cmdNext added for ' + next.toISOString());
 }
 
-function cmdNext(recursion, to) {
+function cmdNext(recursion) {
     recursion = typeof recursion !== 'undefined' ? recursion : true;
-    to = typeof to !== 'undefined' ? to : false;
-
     var next = getNextEvent();
 
     if (next === -1) {
@@ -176,12 +174,7 @@ function cmdNext(recursion, to) {
         main();
         return false;
     }
-
-    if (to !== false) {
-        client.say(to, next);
-    } else {
         client.say(config.room, next);
-    }
 
     if (recursion) {
         var next = getNextEvent(false);
