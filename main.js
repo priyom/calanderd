@@ -1,4 +1,4 @@
-// calanderd 0.1
+// calanderd 0.2
 // GNU GPL 3+
 // Written for #priyom on freenode (priyom.org) by Tomáš Hetmer.
 
@@ -34,8 +34,6 @@ client.connect(5, function (input) {
 
         console.log('[i] room connection is ready');
 
-        // client.say(config.room, 'Voice, fast!');
-
         setInterval(function () {
             client.send('PONG', 'empty');
         }, 2 * 60 * 1000);
@@ -47,39 +45,11 @@ client.connect(5, function (input) {
 
 });
 
-if (typeof String.prototype.startsWith != 'function') {
-  String.prototype.startsWith = function (str){
-    return this.slice(0, str.length) == str;
-  };
-}
-
 client.addListener('message' + config.room, function (from, to, message) {
-    
-    if(message.args[1].startsWith("!manyu ")) {
-       var re = / (.*)/; 
-       var match = re.exec(message.args[1]);
-       client.say(config.room, 'Manyu hugs,' + match[0]);
-       return true;
-    }
-
-    if(message.args[1].startsWith("!veryu ")) {
-       var re = / (.*)/; 
-       var match = re.exec(message.args[1]);
-       client.say(config.room, 'Veryu strong,' + match[0]);
-       return true;
-    }
-
-    if(message.args[1].startsWith("!k ") || message.args[1].startsWith("!kurva ") || message.args[1].startsWith("!f ") || message.args[1].startsWith("!fuck ")) {
-       var re = / (.*)/; 
-       var match = re.exec(message.args[1]);
-       client.say(config.room, 'KURVA' + match[0] + ' !');
-       return true;
-    }
 
     switch(message.args[1]) {
         case '!next':
         case '!n':
-        case '!N':
             console.log('[i] received next command from ' + from);
             cmdNext(false);
             break;
@@ -87,55 +57,13 @@ client.addListener('message' + config.room, function (from, to, message) {
             client.say(config.room, 'To listen to the Buzzer/UZB-76 stream, click here http://argon.printf.cc:8000/buzzer.ogg.m3u');
             break;
         case '!help':
-            client.say(config.room, 'Available commands: !stream !listen !next !manyu');
-            break;
-        case '!faq':
-            client.say(config.room, 'You can find our Buzzer FAQ here: http://priyom.org/number-stations/slavic/s28/faq.aspx - don\'t forget to also check out !dossier');
-            break;
-        case '!primer':
-            client.say(config.room, 'You can find our introductory buzzer tutorial here: http://www.priyom.org/media/57653/the_buzzer_primer.pdf');
-            break;
-        case '!dossier':
-            client.say(config.room, 'You can find our Pip dossier here: http://priyom.org/media/56944/the_pip_dossier.pdf');
-            break;
-        case '!propagation':
-            client.say(config.room, 'You can learn about shortwave propagation here: http://short-wave.info/index.php?feature=propagation');
-            break;
-        case '!schedule':
-            client.say(config.room, 'Number station schedule: http://priyom.org/number-stations/station-schedule.aspx');
-            break;
-        case '!eam':
-            client.say(config.room, 'You can learn more about EAM here: http://en.wikipedia.org/wiki/Emergency_Action_Message');
-            break;
-        case '!hfgcs':
-            client.say(config.room, 'You can learn more about HF-GCS here: http://en.wikipedia.org/wiki/High_Frequency_Global_Communications_System');
-            break;
-        case '!ndb':
-            client.say(config.room, 'You can learn more about NDBs here: http://en.wikipedia.org/wiki/Non_Directional_Beacon');
-            break;
-        case '!oth':
-            client.say(config.room, 'You can learn more about OTH radars here: http://en.wikipedia.org/wiki/Over-the-horizon_radar');
+            client.say(config.room, 'Available commands: !stream !listen !escuchar !next');
             break;
         case '!escuchar':
             client.say(config.room, 'Para escuchar el Buzzer/UVB-76 tienes que abrir el enlace http://websdr.ewi.utwente.nl:8901/ y introducir la frecuencia de 4625 kHz');
             break;
         case '!listen':
             client.say(config.room, 'To listen to the stations open the URL http://websdr.ewi.utwente.nl:8901/');
-            break;
-        case '!signals':
-            client.say(config.room, 'Radio signal identification guide: http://www.rtl-sdr.com/signal-identification-guide/');
-            break;
-        case '!manyu':
-            client.say(config.room, 'Manyu hugs, ' + from);
-            break;
-        case '!veryu':
-            client.say(config.room, 'Veryu strong, ' + from);
-            break;
-        case '!f':
-        case '!fuck':
-        case '!kurva':
-        case '!k':
-            client.say(config.room, from + ', KURVA !');
             break;
         case '!reload':
             client.say(config.room, 'Reloading...');
@@ -147,13 +75,6 @@ client.addListener('message' + config.room, function (from, to, message) {
             break;
     }
 
-});
-
-client.addListener('pm', function (from, to, message) {
-    if (message.args[1] === '!next' || message.args[1] === '!n'){
-        console.log('[i] received private next command from ' + from);
-        cmdNext(false, from);
-    }
 });
 
 client.addListener('error', function (message) {
@@ -179,12 +100,6 @@ function main() {
 
         res.on('end', function () {
             var obj = JSON.parse(data);
-
-            /*if (typeof obj != 'object') {
-                main();
-                return false;
-            }*/
-
             onHttpReturn(obj);
         });
 
