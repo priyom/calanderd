@@ -118,7 +118,7 @@ function cmdNext() {
     next = moment(next);
   }
   
-  $("#events").html("<h3><b>Next station " + next.fromNow() + "</b></h3>" + getNextEvent());
+  $("#events").html("<h3>Next station " + next.fromNow() + "</h3>" + getNextEvent());
 }
 
 $(document).ready(function() {
