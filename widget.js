@@ -88,9 +88,9 @@ function getNextEvent(humanReadable) {
      for (var eventId = 0; eventId < nextEvents.length; eventId++) {
        
        if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
-         returnVal += "<li><a href='http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency + "'>•  " + nextEvents[eventId].title +"</a></li>";
+         returnVal += "<li><a href='http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency + "'>" + nextEvents[eventId].title +"</a></li>";
        } else {
-         returnVal += "<li>• " + nextEvents[eventId].title + "</li>";
+         returnVal += "<li>" + nextEvents[eventId].title + "</li>";
        }
        
      }
