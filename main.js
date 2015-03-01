@@ -57,10 +57,7 @@ client.addListener('message' + config.room, function (from, to, message) {
             client.say(config.room, 'To listen to the Buzzer/UZB-76 stream, click here http://stream.priyom.org:8000/buzzer.ogg.m3u');
             break;
         case '!help':
-            client.say(config.room, 'Available commands: !stream !listen !escuchar !next');
-            break;
-        case '!escuchar':
-            client.say(config.room, 'Para escuchar el Buzzer/UVB-76 tienes que abrir el enlace http://websdr.ewi.utwente.nl:8901/ y introducir la frecuencia de 4625 kHz');
+            client.say(config.room, 'Available commands: !stream !listen !next');
             break;
         case '!listen':
             client.say(config.room, 'To listen to the stations open the URL http://websdr.ewi.utwente.nl:8901/');
