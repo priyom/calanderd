@@ -70,10 +70,9 @@ client.addListener('message' + config.room, function (from, to, message) {
     if(message.args[1].indexOf("!fast ") === 0) {
        var re = / (.*)/; 
        var match = re.exec(message.args[1]);
-       client.say(config.room, match[0] + ', fast!');
+       client.say(config.room, match[0].trim() + ', fast!');
        return true;
     }
-
 
     switch(message.args[1]) {
         case '!next':
@@ -110,6 +109,9 @@ client.addListener('message' + config.room, function (from, to, message) {
             break;
         case '!fast':
             client.say(config.room, 'Voice, fast!');
+            break;
+        case '!why':
+            client.say(config.room, 'The Buzzer is not audible at this time of the day in the Netherlands due to HF propagation characteristics. Try again later in the local evening.');
         default:
             break;
     }
