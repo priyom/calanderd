@@ -1,6 +1,7 @@
 // calanderd 0.2
 // GNU GPL 3+
 // Written for #priyom on freenode (priyom.org) by Tomáš Hetmer.
+// With epicness by Your Man Dzen.
 
 var config = require('./config');
 var irc = require('irc');
@@ -74,6 +75,17 @@ client.addListener('message' + config.room, function (from, to, message) {
        return true;
     }
 
+    if(message.args[1].indexOf("!win ") === 0) {
+       var re = / (.*)/;
+       var match = re.exec(message.args[1]);
+       if ((Math.floor(Math.random() * 100) == 0)) {
+           client.say(config.room, 'fucking win ' + match[0].trim() + ' :D');
+       } else {
+           client.say(config.room, match[0].trim() + ' wins');
+       }
+       return true;
+    }
+
     switch(message.args[1]) {
         case '!next':
         case '!n':
@@ -112,6 +124,14 @@ client.addListener('message' + config.room, function (from, to, message) {
             break;
         case '!why':
             client.say(config.room, 'The Buzzer is not audible at this time of the day in the Netherlands due to HF propagation characteristics. Try again later in the local evening.');
+            break;
+        case '!wat':
+            if ((Math.floor(Math.random() * 100) == 0)) {
+                // the song "What What (In the Butt)" by Samwell
+                client.say(config.room, 'https://www.youtube.com/watch?v=fbGkxcY7YFU');
+            } else {
+                client.say(config.room, "I don't even...");
+            }
         default:
             break;
     }
