@@ -141,45 +141,6 @@ client.addListener('message' + config.room, function (from, to, message) {
        return true;
     }
 
-    if(message.args[1].indexOf("!manyu ") === 0) {
-       var re = / (.*)/; 
-       var match = re.exec(message.args[1]);
-       client.say(config.room, 'Manyu hugs,' + match[0]);
-       return true;
-    }
-
-    if(message.args[1].indexOf("!veryu ") === 0) {
-       var re = / (.*)/; 
-       var match = re.exec(message.args[1]);
-       client.say(config.room, 'Veryu strong,' + match[0]);
-       return true;
-    }
-
-    if(message.args[1].indexOf("!k ") === 0 || message.args[1].indexOf("!kurva ") === 0 || message.args[1].indexOf("!f ") === 0 || message.args[1].indexOf("!fuck ") === 0) {
-       var re = / (.*)/; 
-       var match = re.exec(message.args[1]);
-       client.say(config.room, 'KURVA' + match[0] + ' !');
-       return true;
-    }
-
-    if(message.args[1].indexOf("!fast ") === 0) {
-       var re = / (.*)/; 
-       var match = re.exec(message.args[1]);
-       client.say(config.room, match[0].trim() + ', fast!');
-       return true;
-    }
-
-    if(message.args[1].indexOf("!win ") === 0) {
-       var re = / (.*)/;
-       var match = re.exec(message.args[1]);
-       if ((Math.floor(Math.random() * 100) == 0)) {
-           client.say(config.room, 'fucking win ' + match[0].trim() + ' :D');
-       } else {
-           client.say(config.room, match[0].trim() + ' wins');
-       }
-       return true;
-    }
-
     switch(message.args[1]) {
         case '!next':
         case '!n':
@@ -201,31 +162,8 @@ client.addListener('message' + config.room, function (from, to, message) {
             console.log('[i] restarting');
             events = [];
             break;
-        case '!manyu':
-            client.say(config.room, 'Manyu hugs, ' + from);
-            break;
-        case '!veryu':
-            client.say(config.room, 'Veryu strong, ' + from);
-            break;
-        case '!f':
-        case '!fuck':
-        case '!kurva':
-        case '!k':
-            client.say(config.room, from + ', KURVA !');
-            break;
-        case '!fast':
-            client.say(config.room, 'Voice, fast!');
-            break;
         case '!why':
             client.say(config.room, 'The Buzzer is not audible at this time of the day in the Netherlands due to HF propagation characteristics. Try again later in the local evening.');
-            break;
-        case '!wat':
-            if ((Math.floor(Math.random() * 100) == 0)) {
-                // the song "What What (In the Butt)" by Samwell
-                client.say(config.room, 'https://www.youtube.com/watch?v=fbGkxcY7YFU');
-            } else {
-                client.say(config.room, "I don't even...");
-            }
         default:
             break;
     }
