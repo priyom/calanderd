@@ -148,7 +148,7 @@ client.addListener('message' + config.room, function (from, to, message) {
             cmdNext(false);
             break;
         case '!stream':         
-            client.say(config.room, 'To listen to the Buzzer/UZB-76 stream, click here http://stream.priyom.org:8000/buzzer.ogg.m3u');
+            client.say(config.room, 'To listen to the Buzzer/MDZhB stream, click here http://stream.priyom.org:8000/buzzer.ogg.m3u');
             break;
         case '!help':
             client.say(config.room, 'Available commands: !stream !listen !next');
@@ -340,7 +340,7 @@ function getNextEvent(humanReadable) {
             returnVal += nextEvents[eventId].title;
 
             if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
-                returnVal += " http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency;
+                returnVal += " http://t.svita.cz/" + nextEvents[eventId].frequency;
             }
         }
     } else {
