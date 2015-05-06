@@ -148,13 +148,10 @@ client.addListener('message' + config.room, function (from, to, message) {
             cmdNext(false);
             break;
         case '!stream':         
-            client.say(config.room, 'To listen to the Buzzer/MDZhB stream, click here http://stream.priyom.org:8000/buzzer.ogg.m3u');
-            break;
-        case '!help':
-            client.say(config.room, 'Available commands: !stream !listen !next');
+            client.say(config.room, 'http://stream.priyom.org:8000/buzzer.ogg.m3u');
             break;
         case '!listen':
-            client.say(config.room, 'To listen to the stations open the URL http://websdr.ewi.utwente.nl:8901/');
+            client.say(config.room, 'http://websdr.ewi.utwente.nl:8901/');
             break;
         case '!reload':
             client.say(config.room, 'Reloading...');
@@ -164,6 +161,9 @@ client.addListener('message' + config.room, function (from, to, message) {
             break;
         case '!why':
             client.say(config.room, 'The Buzzer is not audible at this time of the day in the Netherlands due to HF propagation characteristics. Try again later in the local evening.');
+            break;
+        case '!link':
+            client.say(config.room, 'http://priyom.org');
         default:
             break;
     }
