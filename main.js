@@ -27,13 +27,25 @@ var client = new irc.Client(config.server, config.botName, {
     secure: config.tls,
 });
 
+function padString(input, char, len){
+        if(input.length>len)return input;
+        input=(new Array(len+1).join(char))+input;
+        return input.substr(input.length-len,input.length);
+}
+
+var timestamp = function(){
+        var d = new Date();
+		return "("+padString(d.getUTCHours(),"0",2)+":"+padString(d.getUTCMinutes(),"0",2)+":"+padString(d.getUTCSeconds(),"0",2)+") | ";
+};
+
+
 client.connect(5, function (input) {
-    console.log("[i] calanderd on server");
+    console.log(timestamp()+"[i] calanderd on server");
 
     client.join(config.room, function (input) {
         hasRoom = true;
 
-        console.log('[i] room connection is ready');
+        console.log(timestamp()+'[i] room connection is ready');
 
         setInterval(function () {
             client.send('PONG', 'empty');
@@ -144,7 +156,7 @@ client.addListener('message' + config.room, function (from, to, message) {
     switch(message.args[1]) {
         case '!next':
         case '!n':
-            console.log('[i] received next command from ' + from);
+            console.log(timestamp()+'[i] received next command from ' + from);
             cmdNext(false);
             break;
         case '!stream':         
@@ -156,7 +168,7 @@ client.addListener('message' + config.room, function (from, to, message) {
         case '!reload':
             client.say(config.room, 'Reloading...');
             
-            console.log('[i] restarting');
+            console.log(timestamp()+'[i] restarting');
             events = [];
             break;
         case '!why':
@@ -171,11 +183,11 @@ client.addListener('message' + config.room, function (from, to, message) {
 });
 
 client.addListener('error', function (message) {
-    console.log('[!] error: ', message);
+    console.log(timestamp()+'[!] error: ', message);
 });
 
 function main() {
-    console.log('[i] Asking Google for data');
+    console.log(timestamp()+'[i] Asking Google for data');
 
     var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/" + config.calendarId + "@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + new Date().toISOString() +
         "&fields=items(start%2Csummary)%2Csummary&key=" + config.apiKey + "&maxResults=" + config.maxResults;
@@ -183,7 +195,7 @@ function main() {
     var https = require('https');
 
     https.get(calanderUrl, function (res) {
-        console.log("[i] got statusCode: ", res.statusCode);
+        console.log(timestamp()+"[i] got statusCode: ", res.statusCode);
 
         var data = '';
 
@@ -197,7 +209,7 @@ function main() {
         });
 
     }).on('error', function (e) {
-        console.log("[!] " + e.message);
+        console.log(timestamp()+"[!] " + e.message);
         // it shouldn't cycle :>
         // yeah i know, it's stupid
         // why not fix it for me?
@@ -208,8 +220,8 @@ function main() {
 function onHttpReturn(obj) {
     hasEvents = true;
 
-    console.log("[i] Number of events found: " + obj.items.length);
-    console.log("[i] Time of first event: " + obj.items[0].start.dateTime);
+    console.log(timestamp()+"[i] Number of events found: " + obj.items.length);
+    console.log(timestamp()+"[i] Time of first event: " + obj.items[0].start.dateTime);
 
     for (var i = 0; i < obj.items.length; i++) {
         var title = obj.items[i].summary;
@@ -231,7 +243,7 @@ function onHttpReturn(obj) {
 
 
 function onReady() {
-    console.log('[i] both actions succeeded, starting main system');
+    console.log(timestamp()+'[i] both actions succeeded, starting main system');
     schedAnnounce = setTimeout(nextAnnouncement, 1);
 }
 
@@ -239,7 +251,7 @@ function nextAnnouncement() {
     var next = getNextEvent(false);
 
     if (next === -1) {
-        console.log('[i] restarting');
+        console.log(timestamp()+'[i] restarting');
         hasEvents = false;
         events = [];
         clearTimeout(schedNext);
@@ -251,7 +263,7 @@ function nextAnnouncement() {
     var time = next.getTime() - (new Date()).getTime();
     schedNext = setTimeout(cmdNext, time - config.announceEarly);
 
-    console.log('[i] scheduler event cmdNext added for ' + next.toISOString());
+    console.log(timestamp()+'[i] scheduler event cmdNext added for ' + next.toISOString());
 }
 
 function cmdNext(recursion) {
@@ -259,7 +271,7 @@ function cmdNext(recursion) {
     var next = getNextEvent();
 
     if (next === -1) {
-        console.log('[i] restarting');
+        console.log(timestamp()+'[i] restarting');
         hasEvents = false;
         events = [];
         clearTimeout(schedNext);
@@ -275,7 +287,7 @@ function cmdNext(recursion) {
         var time = next.getTime() - (new Date()).getTime();
         schedAnnounce = setTimeout(nextAnnouncement, time + 1 * 60000);
 
-        console.log('[i] scheduler event nextAnnouncement added for ' + next.toISOString());
+        console.log(timestamp()+'[i] scheduler event nextAnnouncement added for ' + next.toISOString());
     }
 }
 
