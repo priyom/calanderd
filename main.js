@@ -6,7 +6,10 @@
 var config = require('./config');
 var irc = require('irc');
 var moment = require('moment');
-var colors = require('irc-colors');
+var colors;
+if (config.color) {
+    colors = require('irc-colors');
+}
 
 var hasRoom = false;
 var hasEvents = false;
