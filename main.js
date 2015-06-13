@@ -6,6 +6,7 @@
 var config = require('./config');
 var irc = require('irc');
 var moment = require('moment');
+var colors = require('irc-colors');
 
 var hasRoom = false;
 var hasEvents = false;
@@ -302,6 +303,51 @@ function extractFrequency(textToMatch) {
     }
 }
 
+var family1A = [ "E06", "G06", "S06", "M14", "FSK 200/500", "FSK 200/1000" ];
+var family1B = [ "E07", "V07", "M12", "XPA", "XPA2" ];
+var family3 = [ "E11", "E11a", "S11a", "M03", "POL FSK" ];
+var family18 = [ "V02a", "M08a", "HM01" ];
+
+function formatStation(match, name, rest) {
+    if (! config.color) {
+        return match;
+    }
+
+    var cname;
+
+    if (family1A.indexOf(name) > 0)
+        cname = colors.brown(name);
+    else if (family1B.indexOf(name) > 0)
+        cname = colors.purple(name);
+    else if (family3.indexOf(name) > 0)
+        cname = colors.teal(name);
+    else if (family18.indexOf(name) > 0)
+        cname = colors.navy(name);
+    else
+        cname = colors.green(name);
+
+    return (cname + " " + rest);
+}
+
+function formatSearch(match, search) {
+    return config.color ? (" " + colors.yellow(search) + " ") : match;
+}
+
+function formatFrequency(freq) {
+    return config.color ? colors.olive(freq) : freq;
+}
+
+function formatEvent(title) {
+    if (! config.color) {
+        return title;
+    }
+
+    title = title.replace(/^([\w /]+) (\d+ ?kHz|Search)/i, formatStation);
+    title = title.replace(/ (Search) /i, formatSearch);
+    title = title.replace(/(\d+ ?kH(z))/gi, formatFrequency);
+    return title;
+}
+
 // Based on original events code written by foo (UTwente-Usability/events.js)
 function getNextEvent(humanReadable) {
     humanReadable = typeof humanReadable !== 'undefined' ? humanReadable : true;
@@ -334,33 +380,32 @@ function getNextEvent(humanReadable) {
         return -1;
     }
 
-    var returnVal = "";
-
-    if (humanReadable) {
-        for (var eventId = 0; eventId < nextEvents.length; eventId++) {
-
-            if (eventId > 0) {
-                returnVal += " • ";
-            }
-
-            var next = moment(nextEvents[eventId].eventDate);
-
-            if (eventId == 0) {
-                returnVal += next.utc().format('H:mm') + " " + next.fromNow() + " ";
-            }
-
-            returnVal += nextEvents[eventId].title;
-
-            if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
-                returnVal += " http://t.svita.cz/" + nextEvents[eventId].frequency;
-            }
-        }
-    } else {
+    if (! humanReadable) {
         // here we assume that only date parsing is needed
-        returnVal = nextEvents[0].eventDate;
+        return nextEvents[0].eventDate;
     }
 
-    return returnVal;
+    if (nextEvents.length == 0) {
+        return "";
+    }
+
+    var first = moment(nextEvents[0].eventDate);
+    var h = first.utc().format('H:mm');
+    var header = (config.color ? colors.bold(h) : h) + " " + first.fromNow() + " ";
+    var e = [];
+
+    for (var eventId = 0; eventId < nextEvents.length; eventId++) {
+
+        var returnVal = formatEvent(nextEvents[eventId].title);
+
+        if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
+            returnVal += " http://t.svita.cz/" + nextEvents[eventId].frequency;
+        }
+
+        e.push(returnVal);
+    }
+
+    return (header + e.join(" • "));
 }
 
 main();

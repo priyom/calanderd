@@ -9,6 +9,7 @@ config.realName = 'Ivo Schwarz',
 config.password = '';
 config.port = 7000;
 config.tls = true;
+config.color = true;
 
 // calendar settings
 config.apiKey = '';
