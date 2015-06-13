@@ -380,34 +380,32 @@ function getNextEvent(humanReadable) {
         return -1;
     }
 
-    var returnVal = "";
-
-    if (humanReadable) {
-        for (var eventId = 0; eventId < nextEvents.length; eventId++) {
-
-            if (eventId > 0) {
-                returnVal += " • ";
-            }
-
-            var next = moment(nextEvents[eventId].eventDate);
-
-            if (eventId == 0) {
-                var h = next.utc().format('H:mm');
-                returnVal += (config.color ? colors.bold(h) : h) + " " + next.fromNow() + " ";
-            }
-
-            returnVal += formatEvent(nextEvents[eventId].title);
-
-            if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
-                returnVal += " http://t.svita.cz/" + nextEvents[eventId].frequency;
-            }
-        }
-    } else {
+    if (! humanReadable) {
         // here we assume that only date parsing is needed
-        returnVal = nextEvents[0].eventDate;
+        return nextEvents[0].eventDate;
     }
 
-    return returnVal;
+    if (nextEvents.length == 0) {
+        return "";
+    }
+
+    var first = moment(nextEvents[0].eventDate);
+    var h = first.utc().format('H:mm');
+    var header = (config.color ? colors.bold(h) : h) + " " + first.fromNow() + " ";
+    var e = [];
+
+    for (var eventId = 0; eventId < nextEvents.length; eventId++) {
+
+        var returnVal = formatEvent(nextEvents[eventId].title);
+
+        if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
+            returnVal += " http://t.svita.cz/" + nextEvents[eventId].frequency;
+        }
+
+        e.push(returnVal);
+    }
+
+    return (header + e.join(" • "));
 }
 
 main();
