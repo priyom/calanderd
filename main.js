@@ -303,10 +303,9 @@ function extractFrequency(textToMatch) {
     }
 }
 
-var family1A = [ "E06", "G06", "S06", "M14", "FSK 200/500", "FSK 200/1000" ];
-var family1B = [ "E07", "V07", "M12", "XPA", "XPA2" ];
-var family3 = [ "E11", "E11a", "S11a", "M03", "POL FSK" ];
-var family18 = [ "V02a", "M08a", "HM01" ];
+var stationMorse = [ "M14", "M24", "M12", "M03", "M01b", "M97", "M08a" ];
+var stationVoice = [ "E06", "G06", "S06", "E07", "E07a", "V07", "V02a", "S06s", "V30" ];
+var stationDigital = [ "FSK 200/500", "FSK 200/1000", "XPA", "XPA2", "HM01" ];
 
 function formatStation(match, name, rest) {
     if (! config.color) {
@@ -315,16 +314,14 @@ function formatStation(match, name, rest) {
 
     var cname;
 
-    if (family1A.indexOf(name) > 0)
-        cname = colors.brown(name);
-    else if (family1B.indexOf(name) > 0)
-        cname = colors.purple(name);
-    else if (family3.indexOf(name) > 0)
-        cname = colors.teal(name);
-    else if (family18.indexOf(name) > 0)
-        cname = colors.navy(name);
-    else
+    if (stationMorse.indexOf(name) > 0)
+        cname = colors.cyan(name);
+    else if (stationVoice.indexOf(name) > 0)
         cname = colors.green(name);
+    else if (stationDigital.indexOf(name) > 0)
+        cname = colors.red(name);
+    else
+        cname = colors.brown(name);
 
     return (cname + " " + rest);
 }
