@@ -399,7 +399,7 @@ function getNextEvent(humanReadable) {
         var returnVal = formatEvent(nextEvents[eventId].title);
 
         if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
-            returnVal += " http://t.svita.cz/" + nextEvents[eventId].frequency;
+            returnVal += " http://freq.ml/" + nextEvents[eventId].frequency;
         }
 
         e.push(returnVal);
