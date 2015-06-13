@@ -6,6 +6,7 @@
 var config = require('./config');
 var irc = require('irc');
 var moment = require('moment');
+var colors = require('irc-colors');
 
 var hasRoom = false;
 var hasEvents = false;
@@ -302,6 +303,33 @@ function extractFrequency(textToMatch) {
     }
 }
 
+function formatStation(match, name, rest) {
+    if (! config.color) {
+        return match;
+    }
+
+    return (colors.green(name) + " " + rest);
+}
+
+function formatSearch(match, search) {
+    return config.color ? (" " + colors.yellow(search) + " ") : match;
+}
+
+function formatFrequency(freq) {
+    return config.color ? colors.olive(freq) : freq;
+}
+
+function formatEvent(title) {
+    if (! config.color) {
+        return title;
+    }
+
+    title = title.replace(/^([\w /]+) (\d+ ?kHz|Search)/i, formatStation);
+    title = title.replace(/ (Search) /i, formatSearch);
+    title = title.replace(/(\d+ ?kH(z))/gi, formatFrequency);
+    return title;
+}
+
 // Based on original events code written by foo (UTwente-Usability/events.js)
 function getNextEvent(humanReadable) {
     humanReadable = typeof humanReadable !== 'undefined' ? humanReadable : true;
@@ -346,10 +374,11 @@ function getNextEvent(humanReadable) {
             var next = moment(nextEvents[eventId].eventDate);
 
             if (eventId == 0) {
-                returnVal += next.utc().format('H:mm') + " " + next.fromNow() + " ";
+                var h = next.utc().format('H:mm');
+                returnVal += (config.color ? colors.bold(h) : h) + " " + next.fromNow() + " ";
             }
 
-            returnVal += nextEvents[eventId].title;
+            returnVal += formatEvent(nextEvents[eventId].title);
 
             if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
                 returnVal += " http://t.svita.cz/" + nextEvents[eventId].frequency;
