@@ -293,13 +293,11 @@ function cmdNext(recursion) {
 }
 
 function extractFrequency(textToMatch) {
-    var digitsRe = '([0-9]*k|[0-9]* k)';
-    var exp = new RegExp(digitsRe);
+    var exp = new RegExp(/(\d+) ?kHz/i);
     var expResult = exp.exec(textToMatch);
 
     if (expResult !== null) {
-      expResult = expResult[0].substring(0, expResult[0].length - 1);
-      return expResult;
+      return expResult[1];
     }
 }
 
