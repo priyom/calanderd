@@ -166,7 +166,7 @@ client.addListener('message' + config.room, function (from, to, message) {
         case '!next':
         case '!n':
             console.log(timestamp()+'[i] received next command from ' + from);
-            cmdNext(false);
+            cmdNext();
             break;
         case '!stream':         
             client.say(config.room, 'http://stream.priyom.org:8000/buzzer.ogg.m3u');
@@ -270,27 +270,31 @@ function nextAnnouncement() {
     if (next === -1) return false;
 
     var time = next.getTime() - (new Date()).getTime();
-    schedNext = setTimeout(cmdNext, time - config.announceEarly);
+    schedNext = setTimeout(recurseNext, time - config.announceEarly);
 
-    console.log(timestamp()+'[i] scheduler event cmdNext added for ' + next.toISOString());
+    console.log(timestamp()+'[i] scheduler event recurseNext added for ' + next.toISOString());
 }
 
-function cmdNext(recursion) {
-    recursion = typeof recursion !== 'undefined' ? recursion : true;
+function recurseNext() {
+
+    if (! cmdNext()) return false;
+
+    var next = getNextDate();
+    if (next === -1) return false;
+
+    var time = next.getTime() - (new Date()).getTime();
+    schedAnnounce = setTimeout(nextAnnouncement, time + 1 * 60000);
+
+    console.log(timestamp()+'[i] scheduler event nextAnnouncement added for ' + next.toISOString());
+}
+
+function cmdNext() {
+
     var next = getNextEvent();
     if (next === -1) return false;
-    
+
     client.say(config.room, next);
-
-    if (recursion) {
-        var next = getNextDate();
-        if (next === -1) return false;
-
-        var time = next.getTime() - (new Date()).getTime();
-        schedAnnounce = setTimeout(nextAnnouncement, time + 1 * 60000);
-
-        console.log(timestamp()+'[i] scheduler event nextAnnouncement added for ' + next.toISOString());
-    }
+    return true;
 }
 
 function extractFrequency(textToMatch) {
