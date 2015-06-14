@@ -345,7 +345,7 @@ function formatEvent(title) {
         return title;
     }
 
-    title = title.replace(/^([\w /]+) (\d+ ?kHz|Search)/i, formatStation);
+    title = title.replace(/^([\w /]+?) (\d+ ?kHz|Search)/i, formatStation);
     title = title.replace(/ (Search) /i, formatSearch);
     title = title.replace(/\d+ ?[kK][hH][zZ]( [A-Z][A-Z/]+)?/g, formatFrequency);
     return title;
