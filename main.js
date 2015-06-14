@@ -256,18 +256,18 @@ function onReady() {
     schedAnnounce = setTimeout(nextAnnouncement, 1);
 }
 
+function restart() {
+    console.log(timestamp()+'[i] restarting');
+    hasEvents = false;
+    events = [];
+    clearTimeout(schedNext);
+    clearTimeout(schedAnnounce);
+    main();
+}
+
 function nextAnnouncement() {
     var next = getNextDate();
-
-    if (next === -1) {
-        console.log(timestamp()+'[i] restarting');
-        hasEvents = false;
-        events = [];
-        clearTimeout(schedNext);
-        clearTimeout(schedAnnounce);
-        main();
-        return false;
-    }
+    if (next === -1) return false;
 
     var time = next.getTime() - (new Date()).getTime();
     schedNext = setTimeout(cmdNext, time - config.announceEarly);
@@ -278,21 +278,14 @@ function nextAnnouncement() {
 function cmdNext(recursion) {
     recursion = typeof recursion !== 'undefined' ? recursion : true;
     var next = getNextEvent();
-
-    if (next === -1) {
-        console.log(timestamp()+'[i] restarting');
-        hasEvents = false;
-        events = [];
-        clearTimeout(schedNext);
-        clearTimeout(schedAnnounce);
-        main();
-        return false;
-    }
+    if (next === -1) return false;
     
     client.say(config.room, next);
 
     if (recursion) {
         var next = getNextDate();
+        if (next === -1) return false;
+
         var time = next.getTime() - (new Date()).getTime();
         schedAnnounce = setTimeout(nextAnnouncement, time + 1 * 60000);
 
@@ -360,6 +353,7 @@ function advanceEvents() {
      }
 
     if (events.length < 3) {
+        restart();
         return false;
     }
     return true;
