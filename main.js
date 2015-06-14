@@ -309,9 +309,9 @@ function extractFrequency(textToMatch) {
     }
 }
 
-var stationMorse = [ "M14", "M24", "M12", "M03", "M01b", "M97", "M08a" ];
-var stationVoice = [ "E06", "G06", "S06", "E07", "E07a", "V07", "V02a", "S06s", "V30" ];
 var stationDigital = [ "FSK 200/500", "FSK 200/1000", "XPA", "XPA2", "POL FSK", "HM01" ];
+var morseExp = new RegExp(/^M\d+[a-z]?$/);
+var voiceExp = new RegExp(/^[EGSV]\d+[a-z]?$/);
 
 function formatStation(match, name, rest) {
     if (! config.color) {
@@ -320,12 +320,12 @@ function formatStation(match, name, rest) {
 
     var cname;
 
-    if (stationMorse.indexOf(name) > 0)
-        cname = colors.cyan(name);
-    else if (stationVoice.indexOf(name) > 0)
-        cname = colors.green(name);
-    else if (stationDigital.indexOf(name) > 0)
+    if (stationDigital.indexOf(name) > 0)
         cname = colors.red(name);
+    else if (morseExp.test(name))
+        cname = colors.cyan(name);
+    else if (voiceExp.test(name))
+        cname = colors.green(name);
     else
         cname = colors.brown(name);
 
