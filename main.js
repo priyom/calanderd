@@ -6,7 +6,10 @@
 var config = require('./config');
 var irc = require('irc');
 var moment = require('moment');
-var colors = require('irc-colors');
+var colors;
+if (config.color) {
+    colors = require('irc-colors');
+}
 
 var hasRoom = false;
 var hasEvents = false;
@@ -63,84 +66,89 @@ function stationPageLink(station) {
     // avoid pissing people off, veryu
     station = station.toLowerCase();
 
+    var milBase = 'http://priyom.org/military-stations/';
+    var diploBase = 'http://priyom.org/diplomatic-stations/';
+    var numberBase = 'http://priyom.org/number-stations/';
+
+    // mil/diplo/digi aliases
+    switch (station) {
+    case 'katok65':
+        station = 'katok-65';
+        break;
+    case 'plovets41':
+        station = 'plovets-41';
+        break;
+    case 'hf-gcs':
+        station = 'hfgcs';
+        break;
+    case 'mazielka':
+        station = 'x06';
+        break;
+    case 'polfsk':
+        station = 'pol-fsk';
+        break;
+    case '200/1000':
+        station = 'fsk-2001000';
+        break;
+    case '200/500':
+        station = 'fsk-200500';
+        break;
+    }
+
     // yep mil/diplo/digi stuff is special
     switch (station) {
     case 'buzzer':
     case 's28':
-        return 'http://priyom.org/military-stations/russia/the-buzzer';
+        return milBase + 'russia/the-buzzer';
     case 'pip':
     case 's30':
-        return 'http://priyom.org/military-stations/russia/the-pip';
+        return milBase + 'russia/the-pip';
     case 'wheel':
     case 's32':
-        return 'http://priyom.org/military-stations/russia/the-squeaky-wheel';
+        return milBase + 'russia/the-squeaky-wheel';
     case 's5292':
-        return 'http://priyom.org/military-stations/russia/s5292';
     case 's4790':
-        return 'http://priyom.org/military-stations/russia/s4790';
     case 's5426':
-        return 'http://priyom.org/military-statinos/russia/s5426';
-    case 'katok65':
     case 'katok-65':
-        return 'http://priyom.org/military-stations/russia/katok-65';
-    case 'plovets41':
     case 'plovets-41':
-        return 'http://priyom.org/military-stations/russia/plovets-41';
     case 'm32':
-        return 'http://priyom.org/military-stations/russia/m32';
+        return milBase + 'russia/' + station;
     case 'monolith':
-        return 'http://priyom.org/military-stations/russia/monolyth-messages-description';
+        return milBase + 'russia/monolyth-messages-description';
     case 'alphabet':
-        return 'http://priyom.org/military-stations/russia/russian-phonetic-alphabet-and-numbers';
+        return milBase + 'russia/russian-phonetic-alphabet-and-numbers';
     case 'hfgcs':
-    case 'hf-gcs':
-        return 'http://priyom.org/military-stations/united-states/hfgcs';
+        return milBase + 'united-states/' + station;
     case 'x06':
-    case 'mazielka':
-        return 'http://priyom.org/diplomatic-stations/russia/x06';
     case 'x06a':
-        return 'http://priyom.org/diplomatic-stations/russia/x06a';
     case 'x06b':
-        return 'http://priyom.org/diplomatic-stations/russia/x06b';
     case 'x06c':
-        return 'http://priyom.org/diplomatic-stations/russia/x06c';
-    case '200/1000':
-        return 'http://priyom.org/number-stations/digital/fsk-2001000';
-    case '200/500':
-        return 'http://priyom.org/number-stations/digital/fsk-200500';
+        return diploBase + 'russia/' + station;
+    case 'fsk-2001000':
+    case 'fsk-200500':
     case 'dp01': // fo, e!
-        return 'http://priyom.org/number-stations/digital/dp01';
     case 'hm01':
-        return 'http://priyom.org/number-stations/digital/hm01';
-    case 'polfsk':
-        return 'http://priyom.org/number-stations/digital/pol-fsk';
     case 'xpa':
-        return 'http://priyom.org/number-stations/digital/xpa';
     case 'xpa2':
-        return 'http://priyom.org/number-stations/digital/xpa2';
     case 'sk01':
-        return 'http://priyom.org/number-stations/digital/sk01';
     case 'xp':
-        return 'http://priyom.org/number-stations/digital/xp';
+    case 'pol-fsk':
+        return numberBase + 'digital/' + station;
     case 'sked':
-        return 'http://priyom.org/number-stations/station-schedule';
+        return numberBase + 'station-schedule';
     }
 
     // the rest should be ok to do this way
-    if (station.indexOf('e') === 0) {
-        return 'http://priyom.org/number-stations/english/' + station;
-    }
-    if (station.indexOf('g') === 0) {
-        return 'http://priyom.org/number-stations/german/' + station;
-    }
-    if (station.indexOf('s') === 0) {
-        return 'http://priyom.org/number-stations/slavic/' + station;
-    }
-    if (station.indexOf('v') === 0) {
-        return 'http://priyom.org/number-stations/other/' + station;
-    }
-    if (station.indexOf('m') === 0) {
-        return 'http://priyom.org/number-stations/morse/' + station;
+    var languages = {
+        'e': 'english',
+        'g': 'german',
+        's': 'slavic',
+        'v': 'other',
+        'm': 'morse',
+    };
+    var language = languages[station[0]];
+    if (language) {
+        return numberBase + language + '/' + station;
     }
 
     return 'u wot m8';
@@ -293,13 +301,11 @@ function cmdNext(recursion) {
 }
 
 function extractFrequency(textToMatch) {
-    var digitsRe = '([0-9]*k|[0-9]* k)';
-    var exp = new RegExp(digitsRe);
+    var exp = new RegExp(/(\d+) ?kHz/i);
     var expResult = exp.exec(textToMatch);
 
     if (expResult !== null) {
-      expResult = expResult[0].substring(0, expResult[0].length - 1);
-      return expResult;
+      return expResult[1];
     }
 }
 
@@ -341,7 +347,7 @@ function formatEvent(title) {
 
     title = title.replace(/^([\w /]+) (\d+ ?kHz|Search)/i, formatStation);
     title = title.replace(/ (Search) /i, formatSearch);
-    title = title.replace(/(\d+ ?kH(z))/gi, formatFrequency);
+    title = title.replace(/\d+ ?[kK][hH][zZ]( [A-Z][A-Z/]+)?/g, formatFrequency);
     return title;
 }
 
