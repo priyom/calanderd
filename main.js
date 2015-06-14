@@ -311,7 +311,7 @@ function extractFrequency(textToMatch) {
 
 var stationMorse = [ "M14", "M24", "M12", "M03", "M01b", "M97", "M08a" ];
 var stationVoice = [ "E06", "G06", "S06", "E07", "E07a", "V07", "V02a", "S06s", "V30" ];
-var stationDigital = [ "FSK 200/500", "FSK 200/1000", "XPA", "XPA2", "HM01" ];
+var stationDigital = [ "FSK 200/500", "FSK 200/1000", "XPA", "XPA2", "POL FSK", "HM01" ];
 
 function formatStation(match, name, rest) {
     if (! config.color) {
