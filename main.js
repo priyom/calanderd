@@ -257,7 +257,7 @@ function onReady() {
 }
 
 function nextAnnouncement() {
-    var next = getNextEvent(false);
+    var next = getNextDate();
 
     if (next === -1) {
         console.log(timestamp()+'[i] restarting');
@@ -292,7 +292,7 @@ function cmdNext(recursion) {
     client.say(config.room, next);
 
     if (recursion) {
-        var next = getNextEvent(false);
+        var next = getNextDate();
         var time = next.getTime() - (new Date()).getTime();
         schedAnnounce = setTimeout(nextAnnouncement, time + 1 * 60000);
 
@@ -351,9 +351,7 @@ function formatEvent(title) {
     return title;
 }
 
-// Based on original events code written by foo (UTwente-Usability/events.js)
-function getNextEvent(humanReadable) {
-    humanReadable = typeof humanReadable !== 'undefined' ? humanReadable : true;
+function advanceEvents() {
 
      var eventToCheck = events[0];
      while (eventToCheck != null && eventToCheck.eventDate < new Date()) {
@@ -362,13 +360,22 @@ function getNextEvent(humanReadable) {
      }
 
     if (events.length < 3) {
-        return -1;
+        return false;
     }
+    return true;
+}
 
-    if (! humanReadable) {
-        // here we assume that only date parsing is needed
-        return events[0].eventDate;
-    }
+function getNextDate() {
+
+    if (! advanceEvents()) return -1;
+
+    return events[0].eventDate;
+}
+
+// Based on original events code written by foo (UTwente-Usability/events.js)
+function getNextEvent() {
+
+    if (! advanceEvents()) return -1;
 
     var nextEvents = [];
     var prevEvent;
