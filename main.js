@@ -361,6 +361,15 @@ function getNextEvent(humanReadable) {
         eventToCheck = events[0];
      }
 
+    if (events.length < 3) {
+        return -1;
+    }
+
+    if (! humanReadable) {
+        // here we assume that only date parsing is needed
+        return events[0].eventDate;
+    }
+
     var nextEvents = [];
     var prevEvent;
 
@@ -377,15 +386,6 @@ function getNextEvent(humanReadable) {
         } else {
             break;
         }
-    }
-
-    if (events.length < 3) {
-        return -1;
-    }
-
-    if (! humanReadable) {
-        // here we assume that only date parsing is needed
-        return nextEvents[0].eventDate;
     }
 
     if (nextEvents.length == 0) {
