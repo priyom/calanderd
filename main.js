@@ -317,7 +317,7 @@ function formatStation(match, name, rest) {
 
     var cname;
 
-    if (stationDigital.indexOf(name) > 0)
+    if (stationDigital.indexOf(name) >= 0)
         cname = colors.red(name);
     else if (morseExp.test(name))
         cname = colors.cyan(name);
