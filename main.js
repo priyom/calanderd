@@ -113,12 +113,21 @@ function stationPageLink(station) {
     case 'plovets-41':
     case 'm32':
         return milBase + 'russia/' + station;
+    case 'mxi':
+    case 'cluster':
+        return milBase + 'russia/naval-markers';
     case 'monolith':
         return milBase + 'russia/monolyth-messages-description';
     case 'alphabet':
         return milBase + 'russia/russian-phonetic-alphabet-and-numbers';
     case 'hfgcs':
         return milBase + 'united-states/' + station;
+    case 'vc01':
+        return milBase + 'china/chinese-robot';
+    case 'm51':
+        return milBase + 'france/' + station;
+    case 'xsl':
+        return milBase + 'japan/slot-machine';
     case 'x06':
     case 'x06a':
     case 'x06b':
