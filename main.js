@@ -354,7 +354,7 @@ function formatStation(match, name, rest) {
     if (stationDigital.indexOf(name) >= 0)
         cname = colors.red(name);
     else if (morseExp.test(name))
-        cname = colors.cyan(name);
+        cname = colors.purple(name);
     else if (voiceExp.test(name))
         cname = colors.green(name);
     else
@@ -364,7 +364,7 @@ function formatStation(match, name, rest) {
 }
 
 function formatSearch(match, search) {
-    return config.color ? (" " + colors.yellow(search) + " ") : match;
+    return config.color ? (" " + colors.bold(search) + " ") : match;
 }
 
 function formatFrequency(freq) {
