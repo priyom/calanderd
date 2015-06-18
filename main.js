@@ -194,7 +194,6 @@ client.addListener('message' + config.room, function (from, to, message) {
             break;
         case '!link':
             client.say(config.room, 'http://priyom.org');
-        default:
             break;
     }
 
