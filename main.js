@@ -11,8 +11,6 @@ if (config.color) {
     colors = require('irc-colors');
 }
 
-var hasRoom = false;
-var hasEvents = false;
 var events = [];
 
 var schedNext;
@@ -47,17 +45,13 @@ client.connect(5, function (input) {
     console.log(timestamp()+"[i] calanderd on server");
 
     client.join(config.room, function (input) {
-        hasRoom = true;
-
         console.log(timestamp()+'[i] room connection is ready');
 
         setInterval(function () {
             client.send('PONG', 'empty');
         }, 2 * 60 * 1000);
 
-        if (hasRoom && hasEvents) {
-            onReady();
-        }
+        fetchEvents();
     });
 
 });
@@ -210,8 +204,12 @@ client.addListener('error', function (message) {
     console.log(timestamp()+'[!] error: ', message);
 });
 
-function main() {
-    console.log(timestamp()+'[i] Asking Google for data');
+function fetchEvents() {
+    events = [];
+    clearTimeout(schedNext);
+    clearTimeout(schedAnnounce);
+
+    console.log(timestamp()+'[i] (re)starting, asking Google for data');
 
     var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/" + config.calendarId + "@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + new Date().toISOString() +
         "&fields=items(start%2Csummary)%2Csummary&key=" + config.apiKey + "&maxResults=" + config.maxResults;
@@ -237,13 +235,11 @@ function main() {
         // it shouldn't cycle :>
         // yeah i know, it's stupid
         // why not fix it for me?
-        main();
+        fetchEvents();
     });
 }
 
 function onHttpReturn(obj) {
-    hasEvents = true;
-
     console.log(timestamp()+"[i] Number of events found: " + obj.items.length);
     console.log(timestamp()+"[i] Time of first event: " + obj.items[0].start.dateTime);
 
@@ -262,25 +258,7 @@ function onHttpReturn(obj) {
         events.push(theEvent);
     }
 
-    if (hasRoom && hasEvents) {
-        onReady();
-    }
-}
-
-
-function onReady() {
-    console.log(timestamp()+'[i] both actions succeeded, starting main system');
-    clearTimeout(schedAnnounce);
-    schedAnnounce = setTimeout(nextAnnouncement, 1);
-}
-
-function restart() {
-    console.log(timestamp()+'[i] restarting');
-    hasEvents = false;
-    events = [];
-    clearTimeout(schedNext);
-    clearTimeout(schedAnnounce);
-    main();
+    nextAnnouncement();
 }
 
 function nextAnnouncement() {
@@ -288,7 +266,7 @@ function nextAnnouncement() {
     if (next === -1) return false;
 
     var time = next.getTime() - (new Date()).getTime();
-    clearTimeout(schedNext);
+    clearTimeout(schedNext); // Prevent grossest race condition
     schedNext = setTimeout(recurseNext, time - config.announceEarly);
 
     console.log(timestamp()+'[i] scheduler event recurseNext added for ' + next.toISOString());
@@ -391,7 +369,7 @@ function advanceEvents() {
      }
 
     if (events.length < 3) {
-        restart();
+        fetchEvents();
         return false;
     }
     return true;
@@ -463,5 +441,3 @@ function getNextEvent() {
 
     return (header + e.join(" • "));
 }
-
-main();
