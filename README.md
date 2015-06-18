@@ -6,6 +6,8 @@ Calander daemon (c). This will get all the upcoming Google Calander events and s
 
 This uses https://github.com/martynsmith/node-irc (so npm install irc) and https://github.com/moment/moment (npm install --save moment).
 
+This also uses https://github.com/fent/irc-colors.js (npm install irc-colors) to display schedule colored announcement in the channel. This can be disabled by going into config.js and setting config.color to false.
+
 Purpose
 ----
 At #priyom (http://priyom.org) we needed a real-time way to announce upcoming foreign intelligence shortwave broadcasts.
