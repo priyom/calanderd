@@ -424,7 +424,6 @@ function getNextEvent() {
                 case "CW":
                     // This makes the CW stations +1000 Hz on USB.
                     frequency = frequency - 1;
-                    break;
                 case "LSB":
                 case "AM":
                     // Especially for M08a.
