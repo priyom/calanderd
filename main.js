@@ -439,18 +439,21 @@ function getNextEvent() {
         var returnVal = formatEvent(nextEvents[eventId].title);
 
         if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
-            if (nextEvents[eventId].mode === "CW") {
-                // This makes the CW stations +1000 Hz on USB.
-                returnVal += " http://freq.ml/" + (nextEvents[eventId].frequency - 1);
-            } else if (nextEvents[eventId].mode === "LSB") {
-                // Especially for M08a.
-                returnVal += " http://freq.ml/" + nextEvents[eventId].frequency + "lsb";
-            } else if (nextEvents[eventId].mode === "AM") {
-				// For HM01 too... veryu
-				returnVal += " http://freq.ml" + nextEvents[eventId].frequency + "am";
-			} else{
-                returnVal += " http://freq.ml/" + nextEvents[eventId].frequency;
+            var frequency = nextEvents[eventId].frequency;
+            var mode = "";
+            switch(nextEvents[eventId].mode) {
+                case "CW":
+                    // This makes the CW stations +1000 Hz on USB.
+                    frequency = frequency - 1;
+                    break;
+                case "LSB":
+                case "AM":
+                    // Especially for M08a.
+                    // For HM01 too... veryu
+                    mode = nextEvents[eventId].mode.toLowerCase();
+                    break;
             }
+            returnVal += " http://freq.ml/" + frequency + mode;
         }
 
         e.push(returnVal);
