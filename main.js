@@ -270,6 +270,7 @@ function onHttpReturn(obj) {
 
 function onReady() {
     console.log(timestamp()+'[i] both actions succeeded, starting main system');
+    clearTimeout(schedAnnounce);
     schedAnnounce = setTimeout(nextAnnouncement, 1);
 }
 
@@ -287,6 +288,7 @@ function nextAnnouncement() {
     if (next === -1) return false;
 
     var time = next.getTime() - (new Date()).getTime();
+    clearTimeout(schedNext);
     schedNext = setTimeout(recurseNext, time - config.announceEarly);
 
     console.log(timestamp()+'[i] scheduler event recurseNext added for ' + next.toISOString());
