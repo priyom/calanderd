@@ -1,7 +1,7 @@
 // calanderd 0.2
 // GNU GPL 3+
 // Written for #priyom on freenode (priyom.org) by Tomáš Hetmer.
-// With epicness by Your Man Dzen.
+// With additions by danix111, MilesPrower, linkfanel.
 
 var config = require('./config');
 var irc = require('irc');
@@ -252,10 +252,12 @@ function onHttpReturn(obj) {
         var time = obj.items[i].start.dateTime;
         var eventDate = new Date(time);
         var frequency = extractFrequency(title);
+        var mode = extractMode(title);
         var theEvent = {
             "eventDate": eventDate,
             "title": title,
-            "frequency": frequency
+            "frequency": frequency,
+			"mode": mode
         };
         events.push(theEvent);
     }
@@ -313,6 +315,12 @@ function cmdNext() {
 }
 
 function extractFrequency(textToMatch) {
+    // Without this the frequency marked as "last used" is given as a link.
+    // Which is misleading as fuck.
+    if (textToMatch.indexOf("Search") !== -1) {
+        return;
+    }
+
     var exp = new RegExp(/(\d+) ?kHz/i);
     var expResult = exp.exec(textToMatch);
 
@@ -320,6 +328,15 @@ function extractFrequency(textToMatch) {
       return expResult[1];
     }
 }
+
+function extractMode(textToMatch) {
+    var exp = new RegExp(/AM|USB\/AM|USB|LSB|CW|MCW/i);
+    var expResult = exp.exec(textToMatch);
+    if (expResult !== null) {
+        return expResult[0];
+    }
+}
+
 
 var stationDigital = [ "FSK 200/500", "FSK 200/1000", "XPA", "XPA2", "POL FSK", "HM01" ];
 var morseExp = new RegExp(/^M\d+[a-z]?$/);
@@ -422,7 +439,18 @@ function getNextEvent() {
         var returnVal = formatEvent(nextEvents[eventId].title);
 
         if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
-            returnVal += " http://freq.ml/" + nextEvents[eventId].frequency;
+            if (nextEvents[eventId].mode === "CW") {
+                // This makes the CW stations +1000 Hz on USB.
+                returnVal += " http://freq.ml/" + (nextEvents[eventId].frequency - 1);
+            } else if (nextEvents[eventId].mode === "LSB") {
+                // Especially for M08a.
+                returnVal += " http://freq.ml/" + nextEvents[eventId].frequency + "lsb";
+            } else if (nextEvents[eventId].mode === "AM") {
+				// For HM01 too... veryu
+				returnVal += " http://freq.ml" + nextEvents[eventId].frequency + "am";
+			} else{
+                returnVal += " http://freq.ml/" + nextEvents[eventId].frequency;
+            }
         }
 
         e.push(returnVal);
