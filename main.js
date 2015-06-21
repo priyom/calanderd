@@ -417,7 +417,7 @@ function getNextEvent() {
 
         var returnVal = formatEvent(nextEvents[eventId].title);
 
-        if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
+        if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3 && nextEvents[eventId].title.indexOf('Target') !== -1) {
             var frequency = nextEvents[eventId].frequency;
             var mode = "";
             switch(nextEvents[eventId].mode) {
