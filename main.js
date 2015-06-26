@@ -195,6 +195,9 @@ client.addListener('message' + config.room, function (from, to, message) {
         case '!link':
             client.say(config.room, 'http://priyom.org');
             break;
+		case '!rivet':
+			client.say(config.room, 'http://www.apul64.dsl.pipex.com/enigma2000/rivet/index.html');
+			break;
     }
 
 });
