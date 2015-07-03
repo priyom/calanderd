@@ -186,8 +186,6 @@ client.addListener('message' + config.room, function (from, to, message) {
         case '!why':
             client.say(config.room, 'The Buzzer is not audible at this time of the day in the Netherlands due to HF propagation characteristics. Try again later in the local evening.');
             break;
-        case '!new':
-            client.say(config.room, 'You can visit our site at http://priyom.org where we have a good read regarding any and all information about logged numbers stations.');
             break;
         case '!rules':
             client.say(config.room, 'http://priyom.org/about/irc-rules');
