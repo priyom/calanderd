@@ -362,11 +362,10 @@ function formatEvent(title) {
 
 function advanceEvents() {
 
-     var eventToCheck = events[0];
-     while (eventToCheck != null && eventToCheck.eventDate < new Date()) {
+    var now = new Date();
+    while (events[0] != null && events[0].eventDate < now) {
         events.shift();
-        eventToCheck = events[0];
-     }
+    }
 
     if (events.length < 3) {
         fetchEvents();
