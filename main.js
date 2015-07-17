@@ -247,13 +247,12 @@ function onHttpReturn(obj) {
         var title = obj.items[i].summary;
         var time = obj.items[i].start.dateTime;
         var eventDate = new Date(time);
-        var frequency = extractFrequency(title);
-        var mode = extractMode(title);
+        var info = extractInfo(title);
         var theEvent = {
             "eventDate": eventDate,
             "title": title,
-            "frequency": frequency,
-            "mode": mode
+            "frequency": info[0],
+            "mode": info[1],
         };
         events.push(theEvent);
     }
@@ -290,29 +289,21 @@ function cmdNext() {
     return true;
 }
 
-function extractFrequency(textToMatch) {
+function extractInfo(textToMatch) {
     // Without this the frequency marked as "last used" is given as a link.
     // Which is misleading as fuck.
-    if (textToMatch.indexOf("Search") !== -1) {
-        return;
+    if (textToMatch.indexOf(" Search ") !== -1) {
+        return [ undefined, undefined ];
     }
 
-    var exp = new RegExp(/(\d+) ?kHz/i);
+    var exp = new RegExp(/(\d+) ?[kK][hH][zZ]((.*?[kK][hH][zZ])?? ([A-Z][A-Z/]+))?/);
     var expResult = exp.exec(textToMatch);
-
-    if (expResult !== null) {
-      return expResult[1];
+    if (expResult === null) {
+        return [ undefined, undefined ];
     }
-}
 
-function extractMode(textToMatch) {
-    var exp = new RegExp(/AM|USB\/AM|USB|LSB|CW|MCW/i);
-    var expResult = exp.exec(textToMatch);
-    if (expResult !== null) {
-        return expResult[0];
-    }
+    return [ expResult[1], expResult[4] ];
 }
-
 
 var stationDigital = [ "FSK 200/500", "FSK 200/1000", "XPA", "XPA2", "POL FSK", "HM01" ];
 var morseExp = new RegExp(/^M\d+[a-z]?$/);
