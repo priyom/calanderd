@@ -179,9 +179,7 @@ client.addListener('message' + config.room, function (from, to, message) {
             break;
         case '!reload':
             client.say(config.room, 'Reloading...');
-            
-            console.log(timestamp()+'[i] restarting');
-            events = [];
+            fetchEvents();
             break;
         case '!why':
             client.say(config.room, 'The Buzzer is not audible at this time of the day in the Netherlands due to HF propagation characteristics. Try again later in the local evening.');
