@@ -276,13 +276,9 @@ function recurseNext() {
 
     if (! cmdNext()) return false;
 
-    var next = getNextDate();
-    if (next === -1) return false;
-
-    var time = next.getTime() - (new Date()).getTime();
-    schedAnnounce = setTimeout(nextAnnouncement, time + 1 * 60000);
-
-    console.log(timestamp()+'[i] scheduler event nextAnnouncement added for ' + next.toISOString());
+    var delay = config.announceEarly + 10000;
+    schedAnnounce = setTimeout(nextAnnouncement, delay);
+    console.log(timestamp()+'[i] scheduler event nextAnnouncement in ' + delay + ' ms');
 }
 
 function cmdNext() {
