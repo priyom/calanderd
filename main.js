@@ -205,10 +205,6 @@ client.addListener('error', function (message) {
 });
 
 function fetchEvents() {
-    events = [];
-    clearTimeout(schedNext);
-    clearTimeout(schedAnnounce);
-
     console.log(timestamp()+'[i] (re)starting, asking Google for data');
 
     var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/" + config.calendarId + "@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + new Date().toISOString() +
@@ -232,9 +228,8 @@ function fetchEvents() {
 
     }).on('error', function (e) {
         console.log(timestamp()+"[!] " + e.message);
-        // it shouldn't cycle :>
-        // yeah i know, it's stupid
-        // why not fix it for me?
+        // it shouldn't cycle :> Maybe there should be a counter to give up
+        // after N consecutive failures
         fetchEvents();
     });
 }
@@ -243,6 +238,7 @@ function onHttpReturn(obj) {
     console.log(timestamp()+"[i] Number of events found: " + obj.items.length);
     console.log(timestamp()+"[i] Time of first event: " + obj.items[0].start.dateTime);
 
+    var ev = [];
     for (var i = 0; i < obj.items.length; i++) {
         var title = obj.items[i].summary;
         var time = obj.items[i].start.dateTime;
@@ -254,8 +250,12 @@ function onHttpReturn(obj) {
             "frequency": info[0],
             "mode": info[1],
         };
-        events.push(theEvent);
+        ev.push(theEvent);
     }
+
+    clearTimeout(schedNext);
+    clearTimeout(schedAnnounce);
+    events = ev;
 
     nextAnnouncement();
 }
@@ -265,7 +265,7 @@ function nextAnnouncement() {
     if (next === -1) return false;
 
     var time = next.getTime() - (new Date()).getTime();
-    clearTimeout(schedNext); // Prevent grossest race condition
+    clearTimeout(schedNext); // Safety net against race conditions
     schedNext = setTimeout(recurseNext, time - config.announceEarly);
 
     console.log(timestamp()+'[i] scheduler event recurseNext added for ' + next.toISOString());
