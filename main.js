@@ -182,7 +182,7 @@ client.addListener('message' + config.room, function (from, to, message) {
             fetchEvents();
             break;
         case '!why':
-            client.say(config.room, 'The Buzzer is not audible at this time of the day in the Netherlands due to HF propagation characteristics. Try again later in the local evening.');
+            client.say(config.room, 'The Buzzer is not audible at this time of the day due to HF propagation characteristics. Try again later in the local evening.');
             break;
         case '!rules':
             client.say(config.room, 'http://priyom.org/about/irc-rules');
@@ -192,6 +192,9 @@ client.addListener('message' + config.room, function (from, to, message) {
             break;
         case '!rivet':
             client.say(config.room, 'http://www.apul64.dsl.pipex.com/enigma2000/rivet/index.html');
+            break;
+        case '!utc':
+            client.say(config.room, (new Date()).toUTCString());
             break;
     }
 
@@ -401,6 +404,8 @@ function getNextEvent() {
 
         var returnVal = formatEvent(nextEvents[eventId].title);
 
+        // Don't give a link for "Target", as "Target" implies that the TX
+        // can NOT be heard on UTwente (most of the time at least)
         if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3 && nextEvents[eventId].title.indexOf('Target') === -1) {
             var frequency = nextEvents[eventId].frequency;
             var mode = "";
