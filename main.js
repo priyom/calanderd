@@ -79,13 +79,16 @@ function stationPageLink(station) {
         station = 'x06';
         break;
     case 'polfsk':
-        station = 'pol-fsk';
+    case 'pol-fsk':
+        station = 'f11';
         break;
     case '200/1000':
-        station = 'fsk-2001000';
+    case 'fsk-2001000':
+        station = 'f06';
         break;
     case '200/500':
-        station = 'fsk-200500';
+    case 'fsk-200500':
+        station = 'f01';
         break;
     }
 
@@ -127,15 +130,12 @@ function stationPageLink(station) {
     case 'x06b':
     case 'x06c':
         return diploBase + 'russia/' + station;
-    case 'fsk-2001000':
-    case 'fsk-200500':
     case 'dp01': // fo, e!
     case 'hm01':
     case 'xpa':
     case 'xpa2':
     case 'sk01':
     case 'xp':
-    case 'pol-fsk':
         return numberBase + 'digital/' + station;
     case 'sked':
         return numberBase + 'station-schedule';
@@ -148,6 +148,7 @@ function stationPageLink(station) {
         's': 'slavic',
         'v': 'other',
         'm': 'morse',
+        'f': 'digital',
     };
     var language = languages[station[0]];
     if (language) {
