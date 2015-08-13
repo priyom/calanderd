@@ -412,6 +412,11 @@ function getNextEvent() {
             var frequency = nextEvents[eventId].frequency;
             var mode = "";
             switch(nextEvents[eventId].mode) {
+                case "RTTY":
+                    // Give it as USB with the center frequency at +2 kHz
+                    frequency = frequency - 2;
+                    break;
+
                 case "CW":
                     // This makes the CW stations +1000 Hz on USB.
                     frequency = frequency - 1;
