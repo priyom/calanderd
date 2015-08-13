@@ -171,7 +171,7 @@ client.addListener('message' + config.room, function (from, to, message) {
             console.log(timestamp()+'[i] received next command from ' + from);
             cmdNext();
             break;
-        case '!stream':         
+        case '!stream':
             client.say(config.room, 'http://stream.priyom.org:8000/buzzer.ogg.m3u');
             break;
         case '!listen':
@@ -184,16 +184,15 @@ client.addListener('message' + config.room, function (from, to, message) {
         case '!why':
             client.say(config.room, 'The Buzzer is not audible at this time of the day in the Netherlands due to HF propagation characteristics. Try again later in the local evening.');
             break;
-            break;
         case '!rules':
             client.say(config.room, 'http://priyom.org/about/irc-rules');
             break;
         case '!link':
             client.say(config.room, 'http://priyom.org');
             break;
-		case '!rivet':
-			client.say(config.room, 'http://www.apul64.dsl.pipex.com/enigma2000/rivet/index.html');
-			break;
+        case '!rivet':
+            client.say(config.room, 'http://www.apul64.dsl.pipex.com/enigma2000/rivet/index.html');
+            break;
     }
 
 });
