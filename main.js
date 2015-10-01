@@ -413,6 +413,7 @@ function getNextEvent() {
             var mode = "";
             switch(nextEvents[eventId].mode) {
                 case "RTTY":
+                case "RTTY/CW":
                     // Give it as USB with the center frequency at +2 kHz
                     frequency = frequency - 2;
                     break;
