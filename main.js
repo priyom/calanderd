@@ -306,8 +306,7 @@ function extractInfo(textToMatch) {
     return [ expResult[1], expResult[4] ];
 }
 
-var stationDigital = [ "XPA", "XPA2", "HM01" ];
-var FSKExp = new RegExp(/^F\d+[a-z]?$/);
+var digitalExp = new RegExp(/^(XP[A-Z]*\d*|(F|HM)\d+)[a-z]?$/);
 var morseExp = new RegExp(/^M\d+[a-z]?$/);
 var voiceExp = new RegExp(/^[EGSV]\d+[a-z]?$/);
 
@@ -318,7 +317,7 @@ function formatStation(match, name, rest) {
 
     var cname;
 
-    if (stationDigital.indexOf(name) >= 0 || FSKExp.test(name))
+    if (digitalExp.test(name))
         cname = colors.red(name);
     else if (morseExp.test(name))
         cname = colors.purple(name);
