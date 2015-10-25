@@ -262,8 +262,8 @@ function onHttpReturn(obj) {
 }
 
 function nextAnnouncement() {
-    var next = getNextDate();
-    if (next === -1) return false;
+    var next = searchEvents(-1);
+    if (next == null) return false;
 
     var time = next.getTime() - (new Date()).getTime();
     clearTimeout(schedNext); // Safety net against race conditions
@@ -348,31 +348,43 @@ function formatEvent(title) {
     return title;
 }
 
-function advanceEvents() {
+function searchEvents(after) {
 
+    // Remove past events
     var now = new Date();
     while (events[0] != null && events[0].eventDate < now) {
         events.shift();
     }
 
-    if (events.length < 3) {
-        fetchEvents();
-        return false;
+    // Search future events
+    for (var i = 0; i < events.length; i++) {
+
+        var date = events[i].eventDate;
+        if (date.getTime() < after)
+            continue;
+
+        // Legacy check for running out of events
+        if (events.length - i < 3)
+            break;
+
+        // Make sure we have all the events for that date
+        for (var j = i + 1; j < events.length; j++) {
+            if (events[j].eventDate > date) {
+                return date;
+            }
+        }
+        break;
     }
-    return true;
-}
 
-function getNextDate() {
-
-    if (! advanceEvents()) return -1;
-
-    return events[0].eventDate;
+    // More events needed
+    fetchEvents();
+    return null;
 }
 
 // Based on original events code written by foo (UTwente-Usability/events.js)
 function getNextEvent() {
 
-    if (! advanceEvents()) return -1;
+    if (searchEvents(-1) == null) return -1;
 
     var nextEvents = [];
     var prevEvent;
