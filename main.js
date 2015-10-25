@@ -13,8 +13,7 @@ if (config.color) {
 
 var events = [];
 
-var schedNext;
-var schedAnnounce;
+var nextAnnouncement;
 
 var client = new irc.Client(config.server, config.botName, {
     userName: config.userName,
@@ -254,31 +253,29 @@ function onHttpReturn(obj) {
         ev.push(theEvent);
     }
 
-    clearTimeout(schedNext);
-    clearTimeout(schedAnnounce);
+    clearTimeout(nextAnnouncement);
     events = ev;
 
-    nextAnnouncement();
+    scheduleNext();
 }
 
-function nextAnnouncement() {
-    var next = searchEvents(-1);
+function scheduleNext() {
+    // Find next event that isn't supposed to have already been announced
+    var limit = (new Date()).getTime() + config.announceEarly;
+
+    var next = searchEvents(limit + 1000);
     if (next == null) return false;
 
-    var time = next.getTime() - (new Date()).getTime();
-    clearTimeout(schedNext); // Safety net against race conditions
-    schedNext = setTimeout(recurseNext, time - config.announceEarly);
+    clearTimeout(nextAnnouncement); // Safety net against race conditions
+    nextAnnouncement = setTimeout(announceNext, next.getTime() - limit);
 
-    console.log(timestamp()+'[i] scheduler event recurseNext added for ' + next.toISOString());
+    console.log(timestamp()+'[i] scheduler event announceNext added for ' + next.toISOString());
 }
 
-function recurseNext() {
+function announceNext() {
 
     if (! cmdNext()) return false;
-
-    var delay = config.announceEarly + 10000;
-    schedAnnounce = setTimeout(nextAnnouncement, delay);
-    console.log(timestamp()+'[i] scheduler event nextAnnouncement in ' + delay + ' ms');
+    scheduleNext();
 }
 
 function cmdNext() {
