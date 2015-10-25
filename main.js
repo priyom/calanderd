@@ -392,10 +392,6 @@ function getNextEvent() {
         }
     }
 
-    if (nextEvents.length == 0) {
-        return "";
-    }
-
     var first = moment(nextEvents[0].eventDate);
     var h = first.utc().format('H:mm');
     var header = (config.color ? colors.bold(h) : h) + " " + first.fromNow() + " ";
