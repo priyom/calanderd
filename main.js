@@ -207,30 +207,26 @@ var ivo = (function() {
 				$func.client.fetchEvents();
 				return null;
 			},
-			getNextEvent: function() {
-				// Based on original events code written by foo (UTwente-Usability/events.js)
-
-				if ($func.events.search(-1) == null) return null;
-
-				var nextEvents = [];
-				var lastTime = null;
-
-				// get a list of the next events which share the same "next event time"
-				$data.events.forEach(function(evt) {
-					if (lastTime === null || lastTime === evt.eventDate.toISOString()) {
-						lastTime = evt.eventDate.toISOString();
-						nextEvents.push(evt);
-						return true;
-					}
+			getByDate: function( date ) {
+				var events = [];
+				$data.events.every(function(evt) {
+					if (evt.eventDate > date)
+						return false;
+					if (evt.eventDate.getTime() == date.getTime())
+						events.push(evt);
+					return true;
 				});
-
-				var first = moment(nextEvents[0].eventDate);
+				return events;
+			},
+			print: function( events ) {
+				// Based on original events code written by foo (UTwente-Usability/events.js)
+				var first = moment(events[0].eventDate);
 				var time = first.utc().format('HH:mm');
 				var header = (config.color ? colors.bold(time) : time) + " " + first.fromNow() + " ";
 
 				var formattedEvents = [];
 
-				nextEvents.forEach(function(evt) {
+				events.forEach(function(evt) {
 					var format = $func.format.event(evt.title);
 					// Don't give a link for "Target", as "Target" implies that the TX can NOT be heard on UTwente. (most of the time at least)
 					if (typeof(evt.frequency) !== 'undefined' && evt.frequency.length > 3 && evt.title.indexOf('Target') === -1) {
@@ -261,10 +257,13 @@ var ivo = (function() {
 				return (header + formattedEvents.join(" • "));
 			},
 			sayNext: function() {
-				var next = $func.events.getNextEvent();
-				if (next != null) return false;
+				var date = $func.events.search(-1);
+				if (date == null) return false;
 
-				$client.say($data.room, next);
+				var events = $func.events.getByDate(date);
+				if (events.length == 0) return false; // Just in case of concurrent modification
+
+				$client.say($data.room, $func.events.print(events));
 				return true;
 			}
 		},
