@@ -21,7 +21,7 @@ var ivo = (function() {
 	// data storage object
 	var $data = {
 		data: (process.env.calendard_data === 'mock' ? 'mock' : 'google'),
-		dataReady: false,
+		notify: 'Reporting for duty',
 		dev: (process.env.calendard === 'dev'),
 		events: [],
 		regex: {
@@ -166,9 +166,10 @@ var ivo = (function() {
 				clearTimeout($data.timers.announce);
 				$data.events = ev;
 
-				if (!$data.dataReady) {
-					$client.say($data.room, 'Done loading events...');
-					$data.dataReady = true;
+				var notify = $data.notify;
+				if (notify != null) {
+					$data.notify = null;
+					$client.say($data.room, notify);
 				}
 				$log.log('system ready!');
 
@@ -468,8 +469,8 @@ var ivo = (function() {
 					$client.say($data.room, 'http://websdr.ewi.utwente.nl:8901/');
 					break;
 				case '!reload':
-					$data.dataReady = false;
 					$log.log('refreshing events list...');
+					$data.notify = 'Done reloading events';
 					$func.client.fetchEvents();
 					break;
 				case '!why':
