@@ -330,6 +330,7 @@ var ivo = (function() {
 						break;
 					default:
 						if (! type) break;
+						type = $func.stations.alias(type);
 						if (! /^[\w /-]+$/.test(type)) return null;
 						filter = new RegExp('^' + type);
 						break;
