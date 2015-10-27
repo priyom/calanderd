@@ -384,6 +384,16 @@ var ivo = (function() {
 			}
 		},
 		stations: {
+			alias: function( station ) {
+				// mil/diplo/digi aliases
+				var alias = $stations.alias[station.toLowerCase()];
+				station = alias ? alias :
+					// Fix case for matching
+					station.replace(/^[a-z]+/, function(ltr) {
+						return ltr.toUpperCase();
+					});
+				return station;
+			},
 			matchLink: function( station ) {
 				// Extra (non-station) info pages
 				var extra = $stations.link.extra[station.toLowerCase()];
@@ -411,20 +421,9 @@ var ivo = (function() {
 
 				return null;
 			},
-			link: function( stn ) {
-				// grab the first element from the given arguments list
-				if (typeof(stn) !== 'string') return false;
-
+			link: function( station ) {
 				// avoid pissing people off, veryu
-				var station = typeof(stn.toLowerCase) === 'function' && stn.toLowerCase();
-
-				// mil/diplo/digi aliases
-				var alias = $stations.alias[station];
-				station = alias ? alias :
-					// Fix case for matching
-					station.replace(/^[a-z]+/, function(ltr) {
-						return ltr.toUpperCase();
-					});
+				station = $func.stations.alias(station);
 
 				var segments = $func.stations.matchLink(station);
 				if (segments == null) return 'u wot m8';
