@@ -24,17 +24,21 @@ var ivo = (function() {
 		notify: 'Reporting for duty',
 		dev: (process.env.calendard === 'dev'),
 		events: [],
-		regex: {
-			digital: /^(XP[A-Z]*\d*|(F|HM)\d+)[a-z]?$/,
-			morse: /^M\d+[a-z]?$/,
-			voice: /^[EGSV]\d+[a-z]?$/
-		},
 		room: process.env.calendard === 'dev' ? config.dev.room : config.room,
 		timers: {
 			announce: null,
 			pong: null
 		},
 		types: []
+	};
+
+	// station static data storage object
+	var $stations = {
+		regex: {
+			digital: /^(XP[A-Z]*\d*|(F|HM)\d+)[a-z]?$/,
+			morse: /^M\d+[a-z]?$/,
+			voice: /^[EGSV]\d+[a-z]?$/,
+		},
 	};
 
 	// log convenience function (console.log is so 2005)
@@ -263,13 +267,13 @@ var ivo = (function() {
 				var filter = null;
 				switch (type) {
 					case 'digital':
-						filter = $data.regex.digital;
+						filter = $stations.regex.digital;
 						break;
 					case 'morse':
-						filter = $data.regex.morse;
+						filter = $stations.regex.morse;
 						break;
 					case 'voice':
-						filter = $data.regex.voice;
+						filter = $stations.regex.voice;
 						break;
 				}
 
@@ -296,11 +300,11 @@ var ivo = (function() {
 			station: function( match, name, rest ) {
 				if (!config.color) return match;
 				var cname;
-				if ($data.regex.digital.test(name)) {
+				if ($stations.regex.digital.test(name)) {
 					cname = colors.red(name);
-				} else if ($data.regex.morse.test(name)) {
+				} else if ($stations.regex.morse.test(name)) {
 					cname = colors.purple(name);
-				} else if ($data.regex.voice.test(name)) {
+				} else if ($stations.regex.voice.test(name)) {
 					cname = colors.green(name);
 				} else {
 					cname = colors.brown(name);
