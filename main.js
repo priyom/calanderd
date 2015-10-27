@@ -35,9 +35,58 @@ var ivo = (function() {
 	// station static data storage object
 	var $stations = {
 		regex: {
-			digital: /^(XP[A-Z]*\d*|(F|HM)\d+)[a-z]?$/,
+			digital: /^(XP[A-Z]*\d*|(F|HM|DP|SK)\d+)[a-z]?$/,
 			morse: /^M\d+[a-z]?$/,
 			voice: /^[EGSV]\d+[a-z]?$/,
+			military: {
+				russia: /^(S(28|30|32|\d{4,})|[A-Za-z]+-\d{2}|M(32|XI))[a-z]?$/,
+				USA: /^HFGCS$/,
+				china: /^VC\d+[a-z]?$/,
+				france: /^M51[a-z]?$/,
+				japan: /^XSL$/,
+			},
+			diplomatic: {
+				russia: /^X0?6[a-z]?$/,
+			},
+		},
+		language: {
+			E: 'english',
+			G: 'german',
+			S: 'slavic',
+			V: 'other',
+			M: 'morse',
+			F: 'digital',
+		},
+		alias: {
+			'buzzer': 'S28',
+			'pip': 'S30',
+			'wheel': 'S32',
+			'katok65': 'Katok-65',
+			'plovets41': 'Plovets-41',
+			'cluster': 'MXI',
+			'hf-gcs': 'HFGCS',
+			'mazielka': 'X06',
+			'polfsk': 'F11',
+			'pol-fsk': 'F11',
+			'200/1000': 'F06',
+			'fsk-2001000': 'F06',
+			'200/500': 'F01',
+			'fsk-200500': 'F01',
+		},
+		link: {
+			irregular: {
+				'S28': 'the-buzzer',
+				'S30': 'the-pip',
+				'S32': 'the-squeaky-wheel',
+				'MXI': 'naval-markers',
+				'VC01': 'chinese-robot',
+				'XSL': 'slot-machine',
+			},
+			extra: {
+				'monolith': [ 'military', 'russia', 'monolyth-messages-description' ],
+				'alphabet': [ 'military', 'russia', 'russian-phonetic-alphabet-and-numbers' ],
+				'sked': [ 'number', 'station-schedule' ],
+			},
 		},
 	};
 
@@ -292,7 +341,7 @@ var ivo = (function() {
 				// Don't match a frequency marked as "last used", otherwise it is given as a link.
 				// Which is misleading as fuck.
 				if ($func.util.type(textToMatch) !== 'string') $log.error('$func.extract.frequency(): incorrect parameters!');
-				var result = textToMatch.match(/^([\w /]+?) (?:Search|(\d+) ?[kK][hH][zZ](?:(?:.*?[kK][hH][zZ])?? ([A-Z][A-Z/]+))?)/);
+				var result = textToMatch.match(/^([\w /-]+?) (?:Search|(\d+) ?[kK][hH][zZ](?:(?:.*?[kK][hH][zZ])?? ([A-Z][A-Z/]+))?)/);
 				return result != null ? [ result[1], result[2], result[3] ] : [ undefined, undefined, undefined ];
 			}
 		},
@@ -320,13 +369,40 @@ var ivo = (function() {
 			},
 			event: function( title ) {
 				if (!config.color) return title;
-				title = title.replace(/^([\w /]+?) (\d+ ?kHz|Search)/i, $func.format.station);
+				title = title.replace(/^([\w /-]+?) (\d+ ?kHz|Search)/i, $func.format.station);
 				title = title.replace(/ (Search) /i, $func.format.search);
 				title = title.replace(/\d+ ?[kK][hH][zZ]( [A-Z][A-Z/]+)?/g, $func.format.frequency);
 				return title;
 			}
 		},
 		stations: {
+			matchLink: function( station ) {
+				// Extra (non-station) info pages
+				var extra = $stations.link.extra[station.toLowerCase()];
+				if (extra) return extra.slice(); // Return a copy of the array, so it can be modified
+
+				// Stations sorted by country
+				var types = [ 'military', 'diplomatic' ];
+				for (var i = 0; i < types.length; i++) {
+					var type = types[i];
+					var regexes = $stations.regex[type];
+					for (var country in regexes) {
+						if (regexes[country].test(station)) {
+							var cty = (country == 'USA') ? 'united-states' : country.toLowerCase();
+							return [ type, cty, station.toLowerCase() ];
+						}
+					}
+				}
+
+				// Check for digital stations with special prefixes
+				var language = $stations.regex.digital.test(station) ? 'digital' :
+					// Generic numbers stations
+					$stations.language[station[0]];
+
+				if (language) return [ 'number', language, station.toLowerCase() ];
+
+				return null;
+			},
 			link: function( stn ) {
 				// grab the first element from the given arguments list
 				if (typeof(stn) !== 'string') return false;
@@ -334,100 +410,24 @@ var ivo = (function() {
 				// avoid pissing people off, veryu
 				var station = typeof(stn.toLowerCase) === 'function' && stn.toLowerCase();
 
-				var milBase = 'http://priyom.org/military-stations/';
-				var diploBase = 'http://priyom.org/diplomatic-stations/';
-				var numberBase = 'http://priyom.org/number-stations/';
-
 				// mil/diplo/digi aliases
-				switch (station) {
-					case 'katok65':
-						station = 'katok-65';
-						break;
-					case 'plovets41':
-						station = 'plovets-41';
-						break;
-					case 'hf-gcs':
-						station = 'hfgcs';
-						break;
-					case 'mazielka':
-						station = 'x06';
-						break;
-					case 'polfsk':
-					case 'pol-fsk':
-						station = 'f11';
-						break;
-					case '200/1000':
-					case 'fsk-2001000':
-						station = 'f06';
-						break;
-					case '200/500':
-					case 'fsk-200500':
-						station = 'f01';
-						break;
-				}
+				var alias = $stations.alias[station];
+				station = alias ? alias :
+					// Fix case for matching
+					station.replace(/^[a-z]+/, function(ltr) {
+						return ltr.toUpperCase();
+					});
 
-				// yep mil/diplo/digi stuff is special
-				switch (station) {
-					case 'buzzer':
-					case 's28':
-						return milBase + 'russia/the-buzzer';
-					case 'pip':
-					case 's30':
-						return milBase + 'russia/the-pip';
-					case 'wheel':
-					case 's32':
-						return milBase + 'russia/the-squeaky-wheel';
-					case 's5292':
-					case 's4790':
-					case 's5426':
-					case 'katok-65':
-					case 'plovets-41':
-					case 'm32':
-						return milBase + 'russia/' + station;
-					case 'mxi':
-					case 'cluster':
-						return milBase + 'russia/naval-markers';
-					case 'monolith':
-						return milBase + 'russia/monolyth-messages-description';
-					case 'alphabet':
-						return milBase + 'russia/russian-phonetic-alphabet-and-numbers';
-					case 'hfgcs':
-						return milBase + 'united-states/' + station;
-					case 'vc01':
-						return milBase + 'china/chinese-robot';
-					case 'm51':
-						return milBase + 'france/' + station;
-					case 'xsl':
-						return milBase + 'japan/slot-machine';
-					case 'x06':
-					case 'x06a':
-					case 'x06b':
-					case 'x06c':
-						return diploBase + 'russia/' + station;
-					case 'dp01': // fo, e!
-					case 'hm01':
-					case 'xpa':
-					case 'xpa2':
-					case 'sk01':
-					case 'xp':
-						return numberBase + 'digital/' + station;
-					case 'sked':
-						return numberBase + 'station-schedule';
-				}
+				var segments = $func.stations.matchLink(station);
+				if (segments == null) return 'u wot m8';
 
-				// the rest should be ok to do this way
-				var languages = {
-					e: 'english',
-					g: 'german',
-					s: 'slavic',
-					v: 'other',
-					m: 'morse',
-					f: 'digital',
-				};
-				var language = languages[station[0]];
-				if (language) return numberBase + language + '/' + station;
+				segments[0] = 'http://priyom.org/' + segments[0] + '-stations';
 
-				return 'u wot m8';
+				// Handle irregular page names
+				var page = $stations.link.irregular[station];
+				if (page) segments[segments.length - 1] = page;
+
+				return segments.join('/');
 			}
 		},
 		util: {
