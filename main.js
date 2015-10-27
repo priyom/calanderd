@@ -291,8 +291,8 @@ var ivo = (function() {
 				// Which is misleading as fuck.
 				if ($func.util.type(textToMatch) !== 'string') $log.error('$func.extract.frequency(): incorrect parameters!');
 				if (textToMatch.indexOf(" Search ") > -1) return [ undefined, undefined ];
-				var result = textToMatch.match(/(\d+) ?[kK][hH][zZ]((.*?[kK][hH][zZ])?? ([A-Z][A-Z/]+))?/);
-				return result != null ? [ result[1], result[4] ] : [ undefined, undefined ];
+				var result = textToMatch.match(/(\d+) ?[kK][hH][zZ](?:(?:.*?[kK][hH][zZ])?? ([A-Z][A-Z/]+))?/);
+				return result != null ? [ result[1], result[2] ] : [ undefined, undefined ];
 			}
 		},
 		format: {
