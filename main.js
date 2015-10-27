@@ -150,8 +150,7 @@ var ivo = (function() {
 				$log.log('number of events found: ' + events.length);
 				$log.log('time of first event: ' + events[0].start.dateTime);
 
-				var ev = [];
-				events.forEach(function(evt) {
+				var ev = events.map(function(evt) {
 					var info = $func.extract.info(evt.summary);
 					var event = {
 						eventDate: new Date(evt.start.dateTime),
@@ -159,7 +158,7 @@ var ivo = (function() {
 						frequency: info[0],
 						mode: info[1],
 					};
-					ev.push(event);
+					return event;
 				});
 
 				// Atomically swap new events in
@@ -232,9 +231,7 @@ var ivo = (function() {
 				var time = first.utc().format('HH:mm');
 				var header = (config.color ? colors.bold(time) : time) + " " + first.fromNow() + " ";
 
-				var formattedEvents = [];
-
-				events.forEach(function(evt) {
+				var formattedEvents = events.map(function(evt) {
 					var format = $func.format.event(evt.title);
 					// Don't give a link for "Target", as "Target" implies that the TX can NOT be heard on UTwente. (most of the time at least)
 					if (typeof(evt.frequency) !== 'undefined' && evt.frequency.length > 3 && evt.title.indexOf('Target') === -1) {
@@ -260,7 +257,7 @@ var ivo = (function() {
 						}
 						format += ' http://freq.ml/' + freq + mode;
 					}
-					formattedEvents.push(format);
+					return format;
 				});
 				return (header + formattedEvents.join(" • "));
 			},
