@@ -161,7 +161,11 @@ var ivo = (function() {
 				$log.debug('next announcement scheduled for event at ' + next.toISOString());
 			},
 			announce: function() {
-				if ($func.events.sayNext(null)) $func.announcements.schedule();
+				var next = $func.events.printNext(null);
+				if (next) {
+					$client.say($data.room, next);
+					$func.announcements.schedule();
+				}
 			}
 		},
 		client: {
@@ -312,7 +316,7 @@ var ivo = (function() {
 				});
 				return (header + formattedEvents.join(" • "));
 			},
-			sayNext: function( type ) {
+			printNext: function( type ) {
 				var filter = null;
 				switch (type) {
 					case 'digital':
@@ -327,13 +331,12 @@ var ivo = (function() {
 				}
 
 				var date = $func.events.search(-1, filter);
-				if (date == null) return false;
+				if (date == null) return null;
 
 				var events = $func.events.getByDate(date);
-				if (events.length == 0) return false; // Just in case of concurrent modification
+				if (events.length == 0) return null; // Just in case of concurrent modification
 
-				$client.say($data.room, $func.events.print(events));
-				return true;
+				return $func.events.print(events);
 			}
 		},
 		extract: {
@@ -474,10 +477,10 @@ var ivo = (function() {
 				case '!next':
 				case '!n':
 					$log.log('received next command from ' + from);
-					if (! $func.events.sayNext(args[1])) {
-						// Unlikely race condition: this should be passed before reloading was triggered, not after
-						$data.notify = 'Not enough events available to find match; please try again now.';
-					}
+					var next = $func.events.printNext(args[1]);
+					if (next) $client.say($data.room, next);
+					// Unlikely race condition: this should be passed before reloading was triggered, not after
+					else $data.notify = 'Not enough events available to find match; please try again now.';
 					break;
 				case '!stream':
 					$client.say($data.room, 'http://stream.priyom.org:8000/buzzer.ogg.m3u');
