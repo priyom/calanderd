@@ -153,7 +153,10 @@ var ivo = (function() {
 				var limit = (new Date()).getTime() + config.announceEarly;
 
 				var next = $func.events.search(limit + 1000, null);
-				if (next == null) return;
+				if (next == null) {
+					$func.client.fetchEvents();
+					return;
+				}
 
 				clearTimeout($data.timers.announce); // Safety net against race conditions
 				$data.timers.announce = setTimeout($func.announcements.announce, next.getTime() - limit);
@@ -162,10 +165,8 @@ var ivo = (function() {
 			},
 			announce: function() {
 				var next = $func.events.printNext(null);
-				if (next) {
-					$client.say($data.room, next);
-					$func.announcements.schedule();
-				}
+				if (next) $client.say($data.room, next);
+				$func.announcements.schedule();
 			}
 		},
 		client: {
@@ -266,7 +267,6 @@ var ivo = (function() {
 				}
 
 				// More events needed
-				$func.client.fetchEvents();
 				return null;
 			},
 			getByDate: function( date ) {
@@ -479,8 +479,10 @@ var ivo = (function() {
 					$log.log('received next command from ' + from);
 					var next = $func.events.printNext(args[1]);
 					if (next) $client.say($data.room, next);
-					// Unlikely race condition: this should be passed before reloading was triggered, not after
-					else $data.notify = 'Not enough events available to find match; please try again now.';
+					else {
+						$data.notify = 'Not enough events available to find match; please try again now.';
+						$func.client.fetchEvents();
+					}
 					break;
 				case '!stream':
 					$client.say($data.room, 'http://stream.priyom.org:8000/buzzer.ogg.m3u');
