@@ -328,6 +328,11 @@ var ivo = (function() {
 					case 'voice':
 						filter = $stations.regex.voice;
 						break;
+					default:
+						if (! type) break;
+						if (! /^[\w /-]+$/.test(type)) return null;
+						filter = new RegExp('^' + type);
+						break;
 				}
 
 				var date = $func.events.search(-1, filter);
@@ -476,13 +481,15 @@ var ivo = (function() {
 			switch(cmd) {
 				case '!next':
 				case '!n':
-					$log.log('received next command from ' + from);
-					var next = $func.events.printNext(args[1]);
+					var type = args[1];
+					$log.log('received next command' + (type ? ' for ' + type : '') + ' from ' + from);
+					var next = $func.events.printNext(type);
 					if (next) $client.say($data.room, next);
-					else {
+					else if ([ 'digital', 'morse', 'voice' ].indexOf(type) > -1) {
 						$data.notify = 'Not enough events available to find match; please try again now.';
 						$func.client.fetchEvents();
 					}
+					else $client.say($data.room, 'No scheduled matching station found within available events.');
 					break;
 				case '!stream':
 					$client.say($data.room, 'http://stream.priyom.org:8000/buzzer.ogg.m3u');
