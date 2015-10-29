@@ -99,7 +99,7 @@ var ivo = (function() {
 				// Find next event that isn't supposed to have already been announced
 				var limit = (new Date()).getTime() + config.announceEarly;
 
-				var next = $func.events.search(limit + 1000);
+				var next = $func.events.search(limit + 1000, null);
 				if (next == null) return;
 
 				clearTimeout($data.timers.announce); // Safety net against race conditions
@@ -108,7 +108,7 @@ var ivo = (function() {
 				$log.debug('next announcement scheduled for event at ' + next.toISOString());
 			},
 			announce: function() {
-				if ($func.events.sayNext()) $func.announcements.schedule();
+				if ($func.events.sayNext(null)) $func.announcements.schedule();
 			}
 		},
 		client: {
@@ -177,7 +177,7 @@ var ivo = (function() {
 			}
 		},
 		events: {
-			search: function( after ) {
+			search: function( after, filter ) {
 				// Remove past events
 				var now = new Date();
 				while ($data.events[0] != null && $data.events[0].eventDate < now) {
@@ -191,8 +191,15 @@ var ivo = (function() {
 					if (date.getTime() < after)
 						continue;
 
+					if (filter != null) {
+						var name = $data.events[i].title.match(/^([\w /]+?) (\d+ ?kHz|Search)/i);
+						if (name == null)
+							continue;
+						if (! filter.test(name[1]))
+							continue;
+					}
 					// Legacy check for running out of events
-					if ($data.events.length - i < 3)
+					else if ($data.events.length - i < 3)
 						break;
 
 					// Make sure we have all the events for that date
@@ -257,8 +264,21 @@ var ivo = (function() {
 				});
 				return (header + formattedEvents.join(" • "));
 			},
-			sayNext: function() {
-				var date = $func.events.search(-1);
+			sayNext: function( type ) {
+				var filter = null;
+				switch (type) {
+					case 'digital':
+						filter = $data.regex.digital;
+						break;
+					case 'morse':
+						filter = $data.regex.morse;
+						break;
+					case 'voice':
+						filter = $data.regex.voice;
+						break;
+				}
+
+				var date = $func.events.search(-1, filter);
 				if (date == null) return false;
 
 				var events = $func.events.getByDate(date);
@@ -456,7 +476,10 @@ var ivo = (function() {
 				case '!next':
 				case '!n':
 					$log.log('received next command from ' + from);
-					if (! $func.events.sayNext()) $client.say($data.room, "I'm still retrieving the newest events...");
+					if (! $func.events.sayNext(args[1])) {
+						// Unlikely race condition: this should be passed before reloading was triggered, not after
+						$data.notify = 'Not enough events available to find match; please try again now.';
+					}
 					break;
 				case '!stream':
 					$client.say($data.room, 'http://stream.priyom.org:8000/buzzer.ogg.m3u');
