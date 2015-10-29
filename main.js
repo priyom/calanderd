@@ -155,8 +155,9 @@ var ivo = (function() {
 					var event = {
 						eventDate: new Date(evt.start.dateTime),
 						title: evt.summary,
-						frequency: info[0],
-						mode: info[1],
+						station: info[0],
+						frequency: info[1],
+						mode: info[2],
 					};
 					return event;
 				});
@@ -191,10 +192,7 @@ var ivo = (function() {
 						continue;
 
 					if (filter != null) {
-						var name = $data.events[i].title.match(/^([\w /]+?) (\d+ ?kHz|Search)/i);
-						if (name == null)
-							continue;
-						if (! filter.test(name[1]))
+						if (! filter.test($data.events[i].station))
 							continue;
 					}
 					// Legacy check for running out of events
@@ -287,12 +285,11 @@ var ivo = (function() {
 		},
 		extract: {
 			info: function( textToMatch ) {
-				// Without this the frequency marked as "last used" is given as a link.
+				// Don't match a frequency marked as "last used", otherwise it is given as a link.
 				// Which is misleading as fuck.
 				if ($func.util.type(textToMatch) !== 'string') $log.error('$func.extract.frequency(): incorrect parameters!');
-				if (textToMatch.indexOf(" Search ") > -1) return [ undefined, undefined ];
-				var result = textToMatch.match(/(\d+) ?[kK][hH][zZ](?:(?:.*?[kK][hH][zZ])?? ([A-Z][A-Z/]+))?/);
-				return result != null ? [ result[1], result[2] ] : [ undefined, undefined ];
+				var result = textToMatch.match(/^([\w /]+?) (?:Search|(\d+) ?[kK][hH][zZ](?:(?:.*?[kK][hH][zZ])?? ([A-Z][A-Z/]+))?)/);
+				return result != null ? [ result[1], result[2], result[3] ] : [ undefined, undefined, undefined ];
 			}
 		},
 		format: {
