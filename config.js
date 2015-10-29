@@ -1,24 +1,38 @@
-var config = {}
 
-// irc config
-config.room = '#priyom';
-config.server = 'chat.freenode.net';
-config.botName = 'IvoSchwarz';
-config.userName = 'ivo',
-config.realName = 'Ivo Schwarz',
-config.password = '';
-config.port = 7000;
-config.tls = true;
-config.color = true;
 
-// calendar settings
-config.apiKey = '';
-config.calendarId = 'ul6joarfkgroeho84vpieeaakk' // this is in your iCal, html, etc. URLs
+var config = module.exports = {
+	// irc config
+	room: '#priyom',
+	server: 'chat.freenode.net',
+	botName: 'IvoSchwarz',
+	userName: 'ivo',
+	realName: 'Ivo Schwarz',
+	password: '',
+	port: 7000,
+	tls: true,
+	color: true,
 
-// announce before ...
-config.announceEarly = 1 * 60000; // milliseconds
+	// calendar settings
+	apiKey: '',
+	// this is in your iCal, html, etc. URLs
+	calendarId: 'ul6joarfkgroeho84vpieeaakk',
 
-// calendar limits
-config.maxResults = 150; // at least 2
+	// announce before ...
+	announceEarly: 1 * 60000, // ms
 
-module.exports = config;
+	// calendar limits
+	maxResults: 150, // at least 2
+
+	// these options are for testing, by doing something like:
+	//    calendard=dev node ./main.js
+	dev: {
+		room: '#priyom',
+		server: 'chat.freenode.net',
+		botName: 'jummyristle',
+		userName: 'foo',
+		realName: 'bar',
+		password: '',
+		port: 7000,
+		tls: true
+	}
+};
