@@ -21,7 +21,10 @@ var ivo = (function() {
 	// data storage object
 	var $data = {
 		data: (process.env.calendard_data === 'mock' ? 'mock' : 'google'),
-		notify: 'Reporting for duty',
+		notify: {
+			msg: 'Reporting for duty',
+			rcpt: process.env.calendard === 'dev' ? config.dev.room : config.room,
+		},
 		dev: (process.env.calendard === 'dev'),
 		events: [],
 		room: process.env.calendard === 'dev' ? config.dev.room : config.room,
@@ -227,7 +230,7 @@ var ivo = (function() {
 				var notify = $data.notify;
 				if (notify != null) {
 					$data.notify = null;
-					$client.say($data.room, notify);
+					$client.say(notify.rcpt, notify.msg);
 				}
 				$log.log('system ready!');
 
@@ -447,6 +450,69 @@ var ivo = (function() {
 				if (thing == null) return thing + '';
 				return typeof(thing) === 'object' || typeof(thing) === 'function' ? $data.types[Object.prototype.toString.call(thing)] || 'object' : typeof(thing);
 			}
+		},
+		irc: {
+			commands: function( from, reply_to, message ) {
+				var args = message.split(/\s+/).filter(function(arg) {
+					// Remove leading/trailing empty strings
+					return arg;
+				});
+				var cmd = args[0];
+				switch(cmd) {
+					case '!next':
+					case '!n':
+						var type = args[1];
+						$log.log('received next command' + (type ? ' for ' + type : '') + ' from ' + from);
+						var next = $func.events.printNext(type);
+						if (next) $client.say(reply_to, next);
+						else if ([ 'digital', 'morse', 'voice' ].indexOf(type) > -1) {
+							$data.notify = {
+								msg: 'Not enough events available to find match; please try again now.',
+								rcpt: reply_to,
+							};
+							$func.client.fetchEvents();
+						}
+						else $client.say(reply_to, 'No scheduled matching station found within available events.');
+						break;
+					case '!stream':
+						$client.say(reply_to, 'http://stream.priyom.org:8000/buzzer.ogg.m3u');
+						break;
+					case '!link':
+						$log.log('received link command from ' + from);
+						if (args.length > 1) $client.say(reply_to, $func.stations.link(args[1], args.slice(2)));
+						break;
+					case '!logs':
+						$log.log('received logs command from ' + from);
+						if (args.length > 1) $client.say(reply_to, $func.stations.link(args[1], [ (new Date()).getFullYear() ]));
+						break;
+					case '!listen':
+						$client.say(reply_to, 'http://websdr.ewi.utwente.nl:8901/');
+						break;
+					case '!reload':
+						$log.log('refreshing events list...');
+						$data.notify = {
+							msg: 'Done reloading events',
+							rcpt: reply_to,
+						};
+						$func.client.fetchEvents();
+						break;
+					case '!why':
+						$client.say(reply_to, 'The Buzzer is not audible at this time of the day due to HF propagation characteristics. Try again later in the local evening.');
+						break;
+					case '!new':
+						$client.say(reply_to, 'You can visit our site at http://priyom.org where we have a good read regarding any and all information about logged numbers stations.');
+						break;
+					case '!rules':
+						$client.say(reply_to, 'http://priyom.org/about/irc-rules');
+						break;
+					case '!rivet':
+						$client.say(reply_to, 'http://www.apul64.dsl.pipex.com/enigma2000/rivet/index.html');
+						break;
+					case '!utc':
+						$client.say(reply_to, (new Date()).toUTCString());
+						break;
+				}
+			},
 		}
 	};
 
@@ -476,60 +542,14 @@ var ivo = (function() {
 				$func.client.fetchEvents();
 			});
 		});
-		$client.addListener('message' + $data.room, function (from, to, message) {
-			var args = message.args[1].split(/\s+/).filter(function(arg) {
-				// Remove leading/trailing empty strings
-				return arg;
-			});
-			var cmd = args[0];
-			switch(cmd) {
-				case '!next':
-				case '!n':
-					var type = args[1];
-					$log.log('received next command' + (type ? ' for ' + type : '') + ' from ' + from);
-					var next = $func.events.printNext(type);
-					if (next) $client.say($data.room, next);
-					else if ([ 'digital', 'morse', 'voice' ].indexOf(type) > -1) {
-						$data.notify = 'Not enough events available to find match; please try again now.';
-						$func.client.fetchEvents();
-					}
-					else $client.say($data.room, 'No scheduled matching station found within available events.');
-					break;
-				case '!stream':
-					$client.say($data.room, 'http://stream.priyom.org:8000/buzzer.ogg.m3u');
-					break;
-				case '!link':
-					$log.log('received link command from ' + from);
-					if (args.length > 1) $client.say($data.room, $func.stations.link(args[1], args.slice(2)));
-					break;
-				case '!logs':
-					$log.log('received logs command from ' + from);
-					if (args.length > 1) $client.say($data.room, $func.stations.link(args[1], [ (new Date()).getFullYear() ]));
-					break;
-				case '!listen':
-					$client.say($data.room, 'http://websdr.ewi.utwente.nl:8901/');
-					break;
-				case '!reload':
-					$log.log('refreshing events list...');
-					$data.notify = 'Done reloading events';
-					$func.client.fetchEvents();
-					break;
-				case '!why':
-					$client.say($data.room, 'The Buzzer is not audible at this time of the day due to HF propagation characteristics. Try again later in the local evening.');
-					break;
-				case '!new':
-					$client.say($data.room, 'You can visit our site at http://priyom.org where we have a good read regarding any and all information about logged numbers stations.');
-					break;
-				case '!rules':
-					$client.say($data.room, 'http://priyom.org/about/irc-rules');
-					break;
-				case '!rivet':
-					$client.say($data.room, 'http://www.apul64.dsl.pipex.com/enigma2000/rivet/index.html');
-					break;
-				case '!utc':
-					$client.say($data.room, (new Date()).toUTCString());
-					break;
-			}
+		$client.addListener('message#', function (from, to, message) {
+			// Skip parsing most channel messages
+			if (message.indexOf('!') == -1) return;
+			$func.irc.commands(from, to, message);
+		});
+		$client.addListener('pm', function (from, message) {
+			$log.debug('received pm from ' + from + ': ' + message);
+			$func.irc.commands(from, from, message);
 		});
 		$client.addListener('error', function (message) {
 			$log.error('[!] IRC CLIENT ERROR: ', message);
