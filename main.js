@@ -422,7 +422,7 @@ var ivo = (function() {
 
 				return null;
 			},
-			link: function( station ) {
+			link: function( station, append ) {
 				// avoid pissing people off, veryu
 				station = $func.stations.alias(station);
 
@@ -435,6 +435,7 @@ var ivo = (function() {
 				var page = $stations.link.irregular[station];
 				if (page) segments[segments.length - 1] = page;
 
+				if (append) segments = segments.concat(append);
 				return segments.join('/');
 			}
 		},
@@ -499,7 +500,11 @@ var ivo = (function() {
 					break;
 				case '!link':
 					$log.log('received link command from ' + from);
-					if (args.length > 1) $client.say($data.room, $func.stations.link(args[1]));
+					if (args.length > 1) $client.say($data.room, $func.stations.link(args[1], args.slice(2)));
+					break;
+				case '!logs':
+					$log.log('received logs command from ' + from);
+					if (args.length > 1) $client.say($data.room, $func.stations.link(args[1], [ (new Date()).getFullYear() ]));
 					break;
 				case '!listen':
 					$client.say($data.room, 'http://websdr.ewi.utwente.nl:8901/');
