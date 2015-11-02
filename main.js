@@ -457,12 +457,14 @@ var ivo = (function() {
 					// Remove leading/trailing empty strings
 					return arg;
 				});
-				var cmd = args[0];
+				var cmd = args.shift();
+				if (cmd[0] != '!') return;
+
+				$log.log('received ' + cmd + ' command from ' + from + (args.length > 0 ? ' (args: ' + args.join(' ') + ')' : ''));
 				switch(cmd) {
 					case '!next':
 					case '!n':
-						var type = args[1];
-						$log.log('received next command' + (type ? ' for ' + type : '') + ' from ' + from);
+						var type = args[0];
 						var next = $func.events.printNext(type);
 						if (next) $client.say(reply_to, next);
 						else if ([ 'digital', 'morse', 'voice' ].indexOf(type) > -1) {
@@ -478,12 +480,10 @@ var ivo = (function() {
 						$client.say(reply_to, 'http://stream.priyom.org:8000/buzzer.ogg.m3u');
 						break;
 					case '!link':
-						$log.log('received link command from ' + from);
-						if (args.length > 1) $client.say(reply_to, $func.stations.link(args[1], args.slice(2)));
+						if (args.length > 0) $client.say(reply_to, $func.stations.link(args[0], args.slice(1)));
 						break;
 					case '!logs':
-						$log.log('received logs command from ' + from);
-						if (args.length > 1) $client.say(reply_to, $func.stations.link(args[1], [ (new Date()).getFullYear() ]));
+						if (args.length > 0) $client.say(reply_to, $func.stations.link(args[0], [ (new Date()).getFullYear() ]));
 						break;
 					case '!listen':
 						$client.say(reply_to, 'http://websdr.ewi.utwente.nl:8901/');
