@@ -476,7 +476,10 @@ var ivo = (function() {
 			});
 		});
 		$client.addListener('message' + $data.room, function (from, to, message) {
-			var args = message.args[1].split(' ');
+			var args = message.args[1].split(/\s+/).filter(function(arg) {
+				// Remove leading/trailing empty strings
+				return arg;
+			});
 			var cmd = args[0];
 			switch(cmd) {
 				case '!next':
