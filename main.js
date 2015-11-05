@@ -474,7 +474,9 @@ var ivo = (function() {
 
 				var info = staticInfo[cmd];
 				if (info) {
-					$client.say(reply_to, info);
+					var nick = args[0];
+					var reply = nick ? nick + ': ' + info : info;
+					$client.say(reply_to, reply);
 					return;
 				}
 
