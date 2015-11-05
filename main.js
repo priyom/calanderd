@@ -461,6 +461,23 @@ var ivo = (function() {
 				if (cmd[0] != '!') return;
 
 				$log.log('received ' + cmd + ' command from ' + from + (args.length > 0 ? ' (args: ' + args.join(' ') + ')' : ''));
+
+				// Don't separate these commands too far from the others
+				var staticInfo = {
+					'!stream': 'http://stream.priyom.org:8000/buzzer.ogg.m3u',
+					'!listen': 'http://websdr.ewi.utwente.nl:8901/',
+					'!why': 'The Buzzer is not audible at this time of the day due to HF propagation characteristics. Try again later in the local evening.',
+					'!new': 'You can visit our site at http://priyom.org where we have a good read regarding any and all information about logged numbers stations.',
+					'!rules': 'http://priyom.org/about/irc-rules',
+					'!rivet': 'http://www.apul64.dsl.pipex.com/enigma2000/rivet/index.html',
+				};
+
+				var info = staticInfo[cmd];
+				if (info) {
+					$client.say(reply_to, info);
+					return;
+				}
+
 				switch(cmd) {
 					case '!next':
 					case '!n':
@@ -476,17 +493,11 @@ var ivo = (function() {
 						}
 						else $client.say(reply_to, 'No scheduled matching station found within available events.');
 						break;
-					case '!stream':
-						$client.say(reply_to, 'http://stream.priyom.org:8000/buzzer.ogg.m3u');
-						break;
 					case '!link':
 						if (args.length > 0) $client.say(reply_to, $func.stations.link(args[0], args.slice(1)));
 						break;
 					case '!logs':
 						if (args.length > 0) $client.say(reply_to, $func.stations.link(args[0], [ (new Date()).getFullYear() ]));
-						break;
-					case '!listen':
-						$client.say(reply_to, 'http://websdr.ewi.utwente.nl:8901/');
 						break;
 					case '!reload':
 						$log.log('refreshing events list...');
@@ -495,18 +506,6 @@ var ivo = (function() {
 							rcpt: reply_to,
 						};
 						$func.client.fetchEvents();
-						break;
-					case '!why':
-						$client.say(reply_to, 'The Buzzer is not audible at this time of the day due to HF propagation characteristics. Try again later in the local evening.');
-						break;
-					case '!new':
-						$client.say(reply_to, 'You can visit our site at http://priyom.org where we have a good read regarding any and all information about logged numbers stations.');
-						break;
-					case '!rules':
-						$client.say(reply_to, 'http://priyom.org/about/irc-rules');
-						break;
-					case '!rivet':
-						$client.say(reply_to, 'http://www.apul64.dsl.pipex.com/enigma2000/rivet/index.html');
 						break;
 					case '!utc':
 						$client.say(reply_to, (new Date()).toUTCString());
