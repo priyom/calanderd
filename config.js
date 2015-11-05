@@ -23,6 +23,10 @@ var config = module.exports = {
 	// calendar limits
 	maxResults: 150, // at least 2
 
+	// WebSDR / URL shortener root
+	// websdrUrl: 'http://websdr.ewi.utwente.nl:8901/?tune=',
+	websdrUrl: 'http://freq.ml/',
+
 	// these options are for testing, by doing something like:
 	//    calendard=dev node ./main.js
 	dev: {

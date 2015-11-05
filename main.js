@@ -313,7 +313,7 @@ var ivo = (function() {
 								mode = evt.mode.toLowerCase();
 								break;
 						}
-						format += ' http://freq.ml/' + freq + mode;
+						format += ' ' + config.websdrUrl + freq + mode;
 					}
 					return format;
 				});
