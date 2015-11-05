@@ -452,7 +452,7 @@ var ivo = (function() {
 			}
 		},
 		irc: {
-			commands: function( from, reply_to, message ) {
+			commands: function( from, replyTo, message ) {
 				var args = message.split(/\s+/).filter(function(arg) {
 					// Remove leading/trailing empty strings
 					return arg;
@@ -476,7 +476,7 @@ var ivo = (function() {
 				if (info) {
 					var nick = args[0];
 					var reply = nick ? nick + ': ' + info : info;
-					$client.say(reply_to, reply);
+					$client.say(replyTo, reply);
 					return;
 				}
 
@@ -485,32 +485,32 @@ var ivo = (function() {
 					case '!n':
 						var type = args[0];
 						var next = $func.events.printNext(type);
-						if (next) $client.say(reply_to, next);
+						if (next) $client.say(replyTo, next);
 						else if ([ 'digital', 'morse', 'voice' ].indexOf(type) > -1) {
 							$data.notify = {
 								msg: 'Not enough events available to find match; please try again now.',
-								rcpt: reply_to,
+								rcpt: replyTo,
 							};
 							$func.client.fetchEvents();
 						}
-						else $client.say(reply_to, 'No scheduled matching station found within available events.');
+						else $client.say(replyTo, 'No scheduled matching station found within available events.');
 						break;
 					case '!link':
-						if (args.length > 0) $client.say(reply_to, $func.stations.link(args[0], args.slice(1)));
+						if (args.length > 0) $client.say(replyTo, $func.stations.link(args[0], args.slice(1)));
 						break;
 					case '!logs':
-						if (args.length > 0) $client.say(reply_to, $func.stations.link(args[0], [ (new Date()).getFullYear() ]));
+						if (args.length > 0) $client.say(replyTo, $func.stations.link(args[0], [ (new Date()).getFullYear() ]));
 						break;
 					case '!reload':
 						$log.log('refreshing events list...');
 						$data.notify = {
 							msg: 'Done reloading events',
-							rcpt: reply_to,
+							rcpt: replyTo,
 						};
 						$func.client.fetchEvents();
 						break;
 					case '!utc':
-						$client.say(reply_to, (new Date()).toUTCString());
+						$client.say(replyTo, (new Date()).toUTCString());
 						break;
 				}
 			},
