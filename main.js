@@ -383,7 +383,7 @@ var ivo = (function() {
 				if (!config.color) return title;
 				title = title.replace(/^([\w /-]+?) (\d+ ?kHz|Search)/i, $func.format.station);
 				title = title.replace(/ (Search) /i, $func.format.search);
-				title = title.replace(/\d+ ?[kKmM][hH][zZ]( [A-Z][A-Z/]+)?/g, $func.format.frequency);
+				title = title.replace(/\d+(-\d+)? ?[kKmM][hH][zZ]( [A-Z][A-Z/]+)?/g, $func.format.frequency);
 				return title;
 			}
 		},
