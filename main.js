@@ -321,22 +321,12 @@ var ivo = (function() {
 			},
 			printNext: function( type ) {
 				var filter = null;
-				switch (type) {
-					case 'digital':
-						filter = $stations.regex.digital;
-						break;
-					case 'morse':
-						filter = $stations.regex.morse;
-						break;
-					case 'voice':
-						filter = $stations.regex.voice;
-						break;
-					default:
-						if (! type) break;
-						type = $func.stations.alias(type);
-						if (! /^[\w /-]+$/.test(type)) return null;
-						filter = new RegExp('^' + type);
-						break;
+				if ([ 'digital', 'morse', 'voice' ].indexOf(type) > -1)
+					filter = $stations.regex[type];
+				else if (type) {
+					type = $func.stations.alias(type);
+					if (! /^[\w /-]+$/.test(type)) return null;
+					filter = new RegExp('^' + type);
 				}
 
 				var date = $func.events.search(-1, filter);
