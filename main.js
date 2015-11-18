@@ -156,7 +156,7 @@ var ivo = (function() {
 				var limit = (new Date()).getTime() + config.announceEarly;
 
 				var next = $func.events.search(limit + 1000, null);
-				if (next == null) {
+				if (next == null || $data.events.length < config.minEvents) {
 					$func.client.fetchEvents();
 					return;
 				}
@@ -252,13 +252,8 @@ var ivo = (function() {
 					if (date.getTime() < after)
 						continue;
 
-					if (filter != null) {
-						if (! filter.test($data.events[i].station))
-							continue;
-					}
-					// Legacy check for running out of events
-					else if ($data.events.length - i < 3)
-						break;
+					if (filter != null && ! filter.test($data.events[i].station))
+						continue;
 
 					// Make sure we have all the events for that date
 					for (var j = i + 1; j < $data.events.length; j++) {

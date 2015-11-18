@@ -21,7 +21,8 @@ var config = module.exports = {
 	announceEarly: 1 * 60000, // ms
 
 	// calendar limits
-	maxResults: 150, // at least 2
+	maxResults: 150,
+	minEvents: 50, // reload data when dropping below this
 
 	// WebSDR / URL shortener root
 	// websdrUrl: 'http://websdr.ewi.utwente.nl:8901/?tune=',
