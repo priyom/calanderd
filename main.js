@@ -274,6 +274,19 @@ var ivo = (function() {
 					},
 				},
 			C),
+			Search: (
+				C = function( search ) {
+					this.search = Boolean(search);
+				},
+				C.prototype = {
+					match: function( event ) {
+						return (this.search != Boolean(event.frequency));
+					},
+					likely: function( chain ) {
+						return (! this.search);
+					},
+				},
+			C),
 		},
 		events: {
 			search: function( filters ) {
@@ -470,18 +483,24 @@ var ivo = (function() {
 			next: function( args ) {
 				// Parse arguments into filters
 				var filters = args.map(function(arg) {
-					var likely = true;
-					var regex;
-					if ([ 'digital', 'morse', 'voice' ].indexOf(arg) > -1)
-						regex = $stations.regex[arg];
-					else {
-						arg = $func.stations.alias(arg);
-						if (! /^[\w /-]+$/.test(arg)) return null;
-						regex = new RegExp('^' + arg);
-						likely = false;
-					}
+					var filter;
+					if (/^!?search$/i.test(arg)) {
+						var search = (arg[0] != '!');
+						filter = new $func.filter.Search(search);
+					} else {
+						var likely = true;
+						var regex;
+						if ([ 'digital', 'morse', 'voice' ].indexOf(arg) > -1)
+							regex = $stations.regex[arg];
+						else {
+							arg = $func.stations.alias(arg);
+							if (! /^[\w /-]+$/.test(arg)) return null;
+							regex = new RegExp('^' + arg);
+							likely = false;
+						}
 
-					var filter = new $func.filter.Regex(regex, likely);
+						filter = new $func.filter.Regex(regex, likely);
+					}
 					return filter;
 				});
 				if (filters.indexOf(null) > -1) return null;
