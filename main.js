@@ -344,17 +344,7 @@ var ivo = (function() {
 				});
 				return (header + formattedEvents.join(" • "));
 			},
-			printNext: function( type ) {
-				var filter = null;
-				if ([ 'digital', 'morse', 'voice' ].indexOf(type) > -1)
-					filter = $stations.regex[type];
-				else if (type) {
-					type = $func.stations.alias(type);
-					if (! /^[\w /-]+$/.test(type)) return null;
-					filter = new RegExp('^' + type);
-				}
-				var filters = filter != null ? [ (new $func.filter.Regex(filter)) ] : null;
-
+			printNext: function( filters ) {
 				var date = $func.events.search(filters);
 				if (date == null) return null;
 
@@ -468,6 +458,25 @@ var ivo = (function() {
 			}
 		},
 		irc: {
+			next: function( type ) {
+				var likely = true;
+				var regex = null;
+				if ([ 'digital', 'morse', 'voice' ].indexOf(type) > -1)
+					regex = $stations.regex[type];
+				else if (type) {
+					type = $func.stations.alias(type);
+					if (! /^[\w /-]+$/.test(type)) return null;
+					regex = new RegExp('^' + type);
+					likely = false;
+				}
+				var filters = filter != null ? [ (new $func.filter.Regex(filter)) ] : null;
+
+				var next = $func.events.printNext(filters);
+				if (next) return next;
+
+				if (likely) return false;
+				return null;
+			},
 			commands: function( from, replyTo, message ) {
 				var args = message.split(/\s+/).filter(function(arg) {
 					// Remove leading/trailing empty strings
@@ -500,9 +509,10 @@ var ivo = (function() {
 					case '!next':
 					case '!n':
 						var type = args[0];
-						var next = $func.events.printNext(type);
+						var next = $func.irc.next(type);
 						if (next) $client.say(replyTo, next);
-						else if ([ 'digital', 'morse', 'voice' ].indexOf(type) > -1) {
+						else if (next != null) {
+							// Should be likely to find match for these parameters
 							$data.notify = {
 								msg: 'Not enough events available to find match; please try again now.',
 								rcpt: replyTo,
