@@ -18,6 +18,9 @@ var ivo = (function() {
 	var moment = require('moment');
 	var colors = config.color ? require('irc-colors') : null;
 
+	// Helper variable for declaring classes, see below
+	var C;
+
 	// data storage object
 	var $data = {
 		data: (process.env.calendard_data === 'mock' ? 'mock' : 'google'),
@@ -155,7 +158,7 @@ var ivo = (function() {
 				// Find next event that isn't supposed to have already been announced
 				var limit = (new Date()).getTime() + config.announceEarly;
 
-				var next = $func.events.search(limit + 1000, null);
+				var next = $func.events.search([ (new $func.filter.After(limit + 1000)) ]);
 				if (next == null || $data.events.length < config.minEvents) {
 					$func.client.fetchEvents();
 					return;
@@ -237,8 +240,34 @@ var ivo = (function() {
 				$func.announcements.schedule();
 			}
 		},
+		filter: {
+			// Old-syntax classes implementing an event filter interface
+			// We use a little trickery to declare them inline:
+			// Class: (C = constructor, C.prototype = members, C),
+			// This evaluates the first two statements and then returns C
+			After: (
+				C = function( after ) {
+					this.after = after;
+				},
+				C.prototype = {
+					match: function( event ) {
+						return (event.eventDate.getTime() >= this.after);
+					},
+				},
+			C),
+			Regex: (
+				C = function( regex ) {
+					this.regex = regex;
+				},
+				C.prototype = {
+					match: function( event ) {
+						return this.regex.test(event.station);
+					},
+				},
+			C),
+		},
 		events: {
-			search: function( after, filter ) {
+			search: function( filters ) {
 				// Remove past events
 				var now = new Date();
 				while ($data.events[0] != null && $data.events[0].eventDate < now) {
@@ -248,14 +277,15 @@ var ivo = (function() {
 				// Search future events
 				for (var i = 0; i < $data.events.length; i++) {
 
-					var date = $data.events[i].eventDate;
-					if (date.getTime() < after)
-						continue;
-
-					if (filter != null && ! filter.test($data.events[i].station))
-						continue;
+					if (filters) {
+						var match = filters.every(function(ftr) {
+							return ftr.match($data.events[i]);
+						});
+						if (! match) continue;
+					}
 
 					// Make sure we have all the events for that date
+					var date = $data.events[i].eventDate;
 					for (var j = i + 1; j < $data.events.length; j++) {
 						if ($data.events[j].eventDate > date) {
 							return date;
@@ -323,8 +353,9 @@ var ivo = (function() {
 					if (! /^[\w /-]+$/.test(type)) return null;
 					filter = new RegExp('^' + type);
 				}
+				var filters = filter != null ? [ (new $func.filter.Regex(filter)) ] : null;
 
-				var date = $func.events.search(-1, filter);
+				var date = $func.events.search(filters);
 				if (date == null) return null;
 
 				var events = $func.events.getByDate(date);
