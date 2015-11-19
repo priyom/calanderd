@@ -253,15 +253,24 @@ var ivo = (function() {
 					match: function( event ) {
 						return (event.eventDate.getTime() >= this.after);
 					},
+					likely: function( chain ) {
+						return (this.after - (new Date()).getTime() <= 3600);
+					},
 				},
 			C),
 			Regex: (
-				C = function( regex ) {
+				C = function( regex, likely ) {
 					this.regex = regex;
+					this._likely = likely;
 				},
 				C.prototype = {
 					match: function( event ) {
 						return this.regex.test(event.station);
+					},
+					likely: function( chain ) {
+						if (chain.regex) return false;
+						chain.regex = true;
+						return this._likely;
 					},
 				},
 			C),
@@ -458,23 +467,35 @@ var ivo = (function() {
 			}
 		},
 		irc: {
-			next: function( type ) {
-				var likely = true;
-				var regex = null;
-				if ([ 'digital', 'morse', 'voice' ].indexOf(type) > -1)
-					regex = $stations.regex[type];
-				else if (type) {
-					type = $func.stations.alias(type);
-					if (! /^[\w /-]+$/.test(type)) return null;
-					regex = new RegExp('^' + type);
-					likely = false;
-				}
-				var filters = filter != null ? [ (new $func.filter.Regex(filter)) ] : null;
+			next: function( args ) {
+				// Parse arguments into filters
+				var filters = args.map(function(arg) {
+					var likely = true;
+					var regex;
+					if ([ 'digital', 'morse', 'voice' ].indexOf(arg) > -1)
+						regex = $stations.regex[arg];
+					else {
+						arg = $func.stations.alias(arg);
+						if (! /^[\w /-]+$/.test(arg)) return null;
+						regex = new RegExp('^' + arg);
+						likely = false;
+					}
+
+					var filter = new $func.filter.Regex(regex, likely);
+					return filter;
+				});
+				if (filters.indexOf(null) > -1) return null;
 
 				var next = $func.events.printNext(filters);
 				if (next) return next;
 
+				// Check if it should have been likely to find events
+				var chain = {};
+				var likely = filters.every(function(ftr) {
+					return ftr.likely(chain);
+				});
 				if (likely) return false;
+
 				return null;
 			},
 			commands: function( from, replyTo, message ) {
@@ -508,8 +529,7 @@ var ivo = (function() {
 				switch(cmd) {
 					case '!next':
 					case '!n':
-						var type = args[0];
-						var next = $func.irc.next(type);
+						var next = $func.irc.next(args);
 						if (next) $client.say(replyTo, next);
 						else if (next != null) {
 							// Should be likely to find match for these parameters
