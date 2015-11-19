@@ -339,7 +339,7 @@ var ivo = (function() {
 				var formattedEvents = events.map(function(evt) {
 					var format = $func.format.event(evt.title);
 					// Don't give a link for "Target", as "Target" implies that the TX can NOT be heard on UTwente. (most of the time at least)
-					if (typeof(evt.frequency) !== 'undefined' && evt.title.indexOf('Target') === -1) {
+					if (evt.frequency && evt.title.indexOf('Target') === -1) {
 						var freq = evt.frequency;
 						var mode = '';
 						switch (evt.mode) {
@@ -382,7 +382,7 @@ var ivo = (function() {
 				// Which is misleading as fuck.
 				if ($func.util.type(textToMatch) !== 'string') $log.error('$func.extract.frequency(): incorrect parameters!');
 				var result = textToMatch.match(/^([\w /-]+?) (?:Search|(\d+) ?[kK][hH][zZ](?:(?:.*?[kK][hH][zZ])?? ([A-Z][A-Z/]+))?)/);
-				return result != null ? [ result[1], result[2], result[3] ] : [ undefined, undefined, undefined ];
+				return result != null ? [ result[1], Number(result[2]), result[3] ] : [ undefined, NaN, undefined ];
 			}
 		},
 		format: {
