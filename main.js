@@ -339,7 +339,7 @@ var ivo = (function() {
 				var formattedEvents = events.map(function(evt) {
 					var format = $func.format.event(evt.title);
 					// Don't give a link for "Target", as "Target" implies that the TX can NOT be heard on UTwente. (most of the time at least)
-					if (typeof(evt.frequency) !== 'undefined' && evt.frequency.length > 3 && evt.title.indexOf('Target') === -1) {
+					if (typeof(evt.frequency) !== 'undefined' && evt.title.indexOf('Target') === -1) {
 						var freq = evt.frequency;
 						var mode = '';
 						switch (evt.mode) {
