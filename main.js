@@ -41,9 +41,11 @@ var ivo = (function() {
 	// station static data storage object
 	var $stations = {
 		regex: {
-			digital: /^(XP[A-Z]*\d*|(F|HM|DP|SK)\d+)[a-z]?$/,
-			morse: /^M\d+[a-z]?$/,
-			voice: /^[EGSV]\d+[a-z]?$/,
+			type: {
+				digital: /^(XP[A-Z]*\d*|(F|HM|DP|SK)\d+)[a-z]?$/,
+				morse: /^M\d+[a-z]?$/,
+				voice: /^[EGSV]\d+[a-z]?$/,
+			},
 			military: {
 				russia: /^(S(28|30|32|\d{4,})|[A-Za-z]+-\d{2}|M(32|XI))[a-z]?$/,
 				USA: /^HFGCS$/,
@@ -413,11 +415,11 @@ var ivo = (function() {
 			station: function( match, name, rest ) {
 				if (!config.color) return match;
 				var cname;
-				if ($stations.regex.digital.test(name)) {
+				if ($stations.regex.type.digital.test(name)) {
 					cname = colors.red(name);
-				} else if ($stations.regex.morse.test(name)) {
+				} else if ($stations.regex.type.morse.test(name)) {
 					cname = colors.purple(name);
-				} else if ($stations.regex.voice.test(name)) {
+				} else if ($stations.regex.type.voice.test(name)) {
 					cname = colors.green(name);
 				} else {
 					cname = colors.brown(name);
@@ -469,7 +471,7 @@ var ivo = (function() {
 				}
 
 				// Check for digital stations with special prefixes
-				var language = $stations.regex.digital.test(station) ? 'digital' :
+				var language = $stations.regex.type.digital.test(station) ? 'digital' :
 					// Generic numbers stations
 					$stations.language[station[0]];
 
@@ -534,10 +536,8 @@ var ivo = (function() {
 						filter = new $func.filter.Search(search);
 					} else {
 						var likely = true;
-						var regex;
-						if ([ 'digital', 'morse', 'voice' ].indexOf(arg) > -1)
-							regex = $stations.regex[arg];
-						else {
+						var regex = $stations.regex.type[arg];
+						if (! regex) {
 							arg = $func.stations.alias(arg);
 							if (! /^[\w /-]+$/.test(arg)) return null;
 							regex = new RegExp('^' + arg);
