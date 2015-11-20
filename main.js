@@ -609,6 +609,7 @@ var ivo = (function() {
 						if (args.length > 0) $client.say(replyTo, $func.stations.link(args[0], args.slice(1)));
 						break;
 					case '!logs':
+					case '!log':
 						if (args.length > 0) $client.say(replyTo, $func.stations.link(args[0], [ (new Date()).getFullYear() ]));
 						break;
 					case '!reload':
