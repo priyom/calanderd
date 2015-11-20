@@ -274,6 +274,30 @@ var ivo = (function() {
 					},
 				},
 			C),
+			Band: (
+				C = function( min, max ) {
+					this.min = min;
+					this.max = max;
+				},
+				C.prototype = {
+					match: function( event ) {
+						var freq = event.frequency;
+						return (!(
+							(this.min && ((! freq) || freq < this.min)) ||
+							((this.max || this.max == 0) && ((! freq) || this.max < freq))
+						));
+					},
+					likely: function( chain ) {
+						if (! chain.min) chain.min = 5000;
+						if (chain.min < this.min) chain.min = this.min;
+
+						if (!(chain.max || chain.max == 0)) chain.max = 18000;
+						if ((this.max || this.max == 0) && chain.max > this.max) chain.max = this.max;
+
+						return (chain.max - chain.min >= 2000);
+					},
+				},
+			C),
 			Search: (
 				C = function( search ) {
 					this.search = Boolean(search);
@@ -484,7 +508,28 @@ var ivo = (function() {
 				// Parse arguments into filters
 				var filters = args.map(function(arg) {
 					var filter;
-					if (/^!?search$/i.test(arg)) {
+					var result = arg.match(/^(\d+)(?:-(\d*))?$/);
+					if (result != null) {
+						var min = Number(result[1]);
+						var max;
+						switch (result[2]) {
+							case undefined:
+								// Single frequency
+								max = min;
+								break;
+							case '':
+								// Lower bound only
+								max = NaN;
+								break;
+							default:
+								// Range
+								max = Number(result[2]);
+								break;
+						}
+
+						filter = new $func.filter.Band(min, max);
+
+					} else if (/^!?search$/i.test(arg)) {
 						var search = (arg[0] != '!');
 						filter = new $func.filter.Search(search);
 					} else {
