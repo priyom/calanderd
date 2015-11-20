@@ -46,6 +46,13 @@ var ivo = (function() {
 				morse: /^M\d+[a-z]?$/,
 				voice: /^[EGSV]\d+[a-z]?$/,
 			},
+			family: {
+				GRU: /^(([EFGV]0?6|E20|S25|V23|M[12]4|F0?[126])[a-z]?|E17[a-y]?|S0?6[a-rt-z]?)$/,
+				SVR: /^([EGSV]0?7|M12|DP0?1|XP[A-Z]*\d*)[a-z]?$/,
+				poland: /^([EFGS]11|G10|S(12|26)|M(0?3|20))[a-z]?$/,
+				ukraine: /^(E17z|S0?6s)$/,
+				DGI: /^(V0?2|M0?8|HM0?1|SK0?1)[a-z]?$/,
+			},
 			military: {
 				russia: /^(S(28|30|32|\d{4,})|[A-Za-z]+-\d{2}|M(32|XI))[a-z]?$/,
 				USA: /^HFGCS$/,
@@ -537,6 +544,8 @@ var ivo = (function() {
 					} else {
 						var likely = true;
 						var regex = $stations.regex.type[arg];
+						if (! regex) regex = $stations.regex.family[arg];
+						if (! regex) regex = $stations.regex.family[arg.toUpperCase()];
 						if (! regex) {
 							arg = $func.stations.alias(arg);
 							if (! /^[\w /-]+$/.test(arg)) return null;
