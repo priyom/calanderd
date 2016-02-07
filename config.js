@@ -26,7 +26,7 @@ var config = module.exports = {
 
 	// WebSDR / URL shortener root
 	// websdrUrl: 'http://websdr.ewi.utwente.nl:8901/?tune=',
-	websdrUrl: 'http://freq.ml/',
+	websdrUrl: 'http://t.svita.cz/',
 
 	// these options are for testing, by doing something like:
 	//    calendard=dev node ./main.js
