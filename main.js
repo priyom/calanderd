@@ -583,12 +583,14 @@ var ivo = (function() {
 
 				// Don't separate these commands too far from the others
 				var staticInfo = {
-					'!stream': 'http://stream.priyom.org:8000/buzzer.ogg.m3u',
+					'!stream': 'http://stream.priyom.org:8000/buzzer.ogg',
 					'!listen': 'http://websdr.ewi.utwente.nl:8901/',
 					'!why': 'The Buzzer is not audible at this time of the day due to HF propagation characteristics. Try again later in the local evening.',
 					'!new': 'You can visit our site at http://priyom.org where we have a good read regarding any and all information about logged numbers stations.',
 					'!rules': 'http://priyom.org/about/irc-rules',
 					'!rivet': 'http://www.apul64.dsl.pipex.com/enigma2000/rivet/index.html',
+					'!twente': 'Priyom is not affiliated with the University of Twente, their WebSDR, and PA3FWM, and is not their helpdesk.',
+					'!sdrhelp': 'http://sdrhelp.blogspot.com',
 				};
 
 				var info = staticInfo[cmd];
