@@ -262,24 +262,15 @@ var ivo = (function() {
 					match: function( event ) {
 						return (event.eventDate.getTime() >= this.after);
 					},
-					likely: function( chain ) {
-						return (this.after - (new Date()).getTime() <= 3600);
-					},
 				},
 			C),
 			Regex: (
-				C = function( regex, likely ) {
+				C = function( regex ) {
 					this.regex = regex;
-					this._likely = likely;
 				},
 				C.prototype = {
 					match: function( event ) {
 						return this.regex.test(event.station);
-					},
-					likely: function( chain ) {
-						if (chain.regex) return false;
-						chain.regex = true;
-						return this._likely;
 					},
 				},
 			C),
@@ -296,15 +287,6 @@ var ivo = (function() {
 							((this.max || this.max == 0) && ((! freq) || this.max < freq))
 						));
 					},
-					likely: function( chain ) {
-						if (! chain.min) chain.min = 5000;
-						if (chain.min < this.min) chain.min = this.min;
-
-						if (!(chain.max || chain.max == 0)) chain.max = 18000;
-						if ((this.max || this.max == 0) && chain.max > this.max) chain.max = this.max;
-
-						return (chain.max - chain.min >= 2000);
-					},
 				},
 			C),
 			Search: (
@@ -314,9 +296,6 @@ var ivo = (function() {
 				C.prototype = {
 					match: function( event ) {
 						return (this.search != Boolean(event.frequency));
-					},
-					likely: function( chain ) {
-						return (! this.search);
 					},
 				},
 			C),
@@ -540,7 +519,6 @@ var ivo = (function() {
 						var search = (arg[0] != '!');
 						filter = new $func.filter.Search(search);
 					} else {
-						var likely = true;
 						var regex = $stations.regex.type[arg];
 						if (! regex) regex = $stations.regex.family[arg];
 						if (! regex) regex = $stations.regex.family[arg.toUpperCase()];
@@ -551,23 +529,13 @@ var ivo = (function() {
 							likely = false;
 						}
 
-						filter = new $func.filter.Regex(regex, likely);
+						filter = new $func.filter.Regex(regex);
 					}
 					return filter;
 				});
 				if (filters.indexOf(null) > -1) return null;
 
-				var next = $func.events.printNext(filters);
-				if (next) return next;
-
-				// Check if it should have been likely to find events
-				var chain = {};
-				var likely = filters.every(function(ftr) {
-					return ftr.likely(chain);
-				});
-				if (likely) return false;
-
-				return null;
+				return $func.events.printNext(filters);
 			},
 			commands: function( from, replyTo, message ) {
 				var args = message.split(/\s+/).filter(function(arg) {
@@ -604,14 +572,6 @@ var ivo = (function() {
 					case '!n':
 						var next = $func.irc.next(args);
 						if (next) $client.say(replyTo, next);
-						else if (next != null) {
-							// Should be likely to find match for these parameters
-							$data.notify = {
-								msg: 'Not enough events available to find match; please try again now.',
-								rcpt: replyTo,
-							};
-							$func.client.fetchEvents();
-						}
 						else $client.say(replyTo, 'No scheduled matching station found within available events.');
 						break;
 					case '!link':
