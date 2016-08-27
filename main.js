@@ -383,13 +383,11 @@ var ivo = (function() {
 								break;
 
 							case 'CW':
-								// This makes the CW stations +1000Hz on USB.
-								freq = freq-1;
+								// WebSDR software gratuitiously shifts CW tuning by +750 Hz, so we compensate for this.
+								freq = freq - 0.75;
 							case 'LSB':
-								// NOTE: we're falling through from LSB into AM!
 							case 'AM':
-								// Especially for M08a
-								// For HM01 too... veryu
+								// Especially for M08a, and for HM01 too... veryu
 								mode = evt.mode.toLowerCase();
 								break;
 						}
