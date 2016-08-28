@@ -527,10 +527,19 @@ var ivo = (function() {
 					var search = (arg[0] != '!');
 					filter = new $func.filter.Search(search);
 				} else if (arg[0] == '!') {
-					var invert = $func.irc.parseFilter(arg.slice(1));
-					if (invert == null) return null;
+					// Optimization and stack-overflow DoS protection
+					while (arg.substr(0, 2) == '!!')
+						arg = arg.slice(2);
 
-					filter = new $func.filter.Not(invert);
+					if (arg[0] != '!') {
+						filter = $func.irc.parseFilter(arg);
+					} else {
+
+						var invert = $func.irc.parseFilter(arg.slice(1));
+						if (invert == null) return null;
+
+						filter = new $func.filter.Not(invert);
+					}
 				} else {
 					var regex = $stations.regex.type[arg];
 					if (! regex) regex = $stations.regex.family[arg];
