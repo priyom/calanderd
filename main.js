@@ -299,6 +299,16 @@ var ivo = (function() {
 					},
 				},
 			C),
+			Not: (
+				C = function( filter ) {
+					this.filter = filter;
+				},
+				C.prototype = {
+					match: function( event ) {
+						return (! this.filter.match(event));
+					},
+				},
+			C),
 		},
 		events: {
 			search: function( filters ) {
@@ -516,6 +526,11 @@ var ivo = (function() {
 				} else if (/^!?search$/i.test(arg)) {
 					var search = (arg[0] != '!');
 					filter = new $func.filter.Search(search);
+				} else if (arg[0] == '!') {
+					var invert = $func.irc.parseFilter(arg.slice(1));
+					if (invert == null) return null;
+
+					filter = new $func.filter.Not(invert);
 				} else {
 					var regex = $stations.regex.type[arg];
 					if (! regex) regex = $stations.regex.family[arg];
