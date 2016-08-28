@@ -490,49 +490,48 @@ var ivo = (function() {
 			}
 		},
 		irc: {
-			next: function( args ) {
-				// Parse arguments into filters
-				var filters = args.map(function(arg) {
-					var filter;
-					var result = arg.match(/^(\d+)(?:-(\d*))?$/);
-					if (result != null) {
-						var min = Number(result[1]);
-						var max;
-						switch (result[2]) {
-							case undefined:
-								// Single frequency
-								max = min;
-								break;
-							case '':
-								// Lower bound only
-								max = NaN;
-								break;
-							default:
-								// Range
-								max = Number(result[2]);
-								break;
-						}
-
-						filter = new $func.filter.Band(min, max);
-
-					} else if (/^!?search$/i.test(arg)) {
-						var search = (arg[0] != '!');
-						filter = new $func.filter.Search(search);
-					} else {
-						var regex = $stations.regex.type[arg];
-						if (! regex) regex = $stations.regex.family[arg];
-						if (! regex) regex = $stations.regex.family[arg.toUpperCase()];
-						if (! regex) {
-							arg = $func.stations.alias(arg);
-							if (! /^[\w /-]+$/.test(arg)) return null;
-							regex = new RegExp('^' + arg);
-							likely = false;
-						}
-
-						filter = new $func.filter.Regex(regex);
+			parseFilter: function( arg ) {
+				var filter;
+				var result = arg.match(/^(\d+)(?:-(\d*))?$/);
+				if (result != null) {
+					var min = Number(result[1]);
+					var max;
+					switch (result[2]) {
+						case undefined:
+							// Single frequency
+							max = min;
+							break;
+						case '':
+							// Lower bound only
+							max = NaN;
+							break;
+						default:
+							// Range
+							max = Number(result[2]);
+							break;
 					}
-					return filter;
-				});
+
+					filter = new $func.filter.Band(min, max);
+
+				} else if (/^!?search$/i.test(arg)) {
+					var search = (arg[0] != '!');
+					filter = new $func.filter.Search(search);
+				} else {
+					var regex = $stations.regex.type[arg];
+					if (! regex) regex = $stations.regex.family[arg];
+					if (! regex) regex = $stations.regex.family[arg.toUpperCase()];
+					if (! regex) {
+						arg = $func.stations.alias(arg);
+						if (! /^[\w /-]+$/.test(arg)) return null;
+						regex = new RegExp('^' + arg);
+					}
+
+					filter = new $func.filter.Regex(regex);
+				}
+				return filter;
+			},
+			next: function( args ) {
+				var filters = args.map($func.irc.parseFilter);
 				if (filters.indexOf(null) > -1) return null;
 
 				return $func.events.printNext(filters);
