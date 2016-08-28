@@ -290,12 +290,11 @@ var ivo = (function() {
 				},
 			C),
 			Search: (
-				C = function( search ) {
-					this.search = Boolean(search);
+				C = function() {
 				},
 				C.prototype = {
 					match: function( event ) {
-						return (this.search != Boolean(event.frequency));
+						return (! event.frequency);
 					},
 				},
 			C),
@@ -523,9 +522,6 @@ var ivo = (function() {
 
 					filter = new $func.filter.Band(min, max);
 
-				} else if (/^!?search$/i.test(arg)) {
-					var search = (arg[0] != '!');
-					filter = new $func.filter.Search(search);
 				} else if (arg[0] == '!') {
 					// Optimization and stack-overflow DoS protection
 					while (arg.substr(0, 2) == '!!')
@@ -540,6 +536,8 @@ var ivo = (function() {
 
 						filter = new $func.filter.Not(invert);
 					}
+				} else if (arg.toLowerCase() == 'search') {
+					filter = new $func.filter.Search();
 				} else {
 					var regex = $stations.regex.type[arg];
 					if (! regex) regex = $stations.regex.family[arg];
