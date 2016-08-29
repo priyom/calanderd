@@ -578,6 +578,7 @@ var ivo = (function() {
 					'!rivet': 'http://www.apul64.dsl.pipex.com/enigma2000/rivet/index.html',
 					'!twente': 'Priyom is not affiliated with the University of Twente, their WebSDR, and PA3FWM, and is not their helpdesk.',
 					'!sdrhelp': 'http://sdrhelp.blogspot.com',
+					'!help': 'https://github.com/priyom/calanderd/blob/master/main.js',
 				};
 
 				var info = staticInfo[cmd];
