@@ -13,6 +13,7 @@ var ivo = (function() {
 	var https = require('https');
 	// local
 	var config = require('./config.js');
+	var website = require('./website.js');
 	// third party
 	var irc = require('irc');
 	var moment = require('moment');
@@ -64,14 +65,6 @@ var ivo = (function() {
 				russia: /^X0?6[a-z]?$/,
 			},
 		},
-		language: {
-			E: 'english',
-			G: 'german',
-			S: 'slavic',
-			V: 'other',
-			M: 'morse',
-			F: 'digital',
-		},
 		alias: {
 			'buzzer': 'S28',
 			'pip': 'S30',
@@ -87,21 +80,6 @@ var ivo = (function() {
 			'fsk-2001000': 'F06',
 			'200/500': 'F01',
 			'fsk-200500': 'F01',
-		},
-		link: {
-			irregular: {
-				'S28': 'the-buzzer',
-				'S30': 'the-pip',
-				'S32': 'the-squeaky-wheel',
-				'MXI': 'naval-markers',
-				'VC01': 'chinese-robot',
-				'XSL': 'slot-machine',
-			},
-			extra: {
-				'monolith': [ 'military', 'russia', 'monolyth-messages-description' ],
-				'alphabet': [ 'military', 'russia', 'russian-phonetic-alphabet-and-numbers' ],
-				'sked': [ 'number', 'station-schedule' ],
-			},
 		},
 	};
 
@@ -447,7 +425,7 @@ var ivo = (function() {
 			},
 			matchLink: function( station ) {
 				// Extra (non-station) info pages
-				var extra = $stations.link.extra[station.toLowerCase()];
+				var extra = website.extra[station.toLowerCase()];
 				if (extra) return extra.slice(); // Return a copy of the array, so it can be modified
 
 				// Stations sorted by country
@@ -466,7 +444,7 @@ var ivo = (function() {
 				// Check for digital stations with special prefixes
 				var language = $stations.regex.type.digital.test(station) ? 'digital' :
 					// Generic numbers stations
-					$stations.language[station[0]];
+					website.language[station[0]];
 
 				if (language) return [ 'number', language, station.toLowerCase() ];
 
@@ -482,7 +460,7 @@ var ivo = (function() {
 				segments[0] = 'http://priyom.org/' + segments[0] + '-stations';
 
 				// Handle irregular page names
-				var page = $stations.link.irregular[station];
+				var page = website.irregular[station];
 				if (page) segments[segments.length - 1] = page;
 
 				if (append) segments = segments.concat(append);
