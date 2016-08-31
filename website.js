@@ -25,4 +25,9 @@ var website = module.exports = {
 		'VC01': 'chinese-robot',
 		'XSL': 'slot-machine',
 	},
+	// Log pages
+	logs: {
+		month: [ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' ],
+		monthly: [ 'F06', 'S28', 'S30', 'S32', 'S3850', 'S5292' ],
+	},
 };

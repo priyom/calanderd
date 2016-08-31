@@ -468,6 +468,7 @@ var ivo = (function() {
 				if (logs) {
 					var today = new Date();
 					segments.push(today.getFullYear());
+					if (website.logs.monthly.indexOf(station) > -1) segments.push(website.logs.month[today.getMonth()]);
 				}
 
 				return segments.join('/');
