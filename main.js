@@ -450,7 +450,7 @@ var ivo = (function() {
 
 				return null;
 			},
-			link: function( station, append ) {
+			link: function( station, append, logs ) {
 				// avoid pissing people off, veryu
 				station = $func.stations.alias(station);
 
@@ -463,7 +463,13 @@ var ivo = (function() {
 				var page = website.irregular[station];
 				if (page) segments[segments.length - 1] = page;
 
+				// Extra sub-pages
 				if (append) segments = segments.concat(append);
+				if (logs) {
+					var today = new Date();
+					segments.push(today.getFullYear());
+				}
+
 				return segments.join('/');
 			}
 		},
@@ -574,13 +580,14 @@ var ivo = (function() {
 						if (next) $client.say(replyTo, next);
 						else $client.say(replyTo, 'No scheduled matching station found within available events.');
 						break;
-					case '!link':
-						if (args.length > 0) $client.say(replyTo, $func.stations.link(args[0], args.slice(1)));
-						break;
+
 					case '!logs':
 					case '!log':
-						if (args.length > 0) $client.say(replyTo, $func.stations.link(args[0], [ (new Date()).getFullYear() ]));
+						var logs = true; // Yes this gives valid javascript, cf. variable scoping/hoisting
+					case '!link':
+						if (args.length > 0) $client.say(replyTo, $func.stations.link(args[0], args.slice(1), logs));
 						break;
+
 					case '!reload':
 						$log.log('refreshing events list...');
 						$data.notify = {
