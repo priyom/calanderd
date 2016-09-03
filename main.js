@@ -385,17 +385,10 @@ var ivo = (function() {
 		format: colors ? {
 			time: colors.bold,
 			station: function( name ) {
-				var cname;
-				if ($stations.regex.type.digital.test(name)) {
-					cname = colors.red(name);
-				} else if ($stations.regex.type.morse.test(name)) {
-					cname = colors.purple(name);
-				} else if ($stations.regex.type.voice.test(name)) {
-					cname = colors.green(name);
-				} else {
-					cname = colors.brown(name);
-				}
-				return cname;
+				if ($stations.regex.type.digital.test(name)) return colors.red(name);
+				else if ($stations.regex.type.morse.test(name)) return colors.purple(name);
+				else if ($stations.regex.type.voice.test(name)) return colors.green(name);
+				else return colors.brown(name);
 			},
 			search: colors.bold,
 			frequency: colors.olive,
