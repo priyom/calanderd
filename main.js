@@ -333,10 +333,10 @@ var ivo = (function() {
 				// Based on original events code written by foo (UTwente-Usability/events.js)
 				var first = moment(events[0].eventDate);
 				var time = first.utc().format('HH:mm');
-				var header = (config.color ? colors.bold(time) : time) + " " + first.fromNow() + " ";
+				var header = ($func.format != null ? $func.format.time(time) : time) + " " + first.fromNow() + " ";
 
 				var formattedEvents = events.map(function(evt) {
-					var format = $func.format.event(evt.title);
+					var format = $func.format_.event(evt.title);
 					// Don't give a link for "Target", as "Target" implies that the TX can NOT be heard on UTwente. (most of the time at least)
 					if (evt.frequency && evt.title.indexOf('Target') === -1) {
 						var freq = evt.frequency;
@@ -382,9 +382,9 @@ var ivo = (function() {
 				return result != null ? [ result[1], Number(result[2]), result[3] ] : [ undefined, NaN, undefined ];
 			}
 		},
-		format: {
-			station: function( match, name, rest ) {
-				if (!config.color) return match;
+		format: colors ? {
+			time: colors.bold,
+			station: function( name ) {
 				var cname;
 				if ($stations.regex.type.digital.test(name)) {
 					cname = colors.red(name);
@@ -395,19 +395,22 @@ var ivo = (function() {
 				} else {
 					cname = colors.brown(name);
 				}
-
-				return (cname + " " + rest);
+				return cname;
+			},
+			search: colors.bold,
+			frequency: colors.olive,
+		} : null,
+		format_: {
+			station: function( match, name, rest ) {
+				return ($func.format.station(name) + " " + rest);
 			},
 			search: function( match, search ) {
-				return config.color ? (" " + colors.bold(search) + " ") : match;
-			},
-			frequency: function( freq ) {
-				return config.color ? colors.olive(freq) : freq;
+				return (" " + $func.format.search(search) + " ");
 			},
 			event: function( title ) {
-				if (!config.color) return title;
-				title = title.replace(/^([\w /-]+?) (\d+ ?kHz|Search)/i, $func.format.station);
-				title = title.replace(/ (Search) /i, $func.format.search);
+				if ($func.format == null) return title;
+				title = title.replace(/^([\w /-]+?) (\d+ ?kHz|Search)/i, $func.format_.station);
+				title = title.replace(/ (Search) /i, $func.format_.search);
 				title = title.replace(/\d+(-\d+)? ?[kKmM][hH][zZ]( [A-Z][A-Z/]+)?/g, $func.format.frequency);
 				return title;
 			}
