@@ -14,6 +14,7 @@ var ivo = (function() {
 	// local
 	var config = require('./config.js');
 	var website = require('./website.js');
+	var TX = require('./tx.js');
 	// third party
 	var irc = require('irc');
 	var moment = require('moment');
@@ -202,15 +203,8 @@ var ivo = (function() {
 				$log.log('time of first event: ' + events[0].start.dateTime);
 
 				var ev = events.map(function(evt) {
-					var info = $func.extract.info(evt.summary);
-					var event = {
-						eventDate: new Date(evt.start.dateTime),
-						title: evt.summary,
-						station: info[0],
-						frequency: info[1],
-						mode: info[2],
-					};
-					return event;
+					if ($func.util.type(evt.summary) !== 'string') $log.error('$func.extract.frequency(): incorrect parameters!');
+					return new TX(evt.summary, new Date(evt.start.dateTime), config.websdrUrl, $func.format);
 				});
 
 				// Atomically swap new events in
@@ -336,29 +330,9 @@ var ivo = (function() {
 				var header = ($func.format != null ? $func.format.time(time) : time) + " " + first.fromNow() + " ";
 
 				var formattedEvents = events.map(function(evt) {
-					var format = $func.format_.event(evt.title);
-					// Don't give a link for "Target", as "Target" implies that the TX can NOT be heard on UTwente. (most of the time at least)
-					if (evt.frequency && evt.title.indexOf('Target') === -1) {
-						var freq = evt.frequency;
-						var mode = '';
-						switch (evt.mode) {
-							case 'RTTY':
-							case 'RTTY/CW':
-								// Give it as USB with the center frequency at +2 kHz
-								freq = freq-2;
-								break;
-
-							case 'CW':
-								// WebSDR software gratuitiously shifts CW tuning by +750 Hz, so we compensate for this.
-								freq = freq - 0.75;
-							case 'LSB':
-							case 'AM':
-								// Especially for M08a, and for HM01 too... veryu
-								mode = evt.mode.toLowerCase();
-								break;
-						}
-						format += ' ' + config.websdrUrl + freq + mode;
-					}
+					var format = evt.format();
+					var link = evt.link();
+					if (link) format += ' ' + evt.link();
 					return format;
 				});
 				return (header + formattedEvents.join(" • "));
@@ -373,15 +347,6 @@ var ivo = (function() {
 				return $func.events.print(events);
 			}
 		},
-		extract: {
-			info: function( textToMatch ) {
-				// Don't match a frequency marked as "last used", otherwise it is given as a link.
-				// Which is misleading as fuck.
-				if ($func.util.type(textToMatch) !== 'string') $log.error('$func.extract.frequency(): incorrect parameters!');
-				var result = textToMatch.match(/^([\w /-]+?) (?:Search|(\d+) ?[kK][hH][zZ](?:(?:.*?[kK][hH][zZ])?? ([A-Z][A-Z/]+))?)/);
-				return result != null ? [ result[1], Number(result[2]), result[3] ] : [ undefined, NaN, undefined ];
-			}
-		},
 		format: colors ? {
 			time: colors.bold,
 			station: function( name ) {
@@ -393,21 +358,6 @@ var ivo = (function() {
 			search: colors.bold,
 			frequency: colors.olive,
 		} : null,
-		format_: {
-			station: function( match, name, rest ) {
-				return ($func.format.station(name) + " " + rest);
-			},
-			search: function( match, search ) {
-				return (" " + $func.format.search(search) + " ");
-			},
-			event: function( title ) {
-				if ($func.format == null) return title;
-				title = title.replace(/^([\w /-]+?) (\d+ ?kHz|Search)/i, $func.format_.station);
-				title = title.replace(/ (Search) /i, $func.format_.search);
-				title = title.replace(/\d+(-\d+)? ?[kKmM][hH][zZ]( [A-Z][A-Z/]+)?/g, $func.format.frequency);
-				return title;
-			}
-		},
 		stations: {
 			alias: function( station ) {
 				// mil/diplo/digi aliases
