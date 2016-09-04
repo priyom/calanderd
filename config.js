@@ -24,10 +24,6 @@ var config = module.exports = {
 	maxResults: 150,
 	minEvents: 50, // reload data when dropping below this
 
-	// WebSDR / URL shortener root
-	// websdrUrl: 'http://websdr.ewi.utwente.nl:8901/?tune=',
-	websdrUrl: 'http://t.svita.cz/',
-
 	// these options are for testing, by doing something like:
 	//    calendard=dev node ./main.js
 	dev: {

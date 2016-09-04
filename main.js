@@ -14,6 +14,7 @@ var ivo = (function() {
 	// local
 	var config = require('./config.js');
 	var website = require('./website.js');
+	var websdrs = require('./websdrs.js');
 	var TX = require('./tx.js');
 	// third party
 	var irc = require('irc');
@@ -204,7 +205,7 @@ var ivo = (function() {
 
 				var ev = events.map(function(evt) {
 					if ($func.util.type(evt.summary) !== 'string') $log.error('$func.extract.frequency(): incorrect parameters!');
-					return new TX(evt.summary, new Date(evt.start.dateTime), config.websdrUrl, $func.format);
+					return new TX(evt.summary, new Date(evt.start.dateTime), websdrs, $func.format);
 				});
 
 				// Atomically swap new events in

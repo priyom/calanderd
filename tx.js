@@ -1,6 +1,6 @@
 
-var TX = function( description, eventDate, websdrUrl, formatter ) {
-	this.websdrUrl = websdrUrl; // WebSDR configuration
+var TX = function( description, eventDate, websdrs, formatter ) {
+	this.websdrs = websdrs; // WebSDR configuration
 	this.formatter = formatter; // Formatting service object
 
 	this.description = description;
@@ -21,9 +21,24 @@ var TX = function( description, eventDate, websdrUrl, formatter ) {
 };
 
 TX.prototype = {
+	receivable: function( websdr ) {
+		return (this.target == websdr.target
+		        && websdr.min <= this.frequency
+                        && this.frequency <= websdr.max);
+	},
 	link: function() {
-		// Don't give a link for "Target", as "Target" implies that the TX can NOT be heard on UTwente. (most of the time at least)
-		if ((! this.frequency) || this.target != null) return null;
+		if (! this.frequency) return null;
+
+		// Find a suitable WebSDR to link to
+		var websdr;
+		this.websdrs.some(function(ws) {
+			if (this.receivable(ws)) {
+				websdr = ws;
+				return true;
+			}
+			return false;
+		}, this);
+		if (websdr == null) return null;
 
 		var freq = this.frequency;
 		var mode = '';
@@ -43,7 +58,7 @@ TX.prototype = {
 				mode = this.mode.toLowerCase();
 				break;
 		}
-		return this.websdrUrl + freq + mode;
+		return websdr.url + freq + mode;
 	},
 	format: function() {
 		if (! this.formatter) return this.description;
