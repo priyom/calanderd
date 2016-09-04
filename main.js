@@ -270,6 +270,20 @@ var ivo = (function() {
 					},
 				},
 			C),
+			Target: (
+				C = function( target ) {
+					this.target = this.comparable(target);
+				},
+				C.prototype = {
+					match: function( event ) {
+						return (this.target == this.comparable(event.target));
+					},
+					comparable: function( target ) {
+						if (! target) return null;
+						return target.replace(/[ _-]/, '').toLowerCase();
+					},
+				},
+			C),
 			Not: (
 				C = function( filter ) {
 					this.filter = filter;
@@ -467,6 +481,8 @@ var ivo = (function() {
 
 						filter = new $func.filter.Not(invert);
 					}
+				} else if (arg[0] == '>') {
+					filter = new $func.filter.Target(arg.slice(1));
 				} else if (arg.toLowerCase() == 'search') {
 					filter = new $func.filter.Search();
 				} else {
