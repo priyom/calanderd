@@ -8,12 +8,13 @@ var TX = function( description, eventDate, websdrUrl, formatter ) {
 
 	// Don't match a frequency marked as "last used", otherwise it is given as a link.
 	// Which is misleading as fuck.
-	var result = description.match(/^([\w /-]+?) (?:Search|(\d+) ?[kK][hH][zZ](?:(?:.*?[kK][hH][zZ])?? ([A-Z][A-Z/]+))?)/);
+	var result = description.match(/^([\w /-]+?) (?:Search|(\d+) ?[kK][hH][zZ](?:(?:.*?[kK][hH][zZ])?? ([A-Z][A-Z/]+))?)(?:.*?\[Target: ([\w -]+)\])?/);
 
 	if (result != null) {
 		this.station = result[1];
 		this.frequency = Number(result[2]);
 		this.mode = result[3];
+		this.target = result[4];
 	} else {
 		this.frequency = NaN;
 	}
@@ -22,7 +23,7 @@ var TX = function( description, eventDate, websdrUrl, formatter ) {
 TX.prototype = {
 	link: function() {
 		// Don't give a link for "Target", as "Target" implies that the TX can NOT be heard on UTwente. (most of the time at least)
-		if ((! this.frequency) || this.description.indexOf('Target') > -1) return null;
+		if ((! this.frequency) || this.target != null) return null;
 
 		var freq = this.frequency;
 		var mode = '';
