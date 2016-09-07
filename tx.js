@@ -41,12 +41,14 @@ TX.prototype = {
 		if (websdr == null) return null;
 
 		var freq = this.frequency;
-		var mode = '';
+		var mode;
 		switch (this.mode) {
 			case 'RTTY':
 			case 'RTTY/CW':
 				// Give it as USB with the center frequency at +2 kHz
 				freq = freq - 2;
+			default:
+				mode = 'usb';
 				break;
 
 			case 'CW':
