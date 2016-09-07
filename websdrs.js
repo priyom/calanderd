@@ -10,11 +10,13 @@ var websdrs = module.exports = [
 		target: null,
 		min: 0,
 		max: 29160,
+		fixCW: true,
 	},
 	{ // argonn's, Poland
 		url: 'http://websdr.printf.cc:8901/?tune=',
 		target: 'Eastern Europe',
 		min: 0,
 		max: 8048,
+		fixCW: true,
 	},
 ];

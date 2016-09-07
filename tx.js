@@ -52,8 +52,8 @@ TX.prototype = {
 				break;
 
 			case 'CW':
-				// WebSDR software gratuitiously shifts CW tuning by +750 Hz, so we compensate for this.
-				freq = freq - 0.75;
+				// PA3FWM WebSDR software gratuitiously shifts CW tuning by +750 Hz, so we compensate for this.
+				if (websdr.fixCW) freq = freq - 0.75;
 			case 'LSB':
 			case 'AM':
 				// Especially for M08a, and for HM01 too... veryu
