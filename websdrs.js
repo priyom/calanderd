@@ -19,4 +19,10 @@ var websdrs = module.exports = [
 		max: 8048,
 		fixCW: true,
 	},
+	{ // KD4HSO's KiwiSDR, Kansas, USA
+		url: 'http://64.136.200.36:8073/?f=',
+		target: 'North America',
+		min: 0,
+		max: 30000,
+	},
 ];
