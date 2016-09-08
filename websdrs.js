@@ -25,4 +25,10 @@ var websdrs = module.exports = [
 		min: 0,
 		max: 30000,
 	},
+	{ // VK5FO's KiwiSDR, South Australia
+		url: 'http://kiwisdr.vk5fo.com:8073/?f=',
+		target: 'Pacific',
+		min: 0,
+		max: 30000,
+	},
 ];
