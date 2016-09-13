@@ -347,7 +347,7 @@ var ivo = (function() {
 				var formattedEvents = events.map(function(evt) {
 					var format = evt.format();
 					var link = evt.link();
-					if (link) format += ' ' + evt.link();
+					if (link) format += ' ' + link;
 					return format;
 				});
 				return (header + formattedEvents.join(" • "));
