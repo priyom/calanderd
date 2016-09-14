@@ -11,11 +11,13 @@ var ivo = (function() {
 
 	// core
 	var https = require('https');
-	// local
+	// local config
 	var config = require('./config.js');
 	var website = require('./website.js');
 	var websdrs = require('./websdrs.js');
+	// local code
 	var TX = require('./tx.js');
+	var Events = require('./events.js');
 	// third party
 	var irc = require('irc');
 	var moment = require('moment');
@@ -32,7 +34,7 @@ var ivo = (function() {
 			rcpt: process.env.calendard === 'dev' ? config.dev.room : config.room,
 		},
 		dev: (process.env.calendard === 'dev'),
-		events: [],
+		events: new Events(),
 		room: process.env.calendard === 'dev' ? config.dev.room : config.room,
 		timers: {
 			announce: null,
@@ -147,8 +149,8 @@ var ivo = (function() {
 				// Find next event that isn't supposed to have already been announced
 				var limit = (new Date()).getTime() + config.announceEarly;
 
-				var next = $func.events.search([ (new $func.filter.After(limit + 1000)) ]);
-				if (next == null || $data.events.length < config.minEvents) {
+				var next = $data.events.search([ (new $func.filter.After(limit + 1000)) ]);
+				if (next == null || $data.events.count() < config.minEvents) {
 					$func.client.fetchEvents();
 					return;
 				}
@@ -159,8 +161,8 @@ var ivo = (function() {
 				$log.debug('next announcement scheduled for event at ' + next.toISOString());
 			},
 			announce: function() {
-				var next = $func.events.printNext(null);
-				if (next) $client.say($data.room, next);
+				var next = $data.events.getNext(null);
+				if (next) $client.say($data.room, $func.events.print(next));
 				$func.announcements.schedule();
 			}
 		},
@@ -210,7 +212,7 @@ var ivo = (function() {
 
 				// Atomically swap new events in
 				clearTimeout($data.timers.announce);
-				$data.events = ev;
+				$data.events.load(ev);
 
 				var notify = $data.notify;
 				if (notify != null) {
@@ -297,49 +299,7 @@ var ivo = (function() {
 			C),
 		},
 		events: {
-			search: function( filters ) {
-				// Remove past events
-				var now = new Date();
-				while ($data.events[0] != null && $data.events[0].eventDate < now) {
-					$data.events.shift();
-				}
-
-				// Search future events
-				for (var i = 0; i < $data.events.length; i++) {
-
-					if (filters) {
-						var match = filters.every(function(ftr) {
-							return ftr.match($data.events[i]);
-						});
-						if (! match) continue;
-					}
-
-					// Make sure we have all the events for that date
-					var date = $data.events[i].eventDate;
-					for (var j = i + 1; j < $data.events.length; j++) {
-						if ($data.events[j].eventDate > date) {
-							return date;
-						}
-					}
-					break;
-				}
-
-				// More events needed
-				return null;
-			},
-			getByDate: function( date ) {
-				var events = [];
-				$data.events.every(function(evt) {
-					if (evt.eventDate > date)
-						return false;
-					if (evt.eventDate.getTime() == date.getTime())
-						events.push(evt);
-					return true;
-				});
-				return events;
-			},
 			print: function( events ) {
-				// Based on original events code written by foo (UTwente-Usability/events.js)
 				var first = moment(events[0].eventDate);
 				var time = first.utc().format('HH:mm');
 				var header = ($func.format != null ? $func.format.time(time) : time) + " " + first.fromNow() + " ";
@@ -352,15 +312,6 @@ var ivo = (function() {
 				});
 				return (header + formattedEvents.join(" • "));
 			},
-			printNext: function( filters ) {
-				var date = $func.events.search(filters);
-				if (date == null) return null;
-
-				var events = $func.events.getByDate(date);
-				if (events.length == 0) return null; // Just in case of concurrent modification
-
-				return $func.events.print(events);
-			}
 		},
 		format: colors ? {
 			time: colors.bold,
@@ -504,7 +455,10 @@ var ivo = (function() {
 				var filters = args.map($func.irc.parseFilter);
 				if (filters.indexOf(null) > -1) return null;
 
-				return $func.events.printNext(filters);
+				var events = $data.events.getNext(filters);
+				if (events == null) return null;
+
+				return $func.events.print(events);
 			},
 			commands: function( from, replyTo, message ) {
 				var args = message.split(/\s+/).filter(function(arg) {
