@@ -14,6 +14,7 @@ var ivo = (function() {
 	// local config
 	var config = require('./config.js');
 	var website = require('./website.js');
+	var stations = require('./stations.js');
 	var websdrs = require('./websdrs.js');
 	// local code
 	var TX = require('./tx.js');
@@ -41,50 +42,6 @@ var ivo = (function() {
 			pong: null
 		},
 		types: []
-	};
-
-	// station static data storage object
-	var $stations = {
-		regex: {
-			type: {
-				digital: /^(XP[A-Z]*\d*|(F|HM|DP|SK)\d+)[a-z]?$/,
-				morse: /^M\d+[a-z]?$/,
-				voice: /^[EGSV]\d+[a-z]?$/,
-			},
-			family: {
-				GRU: /^(([EFGV]0?6|E20|S25|V23|M[12]4|F0?[126])[a-z]?|E17[a-y]?|S0?6[a-rt-z]?)$/,
-				SVR: /^([EGSV]0?7|M12|DP0?1|XP[A-Z]*\d*)[a-z]?$/,
-				poland: /^([EFGS]11|G10|S(12|26)|M(0?3|20))[a-z]?$/,
-				ukraine: /^(E17z|S0?6s)$/,
-				DGI: /^(V0?2|M0?8|HM0?1|SK0?1)[a-z]?$/,
-			},
-			military: {
-				russia: /^(S(28|30|32|\d{4,})|[A-Za-z]+-\d{2}|M(32|XI))[a-z]?$/,
-				USA: /^HFGCS$/,
-				china: /^VC\d+[a-z]?$/,
-				france: /^M51[a-z]?$/,
-				japan: /^XSL$/,
-			},
-			diplomatic: {
-				russia: /^X0?6[a-z]?$/,
-			},
-		},
-		alias: {
-			'buzzer': 'S28',
-			'pip': 'S30',
-			'wheel': 'S32',
-			'katok65': 'Katok-65',
-			'plovets41': 'Plovets-41',
-			'cluster': 'MXI',
-			'hf-gcs': 'HFGCS',
-			'mazielka': 'X06',
-			'polfsk': 'F11',
-			'pol-fsk': 'F11',
-			'200/1000': 'F06',
-			'fsk-2001000': 'F06',
-			'200/500': 'F01',
-			'fsk-200500': 'F01',
-		},
 	};
 
 	// log convenience function (console.log is so 2005)
@@ -316,9 +273,9 @@ var ivo = (function() {
 		format: colors ? {
 			time: colors.bold,
 			station: function( name ) {
-				if ($stations.regex.type.digital.test(name)) return colors.red(name);
-				else if ($stations.regex.type.morse.test(name)) return colors.purple(name);
-				else if ($stations.regex.type.voice.test(name)) return colors.green(name);
+				if (stations.regex.type.digital.test(name)) return colors.red(name);
+				else if (stations.regex.type.morse.test(name)) return colors.purple(name);
+				else if (stations.regex.type.voice.test(name)) return colors.green(name);
 				else return colors.brown(name);
 			},
 			search: colors.bold,
@@ -327,7 +284,7 @@ var ivo = (function() {
 		stations: {
 			alias: function( station ) {
 				// mil/diplo/digi aliases
-				var alias = $stations.alias[station.toLowerCase()];
+				var alias = stations.alias[station.toLowerCase()];
 				station = alias ? alias :
 					// Fix case for matching
 					station.replace(/^[a-z]+/, function(ltr) {
@@ -344,7 +301,7 @@ var ivo = (function() {
 				var types = [ 'military', 'diplomatic' ];
 				for (var i = 0; i < types.length; i++) {
 					var type = types[i];
-					var regexes = $stations.regex[type];
+					var regexes = stations.regex[type];
 					for (var country in regexes) {
 						if (regexes[country].test(station)) {
 							var cty = (country == 'USA') ? 'united-states' : country.toLowerCase();
@@ -354,7 +311,7 @@ var ivo = (function() {
 				}
 
 				// Check for digital stations with special prefixes
-				var language = $stations.regex.type.digital.test(station) ? 'digital' :
+				var language = stations.regex.type.digital.test(station) ? 'digital' :
 					// Generic numbers stations
 					website.language[station[0]];
 
@@ -438,9 +395,9 @@ var ivo = (function() {
 				} else if (arg.toLowerCase() == 'search') {
 					filter = new $func.filter.Search();
 				} else {
-					var regex = $stations.regex.type[arg];
-					if (! regex) regex = $stations.regex.family[arg];
-					if (! regex) regex = $stations.regex.family[arg.toUpperCase()];
+					var regex = stations.regex.type[arg];
+					if (! regex) regex = stations.regex.family[arg];
+					if (! regex) regex = stations.regex.family[arg.toUpperCase()];
 					if (! regex) {
 						arg = $func.stations.alias(arg);
 						if (! /^[\w /-]+$/.test(arg)) return null;
