@@ -192,7 +192,7 @@ var ivo = (function() {
 				},
 				C.prototype = {
 					match: function( event ) {
-						return (event.eventDate.getTime() >= this.after);
+						return (event.eventDate != null && event.eventDate.getTime() >= this.after);
 					},
 				},
 			C),
@@ -257,9 +257,12 @@ var ivo = (function() {
 		},
 		events: {
 			print: function( events ) {
-				var first = moment(events[0].eventDate);
-				var time = first.utc().format('HH:mm');
-				var header = ($func.format != null ? $func.format.time(time) : time) + " " + first.fromNow() + " ";
+				var header = '';
+				if (events[0].eventDate != null) {
+					var first = moment(events[0].eventDate);
+					var time = first.utc().format('HH:mm');
+					header = ($func.format != null ? $func.format.time(time) : time) + " " + first.fromNow() + " ";
+				}
 
 				var formattedEvents = events.map(function(evt) {
 					var format = evt.format();
