@@ -45,5 +45,21 @@ var stations = module.exports = {
 	// Static transmissions, with no particular scheduling
 	tx: [
 		'S28 4625kHz USB',
+		'S28 6998kHz USB',
+		'S30 3756kHz USB',
+		'S30 5448kHz USB',
+		'S32 3828kHz USB',
+		'S32 5473kHz USB',
+		'RWM 4996kHz CW',
+		'RWM 9996kHz CW',
+		'RWM 14996kHz CW',
+		'Russian Air Force 11354kHz USB',
+		'HFGCS 4724kHz USB',
+		'HFGCS 6712kHz USB',
+		'HFGCS 6739kHz USB',
+		'HFGCS 8992kHz USB',
+		'HFGCS 11175kHz USB',
+		'HFGCS 13200kHz USB',
+		'HFGCS 15016kHz USB',
 	],
 };
