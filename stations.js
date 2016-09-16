@@ -41,4 +41,9 @@ var stations = module.exports = {
 		'200/500': 'F01',
 		'fsk-200500': 'F01',
 	},
+
+	// Static transmissions, with no particular scheduling
+	tx: [
+		'S28 4625kHz USB',
+	],
 };

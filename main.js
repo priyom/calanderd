@@ -41,6 +41,9 @@ var ivo = (function() {
 			announce: null,
 			pong: null
 		},
+		stations: {
+			tx: [],
+		},
 		types: []
 	};
 
@@ -285,6 +288,23 @@ var ivo = (function() {
 			frequency: colors.olive,
 		} : null,
 		stations: {
+			init: function() {
+				// Populate static TX database
+				$data.stations.tx = stations.tx.map(function(tx) {
+					return new TX(tx, null, websdrs, $func.format);
+				});
+				$log.log('loaded ' + $data.stations.tx.length + ' static station transmissions');
+			},
+			search: function( filters ) {
+				if (! filters) return $data.stations.tx;
+				var txs = $data.stations.tx.filter(function(tx) {
+					return filters.every(function(ftr) {
+						return ftr.match(tx);
+					});
+				});
+				if (txs.length == 0) return null;
+				return txs;
+			},
 			alias: function( station ) {
 				// mil/diplo/digi aliases
 				var alias = stations.alias[station.toLowerCase()];
@@ -416,6 +436,8 @@ var ivo = (function() {
 				if (filters.indexOf(null) > -1) return null;
 
 				var events = $data.events.getNext(filters);
+				// Only if no event found, give a chance to static transmissions
+				if (events == null) events = $func.stations.search(filters);
 				if (events == null) return null;
 
 				return $func.events.print(events);
@@ -490,6 +512,7 @@ var ivo = (function() {
 		}));
 		$log.log('running in state: ' + ($data.dev ? 'dev' : 'prod'));
 		$log.log('using data of type: ' + $data.data);
+		$func.stations.init();
 	})();
 
 	var main = function() {
