@@ -35,6 +35,7 @@ var stations = module.exports = {
 		'Katok-65': [ 'katok65' ],
 		'Plovets-41': [ 'plovets41' ],
 		'MXI': [ 'cluster' ],
+		'Russian Air Force': [ 'RussianAF', 'Russian-AF' ],
 		'HFGCS': [ 'HF-GCS' ],
 		'X06': [ 'mazielka' ],
 	},
