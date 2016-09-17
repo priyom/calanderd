@@ -5,7 +5,7 @@ var stations = module.exports = {
 		type: {
 			digital: /^(XP[A-Z]*\d*|(F|HM|DP|SK)\d+)[a-z]?$/,
 			morse: /^M\d+[a-z]?$/,
-			voice: /^[EGSV]\d+[a-z]?$/,
+			voice: /^([EGSV]\d+[a-z]?|HFGCS)$/,
 		},
 		family: {
 			GRU: /^(([EFGV]0?6|E20|S25|V23|M[12]4|F0?[126])[a-z]?|E17[a-y]?|S0?6[a-rt-z]?)$/,
