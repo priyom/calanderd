@@ -15,6 +15,7 @@ var website = module.exports = {
 		'monolith': [ 'military', 'russia', 'monolyth-messages-description' ],
 		'alphabet': [ 'military', 'russia', 'russian-phonetic-alphabet-and-numbers' ],
 		'sked': [ 'number', 'station-schedule' ],
+		'ns': [ 'number' ],
 	},
 	// Irregular station page names
 	irregular: {
