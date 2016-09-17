@@ -3,8 +3,8 @@ var stations = module.exports = {
 
 	regex: {
 		type: {
-			digital: /^(XP[A-Z]*\d*|(F|HM|DP|SK)\d+)[a-z]?$/,
-			morse: /^M\d+[a-z]?$/,
+			digital: /^(X(0?6|SL|P[A-Z]*\d*)|(F|HM|DP|SK)\d+)[a-z]?$/,
+			morse: /^M(\d+|X[A-Z]*)[a-z]?$/,
 			voice: /^([EGSV]\d+[a-z]?|HFGCS)$/,
 		},
 		family: {
