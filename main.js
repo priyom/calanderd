@@ -42,6 +42,7 @@ var ivo = (function() {
 			pong: null
 		},
 		stations: {
+			alias: {},
 			tx: [],
 		},
 		types: []
@@ -289,6 +290,16 @@ var ivo = (function() {
 		} : null,
 		stations: {
 			init: function() {
+				$log.log('loading station data...');
+
+				// Populate alias mapping
+				for (var station in stations.alias) {
+					stations.alias[station].forEach(function(alias) {
+						$data.stations.alias[alias.toLowerCase()] = station;
+					});
+				}
+				$log.log('loaded ' + Object.keys($data.stations.alias).length + ' station aliases');
+
 				// Populate static TX database
 				$data.stations.tx = stations.tx.map(function(tx) {
 					return new TX(tx, null, websdrs, $func.format);
@@ -307,7 +318,7 @@ var ivo = (function() {
 			},
 			alias: function( station ) {
 				// mil/diplo/digi aliases
-				var alias = stations.alias[station.toLowerCase()];
+				var alias = $data.stations.alias[station.toLowerCase()];
 				station = alias ? alias :
 					// Fix case for matching
 					station.replace(/^[a-z]+/, function(ltr) {
