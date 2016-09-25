@@ -49,8 +49,7 @@ function getEvents(refresh) {
   });
 }
 
-function getNextEvent(humanReadable) {
-  humanReadable = typeof humanReadable !== 'undefined' ? humanReadable : true;
+function getNextEvent() {
 
   var eventToCheck = events[0];
   while (eventToCheck != null && eventToCheck.eventDate < new Date()) {
@@ -80,9 +79,11 @@ function getNextEvent(humanReadable) {
     return -1;
   }
   
+  return nextEvents;
+}
+
+function printEvents(nextEvents) {
   var returnVal = "";
-  
-   if (humanReadable) {
      returnVal += "<ul>";
      
      for (var eventId = 0; eventId < nextEvents.length; eventId++) {
@@ -96,26 +97,19 @@ function getNextEvent(humanReadable) {
      }
      
      returnVal += "</ul>";
-    } else {
-      // here we assume that only date parsing is needed
-      returnVal = nextEvents[0].eventDate;
-  }
-  
   return returnVal;
-  
 }
 
 function cmdNext() {
-  var next = getNextEvent(false);
+  var nextEvents = getNextEvent();
   
-  if (next === -1) {
+  if (nextEvents === -1) {
     getEvents(true);
-    next = moment(getNextEvent(false));
-  } else {
-    next = moment(next);
+    nextEvents = getNextEvent();
   }
+  var next = moment(nextEvents[0].eventDate);
   
-  $("#events").html("<h3>Next station " + next.fromNow() + "</h3>" + getNextEvent());
+  $("#events").html("<h3>Next station " + next.fromNow() + "</h3>" + printEvents(nextEvents));
 }
 
 $(document).ready(function() {
