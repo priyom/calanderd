@@ -47,7 +47,6 @@ function getEvents() {
       "frequency": frequency
     });
   });
-  return events;
 }
 
 function getNextEvent(humanReadable) {
@@ -113,7 +112,7 @@ function cmdNext() {
     if (typeof(Storage) !== 'undefined') {
       localStorage.removeItem("events");
     }
-    events = getEvents();
+    getEvents();
     next = moment(getNextEvent(false));
   } else {
     next = moment(next);
@@ -123,7 +122,7 @@ function cmdNext() {
 }
 
 $(document).ready(function() {
-  events = getEvents();
+  getEvents();
   cmdNext();
   setInterval(cmdNext, 60 * 1000);
 });
