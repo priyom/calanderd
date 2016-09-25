@@ -16,10 +16,11 @@ function extractFrequency(textToMatch) {
 }
 
 function getEvents() {  
-  var json;
-  if (typeof(Storage) !== 'undefined' && localStorage.getItem("events") !== null) {
+  var json = null;
+  if (typeof(Storage) !== 'undefined') {
     json = localStorage.getItem("events");
-  } else {
+  }
+  if (json === null) {
     var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + (new Date()).toISOString() +
     "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyARkBX_t1JfOEVk0caNk7tf5HpNIEVdcU4&maxResults=150";
   
