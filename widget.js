@@ -36,18 +36,17 @@ function getEvents() {
   }
   
   var obj = JSON.parse(json);
-  for (var i = 0; i < obj.items.length; i++) {
-    var title = obj.items[i].summary;
-    var time = obj.items[i].start.dateTime;
+  events = obj.items.map(function(evt) {
+    var title = evt.summary;
+    var time = evt.start.dateTime;
     var eventDate = new Date(time);
     var frequency = extractFrequency(title);
-    var theEvent = {
+    return ({
       "eventDate": eventDate,
       "title": title,
       "frequency": frequency
-    };
-    events.push(theEvent);    
-  }
+    });
+  });
   return events;
 }
 
