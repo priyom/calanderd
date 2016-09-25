@@ -83,23 +83,18 @@ function getNextEvent() {
 }
 
 function printEvents(nextEvents) {
-  var returnVal = "";
   var next = moment(nextEvents[0].eventDate);
-  returnVal += "<h3>Next station " + next.fromNow() + "</h3>";
-     returnVal += "<ul>";
-     
-     for (var eventId = 0; eventId < nextEvents.length; eventId++) {
-       
-       if (typeof nextEvents[eventId].frequency !== 'undefined' && nextEvents[eventId].frequency.length > 3) {
-         returnVal += "<li><a href='http://websdr.ewi.utwente.nl:8901/?tune=" + nextEvents[eventId].frequency + "'>" + nextEvents[eventId].title +"</a></li>";
-       } else {
-         returnVal += "<li>" + nextEvents[eventId].title + "</li>";
-       }
-       
-     }
-     
-     returnVal += "</ul>";
-  return returnVal;
+  var header = "<h3>Next station " + next.fromNow() + "</h3>";
+
+  var items = nextEvents.map(function(evt) {
+    if (typeof evt.frequency !== 'undefined' && evt.frequency.length > 3) {
+      return ("<li><a href='http://websdr.ewi.utwente.nl:8901/?tune=" + evt.frequency + "'>" + evt.title +"</a></li>");
+    } else {
+      return ("<li>" + evt.title + "</li>");
+    }
+  });
+
+  return (header + "<ul>" + items.join("") + "</ul>");
 }
 
 function cmdNext() {
