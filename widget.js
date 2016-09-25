@@ -15,9 +15,9 @@ function extractFrequency(textToMatch) {
     }
 }
 
-function getEvents() {  
+function getEvents(refresh) {
   var json = null;
-  if (typeof(Storage) !== 'undefined') {
+  if ((! refresh) && typeof(Storage) !== 'undefined') {
     json = localStorage.getItem("events");
   }
   if (json === null) {
@@ -109,10 +109,7 @@ function cmdNext() {
   var next = getNextEvent(false);
   
   if (next === -1) {
-    if (typeof(Storage) !== 'undefined') {
-      localStorage.removeItem("events");
-    }
-    getEvents();
+    getEvents(true);
     next = moment(getNextEvent(false));
   } else {
     next = moment(next);
@@ -122,7 +119,7 @@ function cmdNext() {
 }
 
 $(document).ready(function() {
-  getEvents();
+  getEvents(false);
   cmdNext();
   setInterval(cmdNext, 60 * 1000);
 });
