@@ -1,8 +1,7 @@
-// (c) totoCZ 2014
+// (c) totoCZ 2014, Pierre Ynard 2016
 // Original events.js code written by foo.
 // GPL 3+
 
-var now = new Date();
 var events = [];
 
 function extractFrequency(textToMatch) {
@@ -20,7 +19,7 @@ function getEvents() {
   if (typeof(Storage) !== 'undefined' && localStorage.getItem("events") !== null) {
     var obj = JSON.parse(localStorage.getItem("events"));
   } else {
-    var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + now.toISOString() + 
+    var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + (new Date()).toISOString() +
     "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyARkBX_t1JfOEVk0caNk7tf5HpNIEVdcU4&maxResults=150";
   
     var xmlHttp = new XMLHttpRequest();
