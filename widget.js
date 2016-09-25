@@ -101,7 +101,7 @@ function cmdNext() {
     nextEvents = getNextEvent();
   }
   
-  $("#events").html(printEvents(nextEvents));
+  $("#events").html(nextEvents.length > 0 ? printEvents(nextEvents) : "");
 }
 
 $(document).ready(function() {
