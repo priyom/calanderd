@@ -16,8 +16,9 @@ function extractFrequency(textToMatch) {
 }
 
 function getEvents() {  
+  var json;
   if (typeof(Storage) !== 'undefined' && localStorage.getItem("events") !== null) {
-    var obj = JSON.parse(localStorage.getItem("events"));
+    json = localStorage.getItem("events");
   } else {
     var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + (new Date()).toISOString() +
     "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyARkBX_t1JfOEVk0caNk7tf5HpNIEVdcU4&maxResults=150";
@@ -26,13 +27,14 @@ function getEvents() {
     xmlHttp.open("GET", calanderUrl, false);
     xmlHttp.send(null);  
     
-    var obj = JSON.parse(xmlHttp.responseText);      
+    json = xmlHttp.responseText;
     
     if (typeof(Storage) !== 'undefined') {
-      localStorage.setItem("events", xmlHttp.responseText);
+      localStorage.setItem("events", json);
     }
   }
   
+  var obj = JSON.parse(json);
   for (var i = 0; i < obj.items.length; i++) {
     var title = obj.items[i].summary;
     var time = obj.items[i].start.dateTime;
