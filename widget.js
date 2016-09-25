@@ -75,10 +75,6 @@ function getNextEvent() {
     }
   }
 
-  if (events.length < 3) {
-    return -1;
-  }
-  
   return nextEvents;
 }
 
@@ -100,7 +96,7 @@ function printEvents(nextEvents) {
 function cmdNext() {
   var nextEvents = getNextEvent();
   
-  if (nextEvents === -1) {
+  if (events.length < 3) {
     getEvents(true);
     nextEvents = getNextEvent();
   }
