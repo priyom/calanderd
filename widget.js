@@ -2,18 +2,21 @@
 // Original events.js code written by foo.
 // GPL 3+
 
-var events = [];
+// This code requires loading separately: jquery, moment, and
+// tx.js from calanderd
 
-function extractFrequency(textToMatch) {
-    var digitsRe = '([0-9]*k|[0-9]* k)';
-    var exp = new RegExp(digitsRe);
-    var expResult = exp.exec(textToMatch);
-  
-    if (expResult !== null) {
-      expResult = expResult[0].substring(0, expResult[0].length - 1);
-      return expResult;
-    }
-}
+// Configuration of WebSDRs to link to
+var websdrs = [
+	{ // utwente, Netherlands
+		url: 'http://websdr.ewi.utwente.nl:8901/?tune=',
+		target: null,
+		min: 0,
+		max: 29160,
+		fixCW: true,
+	},
+];
+
+var events = [];
 
 function getEvents(refresh) {
   var json = null;
@@ -37,15 +40,7 @@ function getEvents(refresh) {
   
   var obj = JSON.parse(json);
   events = obj.items.map(function(evt) {
-    var title = evt.summary;
-    var time = evt.start.dateTime;
-    var eventDate = new Date(time);
-    var frequency = extractFrequency(title);
-    return ({
-      "eventDate": eventDate,
-      "title": title,
-      "frequency": frequency
-    });
+    return new TX(evt.summary, new Date(evt.start.dateTime), websdrs, null);
   });
 }
 
@@ -83,11 +78,12 @@ function printEvents(nextEvents) {
   var header = "<h3>Next station " + next.fromNow() + "</h3>";
 
   var items = nextEvents.map(function(evt) {
-    if (typeof evt.frequency !== 'undefined' && evt.frequency.length > 3) {
-      return ("<li><a href='http://websdr.ewi.utwente.nl:8901/?tune=" + evt.frequency + "'>" + evt.title +"</a></li>");
-    } else {
-      return ("<li>" + evt.title + "</li>");
+    var format = evt.format();
+    var link = evt.link();
+    if (link) {
+      format = "<a href='" + link + "'>" + format + "</a>";
     }
+    return ("<li>" + format + "</li>");
   });
 
   return (header + "<ul>" + items.join("") + "</ul>");
