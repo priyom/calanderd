@@ -31,6 +31,9 @@ function getEvents(refresh) {
     xmlHttp.open("GET", calanderUrl, false);
     xmlHttp.send(null);
 
+    // FIXME: switch to asynchronous XMLHttpRequest to avoid freezing browser
+    // FIXME: handle errors, and do NOT cache unusable error responses
+    // permanently into localStorage!
     json = xmlHttp.responseText;
 
     if (typeof(Storage) !== 'undefined') {
