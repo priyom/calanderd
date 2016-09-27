@@ -1,4 +1,7 @@
 
+// TX class definition for parsing, matching and printing
+// Licensed under GPLv3+
+
 var TX = function( description, eventDate, websdrs, formatter ) {
 	this.websdrs = websdrs; // WebSDR configuration
 	this.formatter = formatter; // Formatting service object
@@ -80,4 +83,4 @@ TX.prototype = {
 	},
 };
 
-module.exports = TX;
+if (typeof module != "undefined" && module) module.exports = TX;

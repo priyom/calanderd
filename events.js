@@ -1,6 +1,7 @@
 
 // TX event manager and accessor
 // Based on original events code written by foo (UTwente-Usability/events.js)
+// Licensed under GPLv3+
 
 var Events = function() {
 	this.events = [];
@@ -66,4 +67,4 @@ Events.prototype = {
 	},
 };
 
-module.exports = Events;
+if (typeof module != "undefined" && module) module.exports = Events;
