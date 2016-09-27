@@ -3,7 +3,7 @@
 // GPL 3+
 
 // This code requires loading separately: jquery, moment, and
-// tx.js from calanderd
+// tx.js and events.js from calanderd
 
 // Configuration of WebSDRs to link to
 var websdrs = [
@@ -16,7 +16,7 @@ var websdrs = [
 	},
 ];
 
-var events = [];
+var events;
 
 function getEvents(refresh) {
   var json = null;
@@ -39,38 +39,9 @@ function getEvents(refresh) {
   }
   
   var obj = JSON.parse(json);
-  events = obj.items.map(function(evt) {
+  events.load(obj.items.map(function(evt) {
     return new TX(evt.summary, new Date(evt.start.dateTime), websdrs, null);
-  });
-}
-
-function getNextEvent() {
-
-  var eventToCheck = events[0];
-  while (eventToCheck != null && eventToCheck.eventDate < new Date()) {
-    events.shift();
-    eventToCheck = events[0];
-  }
-  
-  var nextEvents = [];
-  var prevEvent;
-
-  for (i = 0; i < events.length; i++) {
-    var thisEvent = events[i];
-    if (prevEvent == null) {
-      prevEvent = thisEvent;
-      nextEvents.push(prevEvent);
-      continue;
-    }
-    
-    if (prevEvent.eventDate.toISOString() == thisEvent.eventDate.toISOString()) {
-       nextEvents.push(thisEvent);
-    } else {
-       break;
-    }
-  }
-
-  return nextEvents;
+  }));
 }
 
 function printEvents(nextEvents) {
@@ -90,17 +61,17 @@ function printEvents(nextEvents) {
 }
 
 function cmdNext() {
-  var nextEvents = getNextEvent();
-  
-  if (events.length < 3) {
+  var nextEvents = events.getNext(null);
+  if (nextEvents == null || events.count() < 3) {
     getEvents(true);
-    nextEvents = getNextEvent();
+    nextEvents = events.getNext(null);
   }
   
   $("#events").html(nextEvents.length > 0 ? printEvents(nextEvents) : "");
 }
 
 $(document).ready(function() {
+  events = new Events();
   getEvents(false);
   cmdNext();
   setInterval(cmdNext, 60 * 1000);
