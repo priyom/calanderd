@@ -26,18 +26,18 @@ function getEvents(refresh) {
   if (json === null) {
     var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + (new Date()).toISOString() +
     "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyARkBX_t1JfOEVk0caNk7tf5HpNIEVdcU4&maxResults=150";
-  
+
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", calanderUrl, false);
-    xmlHttp.send(null);  
-    
+    xmlHttp.send(null);
+
     json = xmlHttp.responseText;
-    
+
     if (typeof(Storage) !== 'undefined') {
       localStorage.setItem("events", json);
     }
   }
-  
+
   var obj = JSON.parse(json);
   events.load(obj.items.map(function(evt) {
     return new TX(evt.summary, new Date(evt.start.dateTime), websdrs, null);
@@ -66,7 +66,7 @@ function cmdNext() {
     getEvents(true);
     nextEvents = events.getNext(null);
   }
-  
+
   $("#events").html(nextEvents.length > 0 ? printEvents(nextEvents) : "");
 }
 
