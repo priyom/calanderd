@@ -243,7 +243,7 @@ var ivo = (function() {
 						return (this.target == this.comparable(event.target));
 					},
 					comparable: function( target ) {
-						if (! target) return null;
+						if (target == null) target = '';
 						return target.replace(/[ _-]/, '').toLowerCase();
 					},
 				},
