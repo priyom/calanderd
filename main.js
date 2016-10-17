@@ -236,15 +236,11 @@ var ivo = (function() {
 			C),
 			Target: (
 				C = function( target ) {
-					this.target = this.comparable(target);
+					this.target = $func.util.comparable(target);
 				},
 				C.prototype = {
 					match: function( event ) {
-						return (this.target == this.comparable(event.target));
-					},
-					comparable: function( target ) {
-						if (target == null) target = '';
-						return target.replace(/[ _-]/, '').toLowerCase();
+						return (this.target == $func.util.comparable(event.target));
 					},
 				},
 			C),
@@ -378,6 +374,10 @@ var ivo = (function() {
 			}
 		},
 		util: {
+			comparable: function( target ) {
+				if (target == null) target = '';
+				return target.replace(/[ _-]/, '').toLowerCase();
+			},
 			time: function() {
 				return new Date().toJSON();
 			},
