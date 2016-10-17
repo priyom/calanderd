@@ -291,7 +291,7 @@ var ivo = (function() {
 				// Populate alias mapping
 				for (var station in stations.alias) {
 					stations.alias[station].forEach(function(alias) {
-						$data.stations.alias[alias.toLowerCase()] = station;
+						$data.stations.alias[$func.util.comparable(alias)] = station;
 					});
 				}
 				$log.log('loaded ' + Object.keys($data.stations.alias).length + ' station aliases');
@@ -314,7 +314,7 @@ var ivo = (function() {
 			},
 			alias: function( station ) {
 				// mil/diplo/digi aliases
-				var alias = $data.stations.alias[station.toLowerCase()];
+				var alias = $data.stations.alias[$func.util.comparable(station)];
 				station = alias ? alias :
 					// Fix case for matching
 					station.replace(/^[a-z]+/, function(ltr) {
