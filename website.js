@@ -22,6 +22,8 @@ var website = module.exports = {
 		'S28': 'the-buzzer',
 		'S30': 'the-pip',
 		'S32': 'the-squeaky-wheel',
+		'S4325': 'plovets-41',
+		'S6930': 'katok-65',
 		'MXI': 'naval-markers',
 		'VC01': 'chinese-robot',
 		'XSL': 'slot-machine',
