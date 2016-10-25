@@ -219,7 +219,7 @@ var ivo = (function() {
 					match: function( event ) {
 						var freq = event.frequency;
 						return (!(
-							(this.min && ((! freq) || freq < this.min)) ||
+							(this.min > 0 && ((! freq) || freq < this.min)) ||
 							((this.max || this.max == 0) && ((! freq) || this.max < freq))
 						));
 					},
