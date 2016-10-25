@@ -391,19 +391,21 @@ var ivo = (function() {
 				var filter;
 				var result = arg.match(/^(\d+)(?:-(\d*))?$/);
 				if (result != null) {
-					var min = Number(result[1]);
-					var max;
+					var min, max;
 					switch (result[2]) {
 						case undefined:
-							// Single frequency
-							max = min;
+							// Single frequency: loosen match to +/- 2 kHz range
+							min = Number(result[1]) - 2;
+							max = Number(result[1]) + 2;
 							break;
 						case '':
 							// Lower bound only
+							min = Number(result[1]);
 							max = NaN;
 							break;
 						default:
 							// Range
+							min = Number(result[1]);
 							max = Number(result[2]);
 							break;
 					}
