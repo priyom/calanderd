@@ -376,7 +376,7 @@ var ivo = (function() {
 		util: {
 			comparable: function( target ) {
 				if (target == null) target = '';
-				return target.replace(/[ _-]/, '').toLowerCase();
+				return target.replace(/[ _-]/g, '').toLowerCase();
 			},
 			time: function() {
 				return new Date().toJSON();
