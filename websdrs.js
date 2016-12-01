@@ -19,14 +19,14 @@ var websdrs = module.exports = [
 		max: 8048,
 		fixCW: true,
 	},
-	{ // KD4HSO's KiwiSDR, Kansas, USA
-		url: 'http://64.136.200.36:8073/?f=',
+	{ // Pavlova KiwiSDR dispatcher, North America
+		url: 'http://s.printf.cc/#n/',
 		target: 'North America',
 		min: 0,
 		max: 30000,
 	},
-	{ // VK5FO's KiwiSDR, South Australia
-		url: 'http://kiwisdr.vk5fo.com:8073/?f=',
+	{ // Pavlova KiwiSDR dispatcher, Pacific
+		url: 'http://s.printf.cc/#p/',
 		target: 'Pacific',
 		min: 0,
 		max: 30000,
