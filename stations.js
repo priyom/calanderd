@@ -32,6 +32,7 @@ var stations = module.exports = {
 		'S28': [ 'buzzer', 'XB', 'UVB-76', 'UZB-76', 'MDZhB', 'ZhUOZ' ],
 		'S30': [ 'pip', 'XT' ],
 		'S32': [ 'wheel', 'squeaky wheel', 'XSW' ],
+		'S4020': [ 'air horn', 'XAH' ],
 		'S4325': [ 'Plovets-41' ],
 		'S6930': [ 'Katok-65' ],
 		'MXI': [ 'cluster' ],
