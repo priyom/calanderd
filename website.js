@@ -32,6 +32,6 @@ var website = module.exports = {
 	// Log pages
 	logs: {
 		month: [ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' ],
-		monthly: [ 'F06', 'S28', 'S30', 'S32', 'S3850', 'S4020', 'S5292' ],
+		monthly: [ 'F06', 'S28', 'S30', 'S32', 'S3850', 'S4020', 'S4467', 'S5292' ],
 	},
 };
