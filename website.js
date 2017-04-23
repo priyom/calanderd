@@ -22,6 +22,7 @@ var website = module.exports = {
 		'S28': 'the-buzzer',
 		'S30': 'the-pip',
 		'S32': 'the-squeaky-wheel',
+		'XG': 'the-goose',
 		'S4020': 's4020-the-air-horn',
 		'S4110': 'zaliv-52',
 		'S4325': 'plovets-41',
@@ -33,6 +34,6 @@ var website = module.exports = {
 	// Log pages
 	logs: {
 		month: [ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' ],
-		monthly: [ 'F06', 'S28', 'S30', 'S32', 'S3850', 'S4020', 'S4110', 'S4467', 'S5292', 'S6930' ],
+		monthly: [ 'F06', 'S28', 'S30', 'S32', 'XG', 'S3850', 'S4020', 'S4110', 'S4467', 'S5292', 'S6930' ],
 	},
 };
