@@ -26,6 +26,7 @@ var stations = module.exports = {
 		},
 	},
 	alias: {
+		'M14': [ 'M24' ],
 		'F01': [ '200/500', 'FSK-200500' ],
 		'F06': [ '200/1000', 'FSK-2001000' ],
 		'F11': [ 'POL FSK' ],
