@@ -1,8 +1,11 @@
 
+// Configuration of linked WebSDRs
+// Licensed under GPLv3+
+
 // Please make sure to contact the operator of a small WebSDR before
 // adding it here, and keep in mind load and bandwidth constraints.
 
-var websdrs = module.exports = [
+var websdrs = [
 
 	{ // utwente, Netherlands
 		url: 'http://websdr.ewi.utwente.nl:8901/?tune=',
@@ -31,3 +34,5 @@ var websdrs = module.exports = [
 		max: 30000,
 	},
 ];
+
+if (typeof module != "undefined" && module) module.exports = websdrs;
