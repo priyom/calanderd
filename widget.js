@@ -3,25 +3,7 @@
 // GPL 3+
 
 // This code requires loading separately: jquery, moment, and
-// tx.js and events.js from calanderd
-
-// Configuration of WebSDRs to link to
-var websdrs = [
-	{ // utwente, Netherlands
-		url: 'http://websdr.ewi.utwente.nl:8901/?tune=',
-		target: null,
-		min: 0,
-		max: 29160,
-		fixCW: true,
-	},
-	{ // argonn's, Poland
-		url: 'http://websdr.printf.cc:8901/?tune=',
-		target: 'Eastern Europe',
-		min: 0,
-		max: 8048,
-		fixCW: true,
-	},
-];
+// websdrs.js, tx.js and events.js from calanderd
 
 var events;
 
