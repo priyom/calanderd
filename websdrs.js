@@ -5,8 +5,7 @@
 var websdrs = module.exports = [
 
 	{ // utwente, Netherlands
-		//url: 'http://websdr.ewi.utwente.nl:8901/?tune=',
-		url: 'http://t.svita.cz/', // URL shortener
+		url: 'http://websdr.ewi.utwente.nl:8901/?tune=',
 		target: null,
 		min: 0,
 		max: 29160,
