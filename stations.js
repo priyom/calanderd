@@ -46,7 +46,6 @@ var stations = module.exports = {
 	// Static transmissions, with no particular scheduling
 	tx: [
 		'S28 4625kHz USB',
-		'S28 6998kHz USB',
 		'S30 3756kHz USB',
 		'S30 5448kHz USB',
 		'S32 3828kHz USB',
