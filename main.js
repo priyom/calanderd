@@ -485,6 +485,7 @@ var ivo = (function() {
 				switch(cmd) {
 					case '!next':
 					case '!n':
+					case '!N':
 						var next = $func.irc.next(args);
 						if (next) $client.say(replyTo, next);
 						else $client.say(replyTo, 'No scheduled matching station found within available events.');
