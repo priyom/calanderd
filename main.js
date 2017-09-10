@@ -495,6 +495,8 @@ var ivo = (function() {
 					case '!log':
 						var logs = true; // Yes this gives valid javascript, cf. variable scoping/hoisting
 					case '!link':
+					case '!l':
+					case '!L':
 						$client.say(replyTo, $func.stations.link(args[0] ? args[0] : 'ns', args.slice(1), logs));
 						break;
 
