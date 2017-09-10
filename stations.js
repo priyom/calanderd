@@ -12,7 +12,7 @@ var stations = module.exports = {
 			SVR: /^([EGSV]0?7|M12|DP0?1|XP[A-Z]*\d*)[a-z]?$/,
 			poland: /^([EFGS]11|G10|S(12|26)|M(0?3|20))[a-z]?$/,
 			ukraine: /^(E17z|S0?6s)$/,
-			DGI: /^(V0?2|M0?8|HM0?1|SK0?1)[a-z]?$/,
+			DGI: /^(V0?2|M0?8|(HM|SK)0?1)[a-z]?$/,
 		},
 		military: {
 			russia: /^(S(28|30|32|\d{4,})|XG|[A-Za-z]+-\d{2}|M(32|XI))[a-z]?$/,
