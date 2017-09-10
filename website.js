@@ -12,7 +12,7 @@ var website = module.exports = {
 	},
 	// Extra (non-station) info page links
 	extra: {
-		'meta': [ 'number', 'digital', 'russian-intelligence-common-metadata' ],
+		'meta': [ 'number', 'operators', 'russian-6', 'message-metadata' ],
 		'monolith': [ 'military', 'russia', 'monolyth-messages-description' ],
 		'alphabet': [ 'military', 'russia', 'russian-phonetic-alphabet-and-numbers' ],
 		'sked': [ 'number', 'station-schedule' ],
