@@ -31,6 +31,7 @@ var website = module.exports = {
 		'MXI': 'naval-markers',
 		'VC01': 'chinese-robot',
 		'XSL': 'slot-machine',
+		'X06': 'mazielka',
 	},
 	// Log pages
 	logs: {
