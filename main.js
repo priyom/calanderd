@@ -486,6 +486,10 @@ var ivo = (function() {
 					case '!next':
 					case '!n':
 					case '!N':
+						// Dummy-proof this
+						if (message.trim() == '!n - next station')
+							args = [];
+
 						var next = $func.irc.next(args);
 						if (next) $client.say(replyTo, next);
 						else $client.say(replyTo, 'No scheduled matching station found within available events.');
