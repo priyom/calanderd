@@ -33,6 +33,12 @@ var websdrs = [
 		min: 0,
 		max: 30000,
 	},
+	{ // Pavlova KiwiSDR dispatcher, Mediterranean / Middle East
+		url: 'http://s.printf.cc/#m/',
+		target: 'Middle East',
+		min: 0,
+		max: 30000,
+	},
 ];
 
 if (typeof module != "undefined" && module) module.exports = websdrs;
