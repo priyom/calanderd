@@ -513,6 +513,7 @@ var ivo = (function() {
 						$func.client.fetchEvents();
 						break;
 					case '!utc':
+					case '!gmt':
 						$client.say(replyTo, (new Date()).toUTCString());
 						break;
 				}
