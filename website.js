@@ -9,6 +9,7 @@ var website = module.exports = {
 		V: 'other',
 		M: 'morse',
 		F: 'digital',
+		P: 'digital',
 	},
 	// Extra (non-station) info page links
 	extra: {
