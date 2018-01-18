@@ -10,7 +10,7 @@ var stations = module.exports = {
 		family: {
 			GRU: /^(([EFGV]0?6|E20|S25|V23|M[12]4|F0?[126])[a-z]?|E17[a-y]?|S0?6[a-rt-z]?)$/,
 			SVR: /^([EGSV]0?7|M12|DP0?1|XP[A-Z]*\d*)[a-z]?$/,
-			poland: /^([EFGS]11|[FM]0?3|M20|G10|S(12|26))[a-z]?$/,
+			poland: /^([EFGS]11|[FMP]0?3|M20|G10|S(12|26))[a-z]?$/,
 			ukraine: /^(E17z|S0?6s)$/,
 			DGI: /^(V0?2|M0?8|(HM|SK)0?1)[a-z]?$/,
 		},
