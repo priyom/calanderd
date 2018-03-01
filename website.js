@@ -15,7 +15,7 @@ var website = module.exports = {
 	extra: {
 		'meta': [ 'number', 'operators', 'russian-6', 'message-metadata' ],
 		'monolith': [ 'military', 'russia', 'message-format' ],
-		'alphabet': [ 'military', 'russia', 'russian-phonetic-alphabet-and-numbers' ],
+		'alphabet': [ 'military', 'russia', 'russian-phonetic-alphabet' ],
 		'sked': [ 'number', 'station-schedule' ],
 		'ns': [ 'number' ],
 	},
