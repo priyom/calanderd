@@ -33,6 +33,12 @@ var websdrs = [
 		min: 0,
 		max: 30000,
 	},
+	{ // Pavlova KiwiSDR dispatcher, Asia
+		url: 'http://s.printf.cc/#a/',
+		target: 'East Asia',
+		min: 0,
+		max: 30000,
+	},
 	{ // Pavlova KiwiSDR dispatcher, Mediterranean / Middle East
 		url: 'http://s.printf.cc/#m/',
 		target: 'Middle East',
