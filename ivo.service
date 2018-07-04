@@ -1,0 +1,13 @@
+[Unit]
+Description=IvoSchwarz IRC bot
+After=network.target
+
+[Service]
+Type=simple
+User=ivo
+ExecStart=/usr/bin/node /home/ivo/calanderd/main.js
+Restart=on-failure
+WorkingDirectory=/home/ivo/calanderd
+
+[Install]
+WantedBy=multi-user.target
