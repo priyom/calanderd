@@ -475,7 +475,7 @@ var ivo = (function() {
 					'!stream': 'http://stream.priyom.org:8000/buzzer.ogg',
 					'!why': 'The Buzzer is not audible at this time of the day due to HF propagation characteristics. Try again later in the local evening.',
 					'!rivet': 'http://www.apul64.dsl.pipex.com/enigma2000/rivet/index.html',
-					'!help': 'Available commands: !n | !n [freq|freq-|freq1-freq2|station|E|G|S|V|M|F|XP|HM|SVR|GRU|DGI|poland|ukraine|>target|+minutes] (negation supported) | !logs station | !link station | !utc | !reload',
+					'!help': 'Available commands: !n | !n [freq|freq-|freq1-freq2|station|E|G|S|V|M|F|XP|HM|SVR|GRU|DGI|poland|ukraine|>target|+minutes] (negation supported) | !link station | !utc',
 					'!fake': 'Fake messages are messages on some E06, G06, and M14 schedules that are believed to contain no real content whatsoever due to long-period repeats (months, years) and non-random groups: http://priyom.org/number-stations/operators/russian-6/fake-traffic-network'
 				};
 
