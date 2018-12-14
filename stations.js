@@ -15,7 +15,7 @@ var stations = module.exports = {
 			DGI: /^(V0?2|M0?8|(HM|SK)0?1)[a-z]?$/,
 		},
 		military: {
-			russia: /^(S(28|30|32|\d{4,})|[A-Za-z]+-\d{2}|M(32|XI))[a-z]?$/,
+			russia: /^(S(28|30|32|\d{4,})|[A-Za-z]+-\d{2}|M(21|32|XI))[a-z]?$/,
 			USA: /^HFGCS$/,
 			china: /^VC\d+[a-z]?$/,
 			france: /^M51[a-z]?$/,
