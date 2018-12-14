@@ -20,6 +20,7 @@ var stations = module.exports = {
 			china: /^VC\d+[a-z]?$/,
 			france: /^M51[a-z]?$/,
 			japan: /^XSL$/,
+			israel: /^4XZ$/,
 		},
 		diplomatic: {
 			russia: /^X0?6[a-z]?$/,
@@ -41,6 +42,7 @@ var stations = module.exports = {
 		'MXI': [ 'cluster' ],
 		'Russian Air Force': [ 'Russian AF', 'RuAF' ],
 		'HFGCS': [ 'HF-GCS' ],
+		'4XZ': [ '4XZ' ],
 		'X06': [ 'mazielka' ],
 	},
 
