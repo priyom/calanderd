@@ -472,7 +472,7 @@ var ivo = (function() {
 
 				// Don't separate these commands too far from the others
 				var staticInfo = {
-					'!stream': 'http://stream.priyom.org:8000/buzzer.ogg',
+					'!stream': 'http://streams.printf.cc:8000/buzzer.ogg',
 					'!why': 'The Buzzer is not audible at this time of the day due to HF propagation characteristics. Try again later in the local evening.',
 					'!rivet': 'http://www.signalshed.com/rivet/',
 					'!help': 'Available commands: !n | !n [freq|freq-|freq1-freq2|station|E|G|S|V|M|F|XP|HM|SVR|GRU|DGI|poland|ukraine|>target|+minutes] (negation supported) | !link station | !utc',
