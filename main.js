@@ -131,7 +131,7 @@ var ivo = (function() {
 			fetchEvents: function() {
 				$log.log('asking Google for data...');
 				// set date for request
-				$data.calendarUrl = "https://www.googleapis.com/calendar/v3/calendars/" +
+				var calendarUrl = "https://www.googleapis.com/calendar/v3/calendars/" +
 					config.calendarId +
 					"@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" +
 					new Date().toISOString() +
@@ -139,7 +139,7 @@ var ivo = (function() {
 					config.apiKey +
 					"&maxResults=" +
 					config.maxResults;
-				https.get($data.calendarUrl, function (res) {
+				https.get(calendarUrl, function (res) {
 					$log.log('  - http request got statusCode: ' + res.statusCode);
 
 					var data = '';
