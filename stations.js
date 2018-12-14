@@ -15,7 +15,7 @@ var stations = module.exports = {
 			DGI: /^(V0?2|M0?8|(HM|SK)0?1)[a-z]?$/,
 		},
 		military: {
-			russia: /^(S(28|30|32|\d{4,})|[A-Za-z]+-\d{2}|M(21|32|XI))[a-z]?$/,
+			russia: /^((S(28|30|32|\d{4,})|M(21|32|XI))[a-z]?|[A-Za-z]+-\d{2}|RDL|REA4|AT-3004D|T-600)$/,
 			USA: /^HFGCS$/,
 			china: /^VC\d+[a-z]?$/,
 			france: /^M51[a-z]?$/,
@@ -41,6 +41,8 @@ var stations = module.exports = {
 		'Prizma-60': [ 'Zaliv-52', 'S4110' ],
 		'MXI': [ 'cluster' ],
 		'Russian Air Force': [ 'Russian AF', 'RuAF' ],
+		'AT-3004D': [ 'AT-3004D', 'AT-3104' ],
+		'T-600': [ 'T-600' ],
 		'HFGCS': [ 'HF-GCS' ],
 		'4XZ': [ '4XZ' ],
 		'X06': [ 'mazielka' ],
