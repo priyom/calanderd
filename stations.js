@@ -23,7 +23,7 @@ var stations = module.exports = {
 			israel: /^4XZ$/,
 		},
 		diplomatic: {
-			russia: /^X0?6[a-z]?$/,
+			russia: /^(X0?6[a-z]?|M42|Serdolik|Perelivt)$/,
 		},
 	},
 	alias: {
@@ -46,6 +46,8 @@ var stations = module.exports = {
 		'HFGCS': [ 'HF-GCS' ],
 		'4XZ': [ '4XZ' ],
 		'X06': [ 'mazielka' ],
+		'Serdolik': [ 'Serdolik' ],
+		'Perelivt': [ 'Perelivt' ],
 	},
 
 	// Static transmissions, with no particular scheduling

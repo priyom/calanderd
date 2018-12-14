@@ -29,6 +29,7 @@ var website = module.exports = {
 		'S4020': 'the-air-horn',
 		'S4524': 't-marker',
 		'S5292': 'd-marker',
+		'M42': 'rtty',
 		'MXI': 'naval-markers',
 		'VC01': 'chinese-robot',
 		'XSL': 'slot-machine',
