@@ -1,9 +1,10 @@
-// (c) totoCZ 2014, Pierre Ynard 2016
+// (c) totoCZ 2014, Pierre Ynard 2016, 2019
 // Original events.js code written by foo.
-// GPL 3+
+// Licensed under GPLv3+
 
-// This code requires loading separately: moment, and
-// websdrs.js, tx.js and events.js from calanderd
+// This widget is an alternative web frontend for calendard.
+// It requires loading separately the following shared calendard modules:
+// websdrs.js, tx.js, events.js, timeutils.js
 
 var events;
 
@@ -37,8 +38,8 @@ function getEvents(refresh) {
 }
 
 function printEvents(nextEvents) {
-  var next = moment(nextEvents[0].eventDate);
-  var header = "<h3>Next station " + next.fromNow() + "</h3>";
+  var next = timeutils.humanizeDuration(nextEvents[0].eventDate - new Date());
+  var header = "<h3>Next station " + next + "</h3>";
 
   var items = nextEvents.map(function(evt) {
     var format = evt.format();
