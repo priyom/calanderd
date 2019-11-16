@@ -12,10 +12,9 @@ var config = module.exports = {
 	tls: true,
 	color: true,
 
-	// calendar settings
+	// Google Calendar API parameters (now obsolete)
 	apiKey: '',
-	// this is in your iCal, html, etc. URLs
-	calendarId: 'ul6joarfkgroeho84vpieeaakk',
+	calendarId: '',
 
 	// announce before ...
 	announceEarly: 1 * 60000, // ms

@@ -14,8 +14,7 @@ function getEvents(refresh) {
     json = localStorage.getItem("events");
   }
   if (! json) {
-    var calanderUrl = "https://www.googleapis.com/calendar/v3/calendars/ul6joarfkgroeho84vpieeaakk@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" + (new Date()).toISOString() +
-    "&fields=items(start%2Csummary)%2Csummary&key=AIzaSyARkBX_t1JfOEVk0caNk7tf5HpNIEVdcU4&maxResults=150";
+    var calanderUrl = "http://calendar.priyom.org/events?timeMin=" + (new Date()).toISOString() + "&maxResults=150";
 
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", calanderUrl, false);

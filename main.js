@@ -10,7 +10,7 @@ var ivo = (function() {
 	"use strict";
 
 	// core
-	var https = require('https');
+	var http = require('http');
 	// local config
 	var config = require('./config.js');
 	var website = require('./website.js');
@@ -29,7 +29,7 @@ var ivo = (function() {
 
 	// data storage object
 	var $data = {
-		data: (process.env.calendard_data === 'mock' ? 'mock' : 'google'),
+		data: (process.env.calendard_data === 'mock' ? 'mock' : 'live'),
 		notify: {
 			msg: 'Reporting for duty',
 			rcpt: process.env.calendard === 'dev' ? config.dev.room : config.room,
@@ -129,17 +129,12 @@ var ivo = (function() {
 		},
 		client: {
 			fetchEvents: function() {
-				$log.log('asking Google for data...');
+				$log.log('asking web API for data...');
 				// set date for request
-				var calendarUrl = "https://www.googleapis.com/calendar/v3/calendars/" +
-					config.calendarId +
-					"@group.calendar.google.com/events?orderBy=startTime&singleEvents=true&timeMin=" +
-					new Date().toISOString() +
-					"&fields=items(start%2Csummary)%2Csummary&key=" +
-					config.apiKey +
-					"&maxResults=" +
-					config.maxResults;
-				https.get(calendarUrl, function (res) {
+				var calendarUrl = "http://calendar.priyom.org/events" +
+					"?timeMin=" + new Date().toISOString() +
+					"&maxResults=" + config.maxResults;
+				http.get(calendarUrl, function (res) {
 					$log.log('  - http request got statusCode: ' + res.statusCode);
 
 					var data = '';
