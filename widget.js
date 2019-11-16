@@ -2,7 +2,7 @@
 // Original events.js code written by foo.
 // GPL 3+
 
-// This code requires loading separately: jquery, moment, and
+// This code requires loading separately: moment, and
 // websdrs.js, tx.js and events.js from calanderd
 
 var events;
@@ -59,10 +59,10 @@ function cmdNext() {
     nextEvents = events.getNext(null);
   }
 
-  $("#events").html(nextEvents.length > 0 ? printEvents(nextEvents) : "");
+  document.getElementById("events").innerHTML = nextEvents.length > 0 ? printEvents(nextEvents) : "";
 }
 
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", function () {
   events = new Events();
   getEvents(false);
   cmdNext();
