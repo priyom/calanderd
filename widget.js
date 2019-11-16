@@ -8,27 +8,21 @@
 
 var events;
 
-function getEvents(refresh) {
-  var json = null;
-  if ((! refresh) && typeof(Storage) !== 'undefined') {
-    json = localStorage.getItem("events");
-  }
-  if (! json) {
+function getEvents() {
+	// Clean up obsolete cache data. TODO: remove this after a while
+	if (typeof(Storage) !== 'undefined') {
+		localStorage.removeItem("events");
+	}
+
     var calanderUrl = "http://calendar.priyom.org/events?timeMin=" + (new Date()).toISOString() + "&maxResults=150";
 
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", calanderUrl, false);
     xmlHttp.send(null);
 
-    // FIXME: switch to asynchronous XMLHttpRequest to avoid freezing browser
-    // FIXME: handle errors, and do NOT cache unusable error responses
-    // permanently into localStorage!
-    json = xmlHttp.responseText;
-
-    if (typeof(Storage) !== 'undefined') {
-      localStorage.setItem("events", json);
-    }
-  }
+	// FIXME: switch to asynchronous XMLHttpRequest to avoid freezing
+	// browser, and handle errors
+	var json = xmlHttp.responseText;
 
   var obj = JSON.parse(json);
   events.load(obj.items.map(function(evt) {
@@ -55,7 +49,7 @@ function printEvents(nextEvents) {
 function cmdNext() {
   var nextEvents = events.getNext(null);
   if (nextEvents == null || events.count() < 3) {
-    getEvents(true);
+    getEvents();
     nextEvents = events.getNext(null);
   }
 
@@ -64,7 +58,6 @@ function cmdNext() {
 
 document.addEventListener("DOMContentLoaded", function () {
   events = new Events();
-  getEvents(false);
   cmdNext();
   setInterval(cmdNext, 60 * 1000);
 });
