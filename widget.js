@@ -8,13 +8,29 @@
 
 var events;
 
-function getEvents() {
+function getEvents(fallback) {
 	// Clean up obsolete cache data. TODO: remove this after a while
 	if (typeof(Storage) !== 'undefined') {
 		localStorage.removeItem("events");
 	}
 
-    var calanderUrl = "http://calendar.priyom.org/events?timeMin=" + (new Date()).toISOString() + "&maxResults=150";
+	var apiParams;
+	if (! fallback) {
+		// Request fixed and cachable 24-hour slices
+		var timeMin = new Date();
+		timeMin.setUTCHours(timeMin.getUTCHours() < 12 ? 0 : 12, 0, 0, 0);
+		var timeMax = new Date(timeMin);
+		timeMax.setUTCDate(timeMax.getUTCDate() + 1);
+
+		apiParams = "timeMin=" + timeMin.toISOString() +
+			"&timeMax=" + timeMax.toISOString();
+	} else {
+		// Fallback mode: disregard timeframe, make sure to get events
+		apiParams = "timeMin=" + (new Date()).toISOString() +
+			"&maxResults=150";
+	}
+
+	var calanderUrl = "http://calendar.priyom.org/events?" + apiParams;
 
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", calanderUrl, false);
@@ -49,8 +65,13 @@ function printEvents(nextEvents) {
 function cmdNext() {
   var nextEvents = events.getNext(null);
   if (nextEvents == null || events.count() < 3) {
-    getEvents();
+    getEvents(false);
     nextEvents = events.getNext(null);
+    if (nextEvents == null) {
+      // Engage fallback mode and try harder to get events
+      getEvents(true);
+      nextEvents = events.getNext(null);
+    }
   }
 
   document.getElementById("events").innerHTML = nextEvents != null ? printEvents(nextEvents) : "";
