@@ -59,7 +59,7 @@ function cmdNext() {
     nextEvents = events.getNext(null);
   }
 
-  document.getElementById("events").innerHTML = nextEvents.length > 0 ? printEvents(nextEvents) : "";
+  document.getElementById("events").innerHTML = nextEvents != null ? printEvents(nextEvents) : "";
 }
 
 document.addEventListener("DOMContentLoaded", function () {
