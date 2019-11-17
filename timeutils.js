@@ -19,6 +19,10 @@ var timeutils = {
 		else if (ms >= 77400000 && ms < 129600000) return "in a day";
 		return "in " + Math.floor((ms + 43200000) / 86400000) + " days";
 	},
+	printf_02d: function (t) {
+		t = String(Number(t));
+		return t.length < 2 ? "0" + t : t;
+	},
 };
 
 if (typeof module != "undefined" && module) module.exports = timeutils;

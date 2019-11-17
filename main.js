@@ -19,6 +19,7 @@ var ivo = (function() {
 	// local code
 	var TX = require('./tx.js');
 	var Events = require('./events.js');
+	var timeutils = require('./timeutils.js');
 	// third party
 	var irc = require('irc');
 	var moment = require('moment');
@@ -253,9 +254,11 @@ var ivo = (function() {
 		events: {
 			print: function( events ) {
 				var header = '';
-				if (events[0].eventDate != null) {
-					var first = moment(events[0].eventDate);
-					var time = first.utc().format('HH:mm');
+				var next = events[0].eventDate;
+				if (next != null) {
+					var first = moment(next);
+					var time = timeutils.printf_02d(next.getUTCHours()) +
+						":" + timeutils.printf_02d(next.getUTCMinutes());
 					header = ($func.format != null ? $func.format.time(time) : time) + " " + first.fromNow() + " ";
 				}
 
