@@ -22,7 +22,6 @@ var ivo = (function() {
 	var timeutils = require('./timeutils.js');
 	// third party
 	var irc = require('irc');
-	var moment = require('moment');
 	var colors = config.color ? require('irc-colors') : null;
 
 	// Helper variable for declaring classes, see below
@@ -256,10 +255,10 @@ var ivo = (function() {
 				var header = '';
 				var next = events[0].eventDate;
 				if (next != null) {
-					var first = moment(next);
 					var time = timeutils.printf_02d(next.getUTCHours()) +
 						":" + timeutils.printf_02d(next.getUTCMinutes());
-					header = ($func.format != null ? $func.format.time(time) : time) + " " + first.fromNow() + " ";
+					var delay = timeutils.humanizeDuration(next - new Date());
+					header = ($func.format != null ? $func.format.time(time) : time) + " " + delay + " ";
 				}
 
 				var formattedEvents = events.map(function(evt) {

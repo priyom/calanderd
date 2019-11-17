@@ -3,7 +3,7 @@ calanderd
 
 Calander daemon (c). This will get from the web API all the upcoming calendar events and spam them into IRC as time comes.
 
-This uses https://github.com/martynsmith/node-irc (so npm install irc) and https://github.com/moment/moment (npm install --save moment).
+This uses https://github.com/martynsmith/node-irc (so npm install irc).
 
 This also uses https://github.com/fent/irc-colors.js (npm install irc-colors) to display schedule colored announcement in the channel. This can be disabled by going into config.js and setting config.color to false.
 
