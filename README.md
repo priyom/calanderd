@@ -9,7 +9,7 @@ This also uses https://github.com/fent/irc-colors.js (npm install irc-colors) to
 
 Purpose
 ----
-At #priyom (http://priyom.org) we needed a real-time way to announce upcoming foreign intelligence shortwave broadcasts.
+At #priyom (https://priyom.org) we needed a real-time way to announce upcoming foreign intelligence shortwave broadcasts.
 
 This solves the problem by grabbing our calendar events API and announcing each transmission with the use of repeated setTimeouts and the node IRC client library. On demand commands are also implemented.
 
