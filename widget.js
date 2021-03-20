@@ -1,4 +1,4 @@
-// (c) totoCZ 2014, Pierre Ynard 2016, 2019
+// (c) totoCZ 2014, Pierre Ynard 2016, 2019-2020
 // Original events.js code written by foo.
 // Licensed under GPLv3+
 
@@ -30,7 +30,7 @@ function getEvents(fallback) {
 			"&maxResults=150";
 	}
 
-	var calanderUrl = "http://calendar.priyom.org/events?" + apiParams;
+	var calanderUrl = "https://calendar.priyom.org/events?" + apiParams;
 
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", calanderUrl, false);

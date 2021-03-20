@@ -10,7 +10,7 @@ var ivo = (function() {
 	"use strict";
 
 	// core
-	var http = require('http');
+	var https = require('https');
 	// local config
 	var config = require('./config.js');
 	var website = require('./website.js');
@@ -131,10 +131,10 @@ var ivo = (function() {
 			fetchEvents: function() {
 				$log.log('asking web API for data...');
 				// set date for request
-				var calendarUrl = "http://calendar.priyom.org/events" +
+				var calendarUrl = "https://calendar.priyom.org/events" +
 					"?timeMin=" + new Date().toISOString() +
 					"&maxResults=" + config.maxResults;
-				http.get(calendarUrl, function (res) {
+				https.get(calendarUrl, function (res) {
 					$log.log('  - http request got statusCode: ' + res.statusCode);
 
 					var data = '';
