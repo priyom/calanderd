@@ -131,7 +131,7 @@ var ivo = (function() {
 			fetchEvents: function() {
 				$log.log('asking web API for data...');
 				// set date for request
-				var calendarUrl = "https://calendar.priyom.org/events" +
+				var calendarUrl = "https://calendar2.priyom.org/events" +
 					"?timeMin=" + new Date().toISOString() +
 					"&maxResults=" + config.maxResults;
 				https.get(calendarUrl, function (res) {

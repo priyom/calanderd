@@ -30,7 +30,7 @@ function getEvents(fallback) {
 			"&maxResults=150";
 	}
 
-	var calanderUrl = "https://calendar.priyom.org/events?" + apiParams;
+	var calanderUrl = "https://calendar2.priyom.org/events?" + apiParams;
 
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", calanderUrl, false);
