@@ -12,7 +12,7 @@ var websdrs = [
 		target: null,
 		min: 0,
 		max: 29160,
-		fixCW: true,
+		fixCW: false,
 	},
 	{ // argonn's, Poland
 		url: 'http://websdr.printf.cc:8901/?tune=',
