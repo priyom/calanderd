@@ -28,6 +28,7 @@ var website = module.exports = {
 		'S3012': 'the-goose',
 		'S4020': 'the-air-horn',
 		'S4524': 't-marker',
+		'S4770': 'the-alarm',
 		'S5292': 'd-marker',
 		'M42': 'rtty',
 		'MXI': 'naval-markers',

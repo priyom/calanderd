@@ -37,6 +37,7 @@ var stations = module.exports = {
 		'S3012': [ 'goose', 'XG' ],
 		'S4020': [ 'air horn', 'XAH' ],
 		'S4524': [ 'T marker' ],
+		'S4770': [ 'alarm' ],
 		'S5292': [ 'D marker', 'TNDB6' ],
 		'Prizma-60': [ 'Zaliv-52', 'S4110' ],
 		'MXI': [ 'cluster' ],
