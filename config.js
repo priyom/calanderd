@@ -3,7 +3,7 @@
 var config = module.exports = {
 	// irc config
 	room: '#priyom',
-	server: 'chat.freenode.net',
+	server: 'irc.libera.chat',
 	botName: 'IvoSchwarz',
 	userName: 'ivo',
 	realName: 'Ivo Schwarz',
@@ -27,7 +27,7 @@ var config = module.exports = {
 	//    calendard=dev node ./main.js
 	dev: {
 		room: '#priyom',
-		server: 'chat.freenode.net',
+		server: 'irc.libera.chat',
 		botName: 'jummyristle',
 		userName: 'foo',
 		realName: 'bar',
