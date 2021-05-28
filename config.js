@@ -8,7 +8,7 @@ var config = module.exports = {
 	userName: 'ivo',
 	realName: 'Ivo Schwarz',
 	password: '',
-	port: 7000,
+	port: 6697,
 	tls: true,
 	color: true,
 
@@ -32,7 +32,7 @@ var config = module.exports = {
 		userName: 'foo',
 		realName: 'bar',
 		password: '',
-		port: 7000,
+		port: 6697,
 		tls: true
 	}
 };
